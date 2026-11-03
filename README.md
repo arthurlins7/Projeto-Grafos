@@ -2,7 +2,7 @@
 
 Projeto interdisciplinar de **Teoria dos Grafos** e **Análise e Visualização de Dados (AVD)** — 2026.2.
 
-> **Status:** 🚧 em desenvolvimento — repositório inicial, ainda sem código de produção.
+> **Status:**  em desenvolvimento — repositório inicial, ainda sem código de produção.
 
 ---
 
@@ -242,6 +242,6 @@ O uso de IA segue as regras do enunciado e é registrado em [`docs/DECLARACAO_IA
 
 | Integrante | Pacotes de trabalho |
 |---|---|
-| Arthur Lins | _a definir_ |
-| Davi Santiago | _a definir_ |
-| João Pedro Patriota | _a definir_ |
+| Arthur Lins | a definir |
+| Davi Santiago | a definir |
+| João Pedro Patriota | a definir |
