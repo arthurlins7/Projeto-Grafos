@@ -2,7 +2,7 @@
 
 Projeto interdisciplinar de **Teoria dos Grafos** e **Análise e Visualização de Dados (AVD)** — 2026.2.
 
-> **Status:**  em desenvolvimento — repositório inicial, ainda sem código de produção.
+> **Status:** em desenvolvimento — estrutura do grafo, quatro algoritmos e leitura/validação de mapas implementados. A integração das buscas com os mapas ainda está pendente.
 
 ---
 
@@ -25,19 +25,19 @@ O mapa **não é o grafo**. Uma mesma casa do labirinto corresponde a vários n�
 
 ### Símbolos dos mapas
 
-| Símbolo | Significado | Custo de entrar |
-|---|---|---|
-| `#` | Parede (intransponível) | — |
-| `.` | Chão | 1 |
-| `S` | Início (exatamente um por mapa) | 1 |
-| `G` | Saída (pelo menos uma); ao entrar, o jogo termina | 1 |
-| `,` | Lama | 3 |
-| `~` | Água | 5 |
-| `a`–`d` | Chave (o jogador fica com ela para sempre) | 1 |
-| `A`–`D` | Porta (só passa quem tem a chave correspondente) | 1 |
-| `>` `<` `^` `v` | Esteira (estando nela, só se move na direção da seta) | 1 |
-| `+` | Bônus consumível | −4 na 1ª vez, depois 1 |
-| `*` | Fonte de energia (não se esgota) | −2 sempre |
+| Símbolo                 | Significado                                              | Custo de entrar          |
+| ----------------------- | -------------------------------------------------------- | ------------------------ |
+| `#`                     | Parede (intransponível)                                  | —                        |
+| `.`                     | Chão                                                     | 1                        |
+| `S`                     | Início (exatamente um por mapa)                          | 1                        |
+| `G`                     | Saída (pelo menos uma); ao entrar, o jogo termina        | 1                        |
+| `,`                     | Lama                                                     | 3                        |
+| `~`                     | Água                                                     | 5                        |
+| `a`–`d`                 | Chave (o jogador fica com ela para sempre)               | 1                        |
+| `A`–`D`                 | Porta (só passa quem tem a chave correspondente)         | 1                        |
+| `>` `<` `^` `v`         | Esteira (estando nela, só se move na direção da seta)    | 1                        |
+| `+`                     | Bônus consumível                                         | −4 na 1ª vez, depois 1   |
+| `*`                     | Fonte de energia (não se esgota)                         | −2 sempre                |
 
 Linhas iniciadas com `;` são comentários.
 
@@ -58,22 +58,22 @@ Linhas iniciadas com `;` são comentários.
 
 ### Mapas fornecidos (`data/mapas/`)
 
-| Arquivo | O que exercita |
-|---|---|
-| `m01_terreno.txt` | Custos de terreno: o caminho com menos passos não é o mais barato |
-| `m02_uma_chave.txt` | Uma chave e uma porta |
-| `m03_tres_chaves.txt` | Três chaves com ordem de coleta obrigatória |
-| `m04_esteiras.txt` | Arcos de mão única, becos e estados-armadilha |
-| `m05_bonus.txt` | Bônus consumíveis: pesos negativos sem ciclo negativo |
-| `m06_fonte.txt` | Fonte de energia: ciclo negativo (um "exploit" do jogo) |
-| `m07_impossivel.txt` | Mapa sem solução |
-| `m08_grande.txt` | Mapa 31×71 com 4 chaves |
+| Arquivo                 | O que exercita                                                      |
+| ----------------------- | ------------------------------------------------------------------- |
+| `m01_terreno.txt`       | Custos de terreno: o caminho com menos passos não é o mais barato   |
+| `m02_uma_chave.txt`     | Uma chave e uma porta                                               |
+| `m03_tres_chaves.txt`   | Três chaves com ordem de coleta obrigatória                         |
+| `m04_esteiras.txt`      | Arcos de mão única, becos e estados-armadilha                       |
+| `m05_bonus.txt`         | Bônus consumíveis: pesos negativos sem ciclo negativo               |
+| `m06_fonte.txt`         | Fonte de energia: ciclo negativo (um "exploit" do jogo)             |
+| `m07_impossivel.txt`    | Mapa sem solução                                                    |
+| `m08_grande.txt`        | Mapa 31×71 com 4 chaves                                             |
 
 Além deles, o grupo criará **dois mapas próprios** em `data/mapas_grupo/`.
 
 ### Entregas da Parte 1
 
-- [ ] Leitura e validação dos mapas
+- [X] Leitura e validação dos mapas
 - [ ] Construção de `G_pos` e `G_est` (com teto teórico × estados alcançáveis)
 - [ ] Exportação das arestas por mapa
 - [ ] Métricas globais e por camada (ordem, tamanho, densidade), arcos entre camadas
@@ -139,6 +139,8 @@ projeto-grafos/
 │   │   └── algorithms.py      # BFS, DFS, Dijkstra, Bellman-Ford (próprios)
 │   └── viz.py                 # visualizações/UX
 └── tests/
+    ├── test_graph.py
+    ├── test_cli.py
     ├── test_bfs.py
     ├── test_dfs.py
     ├── test_dijkstra.py
@@ -158,14 +160,58 @@ projeto-grafos/
 
 ---
 
-## Como executar (planejado)
+## Como executar
 
-> Os comandos abaixo descrevem a interface prevista; serão implementados em `src/cli.py` e `src/solve.py`.
+### Instalação e testes (PowerShell)
+
+Execute na raiz do repositório:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m pytest -q
+```
+
+### Validar um mapa
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli --mapa data/mapas/m01_terreno.txt --validar-mapa
+```
+
+Saída esperada:
+
+```text
+Mapa valido: 5 linhas e 13 colunas.
+```
+
+O comando verifica linhas, largura, símbolos, exatamente um início `S` e pelo menos uma saída `G`. Aceita UTF-8 com ou sem BOM e quebras de linha do Windows. Linhas iniciadas com `;` são ignoradas; espaços e linhas vazias dentro do mapa são considerados erros.
+
+A validação confere o formato do arquivo. Um mapa válido pode não ter solução, como o `m07`; as buscas ainda não estão integradas ao comando.
+
+O código de saída é `0` para mapa válido e `2` para erros de leitura, codificação, formato ou argumentos. A mensagem de símbolo inválido indica linha e coluna do mapa, contando a partir de 1 e sem contar comentários. Para consultar a ajuda:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli --help
+```
+
+### Localizar início e saídas em Python
+
+Depois de ler o mapa, use `localizar_inicio_e_saidas` para obter a posição do início e a lista de saídas:
+
+```python
+from src.graphs.io import ler_mapa, localizar_inicio_e_saidas
+
+linhas = ler_mapa("data/mapas/m01_terreno.txt")
+inicio, saidas = localizar_inicio_e_saidas(linhas)
+```
+
+As coordenadas seguem o formato `(linha, coluna)`, contando a partir de zero e sem contar comentários. Para o `m01`, o início é `(1, 1)` e as saídas são `[(1, 11)]`. A lista de saídas segue a ordem de leitura do mapa: linha e depois coluna. A função também valida o mapa antes de localizar as posições.
+
+### Execução das buscas (planejada)
+
+> Os comandos abaixo descrevem funcionalidades futuras. Ainda não estão disponíveis em `src/cli.py` e `src/solve.py`.
 
 ```bash
-# Instalação
-pip install -r requirements.txt
-
 # Parte 1 (labirintos)
 python -m src.cli --mapa ./data/mapas/m03_tres_chaves.txt --alg BFS --out ./out/parte1/
 python -m src.cli --mapa ./data/mapas/m03_tres_chaves.txt --alg DIJKSTRA --out ./out/parte1/
@@ -177,9 +223,6 @@ python -m src.cli --mapa ./data/mapas/m03_tres_chaves.txt --interactive --out ./
 # Parte 2 (dataset maior)
 python -m src.cli --dataset ./data/dataset_parte2/ --alg DIJKSTRA --source A --target Z --out ./out/parte2/
 python -m src.cli --dataset ./data/dataset_parte2/ --benchmark --out ./out/parte2/
-
-# Testes
-pytest
 ```
 
 ---
@@ -205,26 +248,28 @@ pytest
 
 ## Testes
 
-Testes mínimos com `pytest`:
+Testes com `pytest`:
 
+- **Grafo:** nós, arcos dirigidos, graus, métricas, transposto, subgrafo e preservação do original.
+- **CLI:** execução em subprocesso com os oito mapas, ajuda, argumentos incorretos e erros de arquivo, codificação e formato.
 - **BFS:** níveis corretos em grafo pequeno.
 - **DFS:** detecção de ciclo e classificação de arcos em grafo dirigido.
 - **Dijkstra:** caminhos corretos com pesos ≥ 0; recusa de grafo com peso negativo.
 - **Bellman-Ford:** distâncias corretas com pesos negativos sem ciclo; detecção e retorno do ciclo negativo.
-- **Estados:** mapa mínimo do grupo (até 5×7) com número de estados e arcos conferido à mão; esteira para parede gera estado sem saída; coletar chave muda de camada.
-- **IO:** mapas inválidos (não retangular, dois `S`, nenhum `G`, símbolo desconhecido) geram erro com mensagem clara.
+- **Estados (planejado):** mapa mínimo do grupo (até 5×7) com número de estados e arcos conferido à mão; esteira para parede gera estado sem saída; coletar chave muda de camada.
+- **IO:** mapas válidos e inválidos, comentários, BOM, quebras de linha, espaços indevidos, localização do início e das saídas e dimensões dos oito mapas fornecidos.
 
 ---
 
 ## Cronograma
 
-| Etapa | Data |
-|---|---|
-| Proposta do dataset da Parte 2 (checkpoint) | até 12/10/2026 |
-| Acompanhamentos em sala (Grafos) | 10/11, 17/11, 19/11 e 24/11 |
-| Acompanhamentos em sala (AVD) | 17/11, 19/11 e 24/11 |
-| Entrega do material | 26/11/2026 |
-| Apresentações | 26/11, 01/12 e 03/12 |
+| Etapa                                       | Data                        |
+| ------------------------------------------- | --------------------------- |
+| Proposta do dataset da Parte 2 (checkpoint) | até 12/10/2026              |
+| Acompanhamentos em sala (Grafos)            | 10/11, 17/11, 19/11 e 24/11 |
+| Acompanhamentos em sala (AVD)               | 17/11, 19/11 e 24/11        |
+| Entrega do material                         | 26/11/2026                  |
+| Apresentações                               | 26/11, 01/12 e 03/12        |
 
 ---
 
@@ -240,8 +285,9 @@ O uso de IA segue as regras do enunciado e é registrado em [`docs/DECLARACAO_IA
 
 ## Equipe
 
-| Integrante | Pacotes de trabalho |
-|---|---|
-| Arthur Lins | a definir |
-| Davi Santiago | a definir |
-| João Pedro Patriota | a definir |
+| Integrante           | Pacotes de trabalho |
+| -------------------- | ------------------- |
+| Arthur Lins          | a definir           |
+| Davi Santiago        | a definir           |
+| João Pedro Patriota  | a definir           |
+| Lucas Ramon          | a definir           |
