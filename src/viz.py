@@ -1,18 +1,15 @@
-# Visualizacoes da Parte 1 (figuras da Secao 8).
-# [IA] Claude – codigo de desenho com matplotlib (uso permitido: apoio com
-# bibliotecas de visualizacao). Cores, titulo e legenda foram escolhidos pelo grupo.
-
+# [IA] Claude – codigo de desenho com matplotlib (arquivo inteiro)
 import matplotlib.pyplot as plt
 from matplotlib.colors import to_rgb
 from matplotlib.patches import Patch
 
 
-# ----------------------------------------------------------------------------
-# CONFIGURACAO VISUAL (escolhas do grupo) - para mudar o visual, mude so aqui.
-# ----------------------------------------------------------------------------
+
+# CONFIGURACAO VISUAL  
+
 
 # Os 8 primeiros sao as cores da Figura 1 do enunciado.
-# Esteira, bonus e fonte foram escolhidos pelo grupo.
+
 CORES = {
     "#": "#3a3a3a",        # parede
     ".": "#ffffff",        # chao
