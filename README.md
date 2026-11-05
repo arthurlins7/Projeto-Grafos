@@ -2,8 +2,7 @@
 
 Projeto interdisciplinar de **Teoria dos Grafos** e **Análise e Visualização de Dados (AVD)** — 2026.2.
 
-> **Status:** em desenvolvimento — estrutura do grafo, quatro algoritmos e leitura/validação de mapas implementados. A integração das buscas com os mapas ainda está pendente.
-
+> **Status:** em desenvolvimento — estrutura do grafo, quatro algoritmos e leitura/validação de mapas implementados. Também foi feita a base de desenho do mapa. A integração das buscas com os mapas ainda está pendente.
 ---
 
 ## Sobre o projeto
