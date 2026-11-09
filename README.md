@@ -2,7 +2,7 @@
 
 Projeto interdisciplinar de **Teoria dos Grafos** e **Análise e Visualização de Dados (AVD)** — 2026.2.
 
-> **Status:** em desenvolvimento — estrutura do grafo, quatro algoritmos e leitura/validação de mapas implementados. Também foi feita a base de desenho do mapa. A integração das buscas com os mapas ainda está pendente.
+> **Status:** em desenvolvimento — estrutura do grafo, quatro algoritmos e leitura/validação de mapas implementados. Também foi feita a base de desenho do mapa (`viz.py`). A integração das buscas com os mapas ainda está pendente.
 ---
 
 ## Sobre o projeto
@@ -83,6 +83,7 @@ Além deles, o grupo criará **dois mapas próprios** em `data/mapas_grupo/`.
 - [ ] Estados-armadilha (m04 e m07)
 - [ ] Correção de regra do m06 (`--fonte-consumivel`)
 - [ ] Visualizações: percursos (m03, m08), grafo em camadas e árvore BFS (m02), heatmap de multiplicidade (m08)
+  - [x] Base de desenho do mapa (`viz.py`)
 - [ ] Apresentação interativa (HTML ou Streamlit)
 - [ ] Dois mapas do grupo com gabarito
 
