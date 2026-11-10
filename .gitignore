@@ -216,8 +216,5 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Dataset da Parte 2 (grande demais para o GitHub; usar script de download)
-data/dataset_parte2/*.gz
-
 # Streamlit
 .streamlit/secrets.toml

@@ -2,7 +2,7 @@
 
 Projeto interdisciplinar de **Teoria dos Grafos** e **Análise e Visualização de Dados (AVD)** — 2026.2.
 
-> **Status:** em desenvolvimento — estrutura do grafo, quatro algoritmos e leitura/validação de mapas implementados. Também foi feita a base de desenho do mapa (`viz.py`). A integração das buscas com os mapas ainda está pendente.
+> **Status:** em desenvolvimento — estrutura do grafo, quatro algoritmos e leitura/validação de mapas implementados. Também foi feita a base de desenho do mapa (`viz.py`). A integração das buscas com os mapas ainda está pendente. Na Parte 2, o dataset Slashdot já é lido, validado e convertido em grafo dirigido.
 ---
 
 ## Sobre o projeto
@@ -91,7 +91,19 @@ Além deles, o grupo criará **dois mapas próprios** em `data/mapas_grupo/`.
 
 ## Parte 2 — Dataset Maior, Comparação de Algoritmos e Análise Visual
 
-> **Dataset:** _a definir / aguardando aprovação._
+> **Dataset (aprovado):** Slashdot Zoo signed social network, fevereiro de 2009 — [SNAP / Stanford](https://snap.stanford.edu/data/soc-sign-Slashdot090221.html).
+
+| Atributo | Valor (fonte: SNAP) |
+| --- | --- |
+| Arquivo | `soc-sign-Slashdot090221.txt.gz` |
+| Nós | 82.140 |
+| Arestas | 549.202 |
+| Tipo | dirigido, ponderado (sinal da relação) |
+| Colunas | `FromNodeId`, `ToNodeId`, `Sign` (+1 amigo, −1 inimigo) |
+
+**Como obter:** baixe `soc-sign-Slashdot090221.txt.gz` na página acima e salve em `data/dataset_parte2/` (não é preciso descompactar).
+
+**Citação:** J. Leskovec, D. Huttenlocher, J. Kleinberg. *Signed Networks in Social Media*. CHI 2010.
 
 ### Requisitos do dataset
 
@@ -103,6 +115,7 @@ Além deles, o grupo criará **dois mapas próprios** em `data/mapas_grupo/`.
 
 ### Entregas da Parte 2
 
+- [x] Leitura, validação e montagem do grafo do dataset (`io.py`)
 - [ ] Descrição e exploração do dataset (visão de grafos e visão de dados/AVD)
 - [ ] BFS/DFS a partir de ≥ 3 fontes distintas
 - [ ] Dijkstra com pesos ≥ 0 em ≥ 5 pares origem–destino (com a transformação de pesos documentada)
@@ -206,6 +219,22 @@ inicio, saidas = localizar_inicio_e_saidas(linhas)
 ```
 
 As coordenadas seguem o formato `(linha, coluna)`, contando a partir de zero e sem contar comentários. Para o `m01`, o início é `(1, 1)` e as saídas são `[(1, 11)]`. A lista de saídas segue a ordem de leitura do mapa: linha e depois coluna. A função também valida o mapa antes de localizar as posições.
+
+### Ler o dataset da Parte 2 em Python
+
+Use `ler_dataset` para ler e validar o arquivo e `montar_grafo_dataset` para criar o grafo dirigido:
+
+```python
+from src.graphs.io import ler_dataset, montar_grafo_dataset
+
+dados = ler_dataset("data/dataset_parte2/soc-sign-Slashdot090221.txt.gz")
+grafo = montar_grafo_dataset(dados)
+print(grafo.ordem(), grafo.tamanho())   # 82140 549202
+```
+
+`ler_dataset` devolve uma tabela com as colunas `origem`, `destino` e `sinal`, todas inteiras. O arquivo `.gz` é lido sem descompactar, e as linhas iniciadas com `#` são ignoradas. A leitura gera `ValueError` com mensagem clara para arquivo vazio, número de colunas diferente de três, valores vazios, valores não inteiros, sinal diferente de `1` ou `-1` e codificação diferente de UTF-8.
+
+Em `montar_grafo_dataset`, cada linha vira um arco `origem → destino` com peso igual ao sinal (`+1` amigo, `-1` inimigo). A montagem do grafo completo leva alguns segundos.
 
 ### Execução das buscas (planejada)
 
