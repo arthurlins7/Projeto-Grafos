@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Arquivos locais e pasta REGRAS (nao subir no repositorio)
+.DS_Store
+REGRAS/
+RESPOSTAS_DECLARACAO_IA.md
+*DECLARACAO*IA*
+docs/DECLARACAO_IA.pdf
+.claude/
+
