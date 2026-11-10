@@ -2,7 +2,16 @@ from pathlib import Path
 
 import pytest
 
-from src.graphs.io import ler_mapa, localizar_inicio_e_saidas, validar_mapa
+from src.graphs.estados import construir_grafo_estados
+from src.graphs.io import (
+    ler_dataset,
+    ler_mapa,
+    localizar_inicio_e_saidas,
+    montar_grafo_dataset,
+    salvar_arestas_csv,
+    salvar_graus_csv,
+    validar_mapa,
+)
 
 
 @pytest.mark.parametrize("linhas", [
@@ -147,3 +156,41 @@ def test_mapas_fornecidos(nome, altura, largura):
     assert len(saidas) == 1
     linha, coluna = saidas[0]
     assert linhas[linha][coluna] == "G"
+
+
+def test_salvar_arestas_e_graus_csv_ignora_alvo(tmp_path):
+    linhas = [
+        "####",
+        "#SG#",
+        "####",
+    ]
+    g = construir_grafo_estados(linhas, incluir_alvo=True)
+    arq_arestas = tmp_path / "arestas_teste.csv"
+    arq_graus = tmp_path / "graus_teste.csv"
+
+    salvar_arestas_csv(g, arq_arestas)
+    salvar_graus_csv(g, arq_graus)
+
+    conteudo_arestas = arq_arestas.read_text(encoding="utf-8").splitlines()
+    assert conteudo_arestas == [
+        "origem,destino,movimento,casa_destino,peso",
+        '"(1,1)|-|{}","(1,2)|-|{}",L,G,1',
+    ]
+
+    conteudo_graus = arq_graus.read_text(encoding="utf-8").splitlines()
+    assert conteudo_graus == [
+        "estado,grau_entrada,grau_saida",
+        '"(1,1)|-|{}",0,1',
+        '"(1,2)|-|{}",1,0',
+    ]
+
+
+def test_ler_e_montar_dataset_valido(tmp_path):
+    arq = tmp_path / "rede.txt"
+    arq.write_text("# comentario\n0\t1\t1\n1\t2\t-1\n", encoding="utf-8")
+    dados = ler_dataset(arq)
+    g = montar_grafo_dataset(dados)
+    assert g.ordem() == 3
+    assert g.tamanho() == 2
+    assert g.tem_peso_neg is True
+
