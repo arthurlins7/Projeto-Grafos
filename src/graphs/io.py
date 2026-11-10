@@ -1,3 +1,6 @@
+import csv
+from pathlib import Path
+
 import pandas as pd
 
 from src.graphs.graph import GrafoDirigido
@@ -5,6 +8,8 @@ from src.graphs.graph import GrafoDirigido
 
 SIMBOLOS = "#.SG,~abcdABCD><^v+*"
 COLUNAS_DATASET = ["origem", "destino", "sinal"]
+COLUNAS_ARESTAS = ["origem", "destino", "movimento", "casa_destino", "peso"]
+COLUNAS_GRAUS = ["estado", "grau_entrada", "grau_saida"]
 
 
 def ler_mapa(caminho):
@@ -110,3 +115,38 @@ def montar_grafo_dataset(dados):
         grafo.adicionar_arco(origem, destino, peso=sinal)
 
     return grafo
+
+
+# [IA] Claude - escrita de CSVs de arestas e graus com modulo csv
+def salvar_arestas_csv(grafo, caminho):
+    """Exporta os arcos do grafo para CSV (ignorando o no virtual ALVO)."""
+    destino_path = Path(caminho)
+    destino_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with open(destino_path, "w", encoding="utf-8", newline="") as arquivo:
+        escritor = csv.writer(arquivo)
+        escritor.writerow(COLUNAS_ARESTAS)
+        for origem in grafo.nos():
+            if origem == "ALVO":
+                continue
+            for destino, peso, movimento, casa in grafo.vizinhos(origem):
+                if destino == "ALVO":
+                    continue
+                escritor.writerow([origem, destino, movimento, casa, peso])
+
+
+# [IA] Claude - escrita de CSV de graus de entrada e saida
+def salvar_graus_csv(grafo, caminho):
+    """Exporta a tabela (estado, grau_entrada, grau_saida) sem o no virtual ALVO."""
+    destino_path = Path(caminho)
+    destino_path.parent.mkdir(parents=True, exist_ok=True)
+
+    sub = grafo
+    if grafo.tem_no("ALVO"):
+        sub = grafo.subgrafo_induzido([no for no in grafo.nos() if no != "ALVO"])
+
+    with open(destino_path, "w", encoding="utf-8", newline="") as arquivo:
+        escritor = csv.writer(arquivo)
+        escritor.writerow(COLUNAS_GRAUS)
+        for estado, grau_ent, grau_sai in sub.tabela_graus():
+            escritor.writerow([estado, grau_ent, grau_sai])
