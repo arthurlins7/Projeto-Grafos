@@ -1,0 +1,25 @@
+{
+  "tem_ciclo_negativo": true,
+  "ciclo": [
+    "(3,5)|-|{}",
+    "(3,4)|-|{}",
+    "(3,5)|-|{}"
+  ],
+  "arcos": [
+    {
+      "origem": "(3,5)|-|{}",
+      "destino": "(3,4)|-|{}",
+      "peso": 1
+    },
+    {
+      "origem": "(3,4)|-|{}",
+      "destino": "(3,5)|-|{}",
+      "peso": -2
+    }
+  ],
+  "custo_do_ciclo": -1,
+  "com_fonte_consumivel": {
+    "tem_ciclo_negativo": false,
+    "custo_ate_alvo": 10
+  }
+}

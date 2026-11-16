@@ -1,0 +1,10 @@
+mapa,abordagem,passos,caminho_valido,observacao
+m02,G_pos portas como chao,10,False,atravessa porta sem ter a chave
+m02,G_pos portas como parede,,False,nao encontra caminho: nao sabe que pode pegar a chave e voltar
+m02,G_est,34,True,pega as chaves antes de passar pelas portas
+m03,G_pos portas como chao,21,False,atravessa porta sem ter a chave
+m03,G_pos portas como parede,,False,nao encontra caminho: nao sabe que pode pegar a chave e voltar
+m03,G_est,87,True,pega as chaves antes de passar pelas portas
+m04,G_pos portas como chao,14,False,atravessa porta sem ter a chave
+m04,G_pos portas como parede,,False,nao encontra caminho: nao sabe que pode pegar a chave e voltar
+m04,G_est,20,True,pega as chaves antes de passar pelas portas
