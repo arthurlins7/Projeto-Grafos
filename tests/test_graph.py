@@ -1,3 +1,4 @@
+# [IA] ChatGPT - apoio na elaboracao dos testes da estrutura do grafo
 import pytest
 
 from src.graphs.graph import GrafoDirigido

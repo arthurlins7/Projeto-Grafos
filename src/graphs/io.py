@@ -12,6 +12,7 @@ COLUNAS_ARESTAS = ["origem", "destino", "movimento", "casa_destino", "peso"]
 COLUNAS_GRAUS = ["estado", "grau_entrada", "grau_saida"]
 
 
+# [IA] ChatGPT - apoio na implementacao da leitura dos mapas
 def ler_mapa(caminho):
     """Le o arquivo e devolve as linhas do mapa validado."""
     with open(caminho, encoding="utf-8-sig") as arquivo:
@@ -21,6 +22,7 @@ def ler_mapa(caminho):
     return linhas
 
 
+# [IA] ChatGPT - apoio na implementacao da validacao dos mapas
 def validar_mapa(linhas):
     """Confere o formato e os simbolos, sem buscar uma solucao."""
     if not linhas:
@@ -53,6 +55,7 @@ def validar_mapa(linhas):
         raise ValueError("O mapa deve ter pelo menos um G.")
 
 
+# [IA] ChatGPT - apoio na implementacao da localizacao do inicio e das saidas
 def localizar_inicio_e_saidas(linhas):
     """Devolve inicio e saidas como (linha, coluna), contando a partir de zero."""
     validar_mapa(linhas)

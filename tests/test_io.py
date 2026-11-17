@@ -14,6 +14,7 @@ from src.graphs.io import (
 )
 
 
+# [IA] ChatGPT - apoio nos testes de mapas deste bloco, ate test_mapas_fornecidos
 @pytest.mark.parametrize("linhas", [
     ["SG"],
     ["SGG"],
@@ -158,6 +159,7 @@ def test_mapas_fornecidos(nome, altura, largura):
     assert linhas[linha][coluna] == "G"
 
 
+# Fim do bloco de testes de mapas com apoio de ChatGPT.
 def test_salvar_arestas_e_graus_csv_ignora_alvo(tmp_path):
     linhas = [
         "####",

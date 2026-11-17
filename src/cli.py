@@ -1,3 +1,4 @@
+# [IA] ChatGPT - apoio na implementacao do comando de validacao dos mapas
 import argparse
 
 from src.graphs.io import ler_mapa

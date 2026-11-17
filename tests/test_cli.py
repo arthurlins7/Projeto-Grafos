@@ -1,3 +1,4 @@
+# [IA] ChatGPT - apoio na elaboracao dos testes do comando de validacao dos mapas
 import subprocess
 import sys
 from pathlib import Path
