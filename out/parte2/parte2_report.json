@@ -1,0 +1,918 @@
+{
+  "dataset": "soc-sign-Slashdot090221",
+  "nos": 82140,
+  "arcos": 549202,
+  "recortes": [
+    {
+      "usuarios (%)": 10,
+      "nos": 8214,
+      "arcos": 5434,
+      "arcos (%)": 0.99
+    },
+    {
+      "usuarios (%)": 50,
+      "nos": 41070,
+      "arcos": 134558,
+      "arcos (%)": 24.5
+    },
+    {
+      "usuarios (%)": 100,
+      "nos": 82140,
+      "arcos": 549202,
+      "arcos (%)": 100.0
+    }
+  ],
+  "unidade_tempo": "milissegundos",
+  "medicoes": [
+    {
+      "algoritmo": "BFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 48088,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 3.2977,
+      "tempo_mediano_ms": 3.3556,
+      "tempos_ms": [
+        3.3556,
+        2.9848,
+        4.6369,
+        3.635,
+        1.876
+      ],
+      "alcancados": 1412
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 48088,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 5.9229,
+      "tempo_mediano_ms": 5.654,
+      "tempos_ms": [
+        8.0488,
+        6.0527,
+        4.7968,
+        5.062,
+        5.654
+      ],
+      "alcancados": 1412
+    },
+    {
+      "algoritmo": "BFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 4710,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 0.007,
+      "tempo_mediano_ms": 0.0049,
+      "tempos_ms": [
+        0.0177,
+        0.0067,
+        0.0028,
+        0.0028,
+        0.0049
+      ],
+      "alcancados": 2
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 4710,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 0.0108,
+      "tempo_mediano_ms": 0.0057,
+      "tempos_ms": [
+        0.0279,
+        0.0099,
+        0.0057,
+        0.0052,
+        0.0052
+      ],
+      "alcancados": 2
+    },
+    {
+      "algoritmo": "BFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 1199,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 3.2442,
+      "tempo_mediano_ms": 2.8504,
+      "tempos_ms": [
+        3.9352,
+        4.5615,
+        2.3676,
+        2.8504,
+        2.5065
+      ],
+      "alcancados": 1411
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 1199,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 5.2356,
+      "tempo_mediano_ms": 4.5024,
+      "tempos_ms": [
+        10.1188,
+        5.2926,
+        4.5024,
+        3.0963,
+        3.1677
+      ],
+      "alcancados": 1411
+    },
+    {
+      "algoritmo": "BFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 48088,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 47.0244,
+      "tempo_mediano_ms": 50.8903,
+      "tempos_ms": [
+        54.9007,
+        36.319,
+        41.9515,
+        51.0604,
+        50.8903
+      ],
+      "alcancados": 23123
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 48088,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 155.4546,
+      "tempo_mediano_ms": 149.7447,
+      "tempos_ms": [
+        193.9651,
+        184.6084,
+        149.7447,
+        121.5944,
+        127.3605
+      ],
+      "alcancados": 23123
+    },
+    {
+      "algoritmo": "BFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 4710,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 45.112,
+      "tempo_mediano_ms": 47.7237,
+      "tempos_ms": [
+        39.0225,
+        47.7237,
+        49.8625,
+        40.8106,
+        48.1406
+      ],
+      "alcancados": 23120
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 4710,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 140.3696,
+      "tempo_mediano_ms": 142.3671,
+      "tempos_ms": [
+        142.3671,
+        128.777,
+        160.0256,
+        126.6101,
+        144.068
+      ],
+      "alcancados": 23120
+    },
+    {
+      "algoritmo": "BFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 1199,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 36.489,
+      "tempo_mediano_ms": 37.2639,
+      "tempos_ms": [
+        37.2639,
+        38.1278,
+        37.3367,
+        34.8293,
+        34.8873
+      ],
+      "alcancados": 23120
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 1199,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 147.0105,
+      "tempo_mediano_ms": 157.0101,
+      "tempos_ms": [
+        157.321,
+        157.0101,
+        176.721,
+        125.596,
+        118.4046
+      ],
+      "alcancados": 23120
+    },
+    {
+      "algoritmo": "BFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 48088,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 349.8274,
+      "tempo_mediano_ms": 280.445,
+      "tempos_ms": [
+        130.6891,
+        690.3075,
+        425.0179,
+        280.445,
+        222.6775
+      ],
+      "alcancados": 67272
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 48088,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 1165.4603,
+      "tempo_mediano_ms": 1184.6565,
+      "tempos_ms": [
+        788.8951,
+        1761.1067,
+        1200.228,
+        1184.6565,
+        892.4154
+      ],
+      "alcancados": 67272
+    },
+    {
+      "algoritmo": "BFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 4710,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 208.1005,
+      "tempo_mediano_ms": 213.3026,
+      "tempos_ms": [
+        268.7861,
+        278.63,
+        213.3026,
+        134.5293,
+        145.2543
+      ],
+      "alcancados": 67266
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 4710,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 749.0245,
+      "tempo_mediano_ms": 567.6666,
+      "tempos_ms": [
+        1134.6644,
+        1039.2741,
+        567.6666,
+        510.4803,
+        493.0371
+      ],
+      "alcancados": 67266
+    },
+    {
+      "algoritmo": "BFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 1199,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 140.0542,
+      "tempo_mediano_ms": 136.6206,
+      "tempos_ms": [
+        125.7094,
+        136.6206,
+        156.0762,
+        161.8263,
+        120.0387
+      ],
+      "alcancados": 67266
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 1199,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 532.0103,
+      "tempo_mediano_ms": 516.7862,
+      "tempos_ms": [
+        516.7862,
+        536.1291,
+        500.5753,
+        514.0876,
+        592.4734
+      ],
+      "alcancados": 67266
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 48088,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 3.158,
+      "tempo_mediano_ms": 2.5073,
+      "tempos_ms": [
+        6.275,
+        2.5073,
+        2.0116,
+        3.2076,
+        1.7884
+      ],
+      "alcancados": 1412
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 48088,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 7.1929,
+      "tempo_mediano_ms": 5.9988,
+      "tempos_ms": [
+        13.4038,
+        9.1313,
+        3.55,
+        5.9988,
+        3.8804
+      ],
+      "alcancados": 1412
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 4710,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 0.0022,
+      "tempo_mediano_ms": 0.0015,
+      "tempos_ms": [
+        0.0046,
+        0.0022,
+        0.0015,
+        0.0015,
+        0.0014
+      ],
+      "alcancados": 2
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 4710,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 0.0032,
+      "tempo_mediano_ms": 0.0025,
+      "tempos_ms": [
+        0.0053,
+        0.0035,
+        0.0025,
+        0.0023,
+        0.0023
+      ],
+      "alcancados": 2
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 1199,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 3.3878,
+      "tempo_mediano_ms": 3.3767,
+      "tempos_ms": [
+        3.3767,
+        2.1105,
+        3.8551,
+        3.2832,
+        4.3136
+      ],
+      "alcancados": 1411
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 1199,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 5.6995,
+      "tempo_mediano_ms": 4.9981,
+      "tempos_ms": [
+        9.46,
+        5.7026,
+        4.9111,
+        3.4257,
+        4.9981
+      ],
+      "alcancados": 1411
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 48088,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 75.8203,
+      "tempo_mediano_ms": 72.186,
+      "tempos_ms": [
+        88.3471,
+        72.186,
+        70.0348,
+        71.8729,
+        76.6606
+      ],
+      "alcancados": 23123
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 48088,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 146.7039,
+      "tempo_mediano_ms": 126.4047,
+      "tempos_ms": [
+        139.3582,
+        126.4047,
+        121.9957,
+        109.3715,
+        236.3896
+      ],
+      "alcancados": 23123
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 4710,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 104.6573,
+      "tempo_mediano_ms": 109.4192,
+      "tempos_ms": [
+        82.851,
+        109.4192,
+        118.4799,
+        120.729,
+        91.8076
+      ],
+      "alcancados": 23120
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 4710,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 142.0298,
+      "tempo_mediano_ms": 145.1623,
+      "tempos_ms": [
+        126.5169,
+        145.1623,
+        159.8536,
+        163.626,
+        114.99
+      ],
+      "alcancados": 23120
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 1199,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 77.5419,
+      "tempo_mediano_ms": 78.153,
+      "tempos_ms": [
+        87.8971,
+        78.153,
+        80.7345,
+        69.0766,
+        71.8485
+      ],
+      "alcancados": 23120
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 50,
+      "usuario_partida": 1199,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 122.4933,
+      "tempo_mediano_ms": 121.0517,
+      "tempos_ms": [
+        120.0023,
+        121.0517,
+        115.257,
+        133.9145,
+        122.2412
+      ],
+      "alcancados": 23120
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 48088,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 272.6564,
+      "tempo_mediano_ms": 271.7571,
+      "tempos_ms": [
+        281.841,
+        266.3768,
+        271.7571,
+        276.4133,
+        266.8939
+      ],
+      "alcancados": 67272
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 48088,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 396.0834,
+      "tempo_mediano_ms": 395.489,
+      "tempos_ms": [
+        403.7269,
+        407.3469,
+        386.9077,
+        386.9465,
+        395.489
+      ],
+      "alcancados": 67272
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 4710,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 296.407,
+      "tempo_mediano_ms": 279.433,
+      "tempos_ms": [
+        279.433,
+        273.6622,
+        333.7404,
+        327.0132,
+        268.1863
+      ],
+      "alcancados": 67266
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 4710,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 401.7737,
+      "tempo_mediano_ms": 395.0897,
+      "tempos_ms": [
+        418.3815,
+        395.0897,
+        415.7936,
+        393.6604,
+        385.9433
+      ],
+      "alcancados": 67266
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 1199,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 270.7128,
+      "tempo_mediano_ms": 274.8836,
+      "tempos_ms": [
+        256.0753,
+        274.8836,
+        296.6861,
+        250.5166,
+        275.4023
+      ],
+      "alcancados": 67266
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 100,
+      "usuario_partida": 1199,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 399.4921,
+      "tempo_mediano_ms": 376.5039,
+      "tempos_ms": [
+        363.6032,
+        376.5039,
+        440.5678,
+        465.232,
+        351.5537
+      ],
+      "alcancados": 67266
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 48080,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 1.3689,
+      "tempo_mediano_ms": 0.0039,
+      "tempos_ms": [
+        6.7996,
+        0.0364,
+        0.0039,
+        0.0023,
+        0.0022
+      ],
+      "destino": 8068,
+      "custo": null,
+      "passos": null
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 19563,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 344.2712,
+      "tempo_mediano_ms": 341.277,
+      "tempos_ms": [
+        348.0167,
+        357.8701,
+        341.277,
+        335.111,
+        339.0813
+      ],
+      "destino": 653,
+      "custo": 3,
+      "passos": 3
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 9765,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 318.2612,
+      "tempo_mediano_ms": 323.2348,
+      "tempos_ms": [
+        323.2348,
+        337.6365,
+        328.1915,
+        299.3713,
+        302.8718
+      ],
+      "destino": 3451,
+      "custo": 2,
+      "passos": 2
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 134,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 319.0126,
+      "tempo_mediano_ms": 303.6049,
+      "tempos_ms": [
+        284.6304,
+        262.9067,
+        422.3482,
+        321.5727,
+        303.6049
+      ],
+      "destino": 21299,
+      "custo": 4,
+      "passos": 4
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 11021,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 288.8185,
+      "tempo_mediano_ms": 288.6876,
+      "tempos_ms": [
+        281.4292,
+        288.3297,
+        294.5832,
+        291.0629,
+        288.6876
+      ],
+      "destino": 7733,
+      "custo": 4,
+      "passos": 3
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 16592,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 280.9984,
+      "tempo_mediano_ms": 282.6097,
+      "tempos_ms": [
+        275.0765,
+        288.86,
+        289.9894,
+        268.4562,
+        282.6097
+      ],
+      "destino": 19236,
+      "custo": 3,
+      "passos": 3
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 29495,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 290.6288,
+      "tempo_mediano_ms": 277.7938,
+      "tempos_ms": [
+        326.9287,
+        277.7938,
+        274.8879,
+        276.5133,
+        297.0204
+      ],
+      "destino": 3381,
+      "custo": 6,
+      "passos": 6
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 3078,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 281.6414,
+      "tempo_mediano_ms": 279.5612,
+      "tempos_ms": [
+        268.3272,
+        270.0455,
+        303.7961,
+        279.5612,
+        286.4769
+      ],
+      "destino": 19094,
+      "custo": 2,
+      "passos": 1
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 277,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 275.2916,
+      "tempo_mediano_ms": 276.6493,
+      "tempos_ms": [
+        276.6493,
+        291.4795,
+        267.494,
+        284.1463,
+        256.6888
+      ],
+      "destino": 65476,
+      "custo": 6,
+      "passos": 5
+    },
+    {
+      "algoritmo": "Dijkstra",
+      "tarefa": "volta das marcações do piloto",
+      "recorte_percentual": 100,
+      "usuario_partida": 36599,
+      "pesos": "amigo 1, inimigo 2",
+      "execucoes": 5,
+      "tempo_medio_ms": 282.2405,
+      "tempo_mediano_ms": 256.8395,
+      "tempos_ms": [
+        254.3804,
+        290.9971,
+        256.8395,
+        356.1837,
+        252.8017
+      ],
+      "destino": 47238,
+      "custo": 4,
+      "passos": 4
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "peso negativo sem ciclo negativo",
+      "recorte_percentual": 10,
+      "usuario_partida": 11038,
+      "pesos": "sinal original (amigo +1, inimigo -1)",
+      "execucoes": 5,
+      "tempo_medio_ms": 0.0427,
+      "tempo_mediano_ms": 0.0357,
+      "tempos_ms": [
+        0.0662,
+        0.0357,
+        0.0309,
+        0.0343,
+        0.0466
+      ],
+      "alcancados": 13,
+      "ciclo_negativo": null
+    },
+    {
+      "algoritmo": "Bellman-Ford",
+      "tarefa": "detecção de ciclo negativo",
+      "recorte_percentual": 100,
+      "usuario_partida": 11038,
+      "pesos": "sinal original (amigo +1, inimigo -1)",
+      "execucoes": 5,
+      "tempo_medio_ms": 8.7673,
+      "tempo_mediano_ms": 8.9154,
+      "tempos_ms": [
+        13.2619,
+        10.3373,
+        8.9154,
+        6.803,
+        4.5191
+      ],
+      "ciclo_negativo": [
+        919,
+        949,
+        919
+      ],
+      "custo_ciclo": -2
+    }
+  ]
+}
