@@ -31,14 +31,14 @@
       "usuario_partida": 48088,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 8.0339,
-      "tempo_mediano_ms": 7.8057,
+      "tempo_medio_ms": 1.718,
+      "tempo_mediano_ms": 1.7659,
       "tempos_ms": [
-        5.1082,
-        10.0331,
-        7.8057,
-        7.4167,
-        9.8058
+        1.7659,
+        1.2078,
+        2.3899,
+        1.803,
+        1.4235
       ],
       "alcancados": 1412
     },
@@ -49,14 +49,14 @@
       "usuario_partida": 48088,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 15.1559,
-      "tempo_mediano_ms": 10.9406,
+      "tempo_medio_ms": 4.7208,
+      "tempo_mediano_ms": 4.5568,
       "tempos_ms": [
-        9.2635,
-        9.8281,
-        14.459,
-        31.2883,
-        10.9406
+        4.5568,
+        2.8493,
+        5.5325,
+        6.3726,
+        4.2927
       ],
       "alcancados": 1412
     },
@@ -67,50 +67,50 @@
       "usuario_partida": 4710,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 0.0062,
-      "tempo_mediano_ms": 0.0029,
+      "tempo_medio_ms": 0.0027,
+      "tempo_mediano_ms": 0.002,
       "tempos_ms": [
-        0.0168,
-        0.006,
+        0.0058,
+        0.0026,
+        0.002,
+        0.0016,
+        0.0013
+      ],
+      "alcancados": 2
+    },
+    {
+      "algoritmo": "DFS",
+      "tarefa": "escalabilidade nos recortes",
+      "recorte_percentual": 10,
+      "usuario_partida": 4710,
+      "pesos": "sem pesos (cada seta é um passo)",
+      "execucoes": 5,
+      "tempo_medio_ms": 0.0042,
+      "tempo_mediano_ms": 0.0033,
+      "tempos_ms": [
+        0.0081,
+        0.0039,
+        0.0033,
         0.0029,
-        0.0027,
         0.0028
       ],
       "alcancados": 2
     },
     {
-      "algoritmo": "DFS",
-      "tarefa": "escalabilidade nos recortes",
-      "recorte_percentual": 10,
-      "usuario_partida": 4710,
-      "pesos": "sem pesos (cada seta é um passo)",
-      "execucoes": 5,
-      "tempo_medio_ms": 0.0104,
-      "tempo_mediano_ms": 0.0054,
-      "tempos_ms": [
-        0.0291,
-        0.0076,
-        0.0052,
-        0.0054,
-        0.0047
-      ],
-      "alcancados": 2
-    },
-    {
       "algoritmo": "BFS",
       "tarefa": "escalabilidade nos recortes",
       "recorte_percentual": 10,
       "usuario_partida": 1199,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 7.6122,
-      "tempo_mediano_ms": 7.464,
+      "tempo_medio_ms": 2.0733,
+      "tempo_mediano_ms": 1.4438,
       "tempos_ms": [
-        5.9494,
-        5.2153,
-        11.452,
-        7.9802,
-        7.464
+        3.065,
+        1.4438,
+        3.6873,
+        1.1292,
+        1.0412
       ],
       "alcancados": 1411
     },
@@ -121,14 +121,14 @@
       "usuario_partida": 1199,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 16.9254,
-      "tempo_mediano_ms": 18.308,
+      "tempo_medio_ms": 5.6631,
+      "tempo_mediano_ms": 5.6024,
       "tempos_ms": [
-        19.0799,
-        10.8164,
-        18.4797,
-        17.943,
-        18.308
+        6.5504,
+        5.6024,
+        4.9935,
+        3.6355,
+        7.5336
       ],
       "alcancados": 1411
     },
@@ -139,14 +139,14 @@
       "usuario_partida": 48088,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 160.3339,
-      "tempo_mediano_ms": 131.3882,
+      "tempo_medio_ms": 57.5,
+      "tempo_mediano_ms": 57.7851,
       "tempos_ms": [
-        209.1934,
-        128.7757,
-        203.2525,
-        131.3882,
-        129.0595
+        45.6584,
+        57.7851,
+        51.566,
+        64.9108,
+        67.5796
       ],
       "alcancados": 23123
     },
@@ -157,14 +157,14 @@
       "usuario_partida": 48088,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 355.5652,
-      "tempo_mediano_ms": 343.9305,
+      "tempo_medio_ms": 171.1384,
+      "tempo_mediano_ms": 167.8383,
       "tempos_ms": [
-        256.9572,
-        343.9305,
-        536.362,
-        295.0317,
-        345.5447
+        158.7337,
+        147.8819,
+        179.5311,
+        167.8383,
+        201.7072
       ],
       "alcancados": 23123
     },
@@ -175,14 +175,14 @@
       "usuario_partida": 4710,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 163.1711,
-      "tempo_mediano_ms": 153.0674,
+      "tempo_medio_ms": 44.384,
+      "tempo_mediano_ms": 41.2574,
       "tempos_ms": [
-        114.2812,
-        217.8596,
-        192.5581,
-        153.0674,
-        138.089
+        53.8202,
+        41.2574,
+        35.6368,
+        41.1101,
+        50.0955
       ],
       "alcancados": 23120
     },
@@ -193,14 +193,14 @@
       "usuario_partida": 4710,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 422.6814,
-      "tempo_mediano_ms": 406.3391,
+      "tempo_medio_ms": 144.212,
+      "tempo_mediano_ms": 135.2925,
       "tempos_ms": [
-        381.695,
-        527.1971,
-        381.2311,
-        406.3391,
-        416.9446
+        191.8086,
+        156.4077,
+        135.2925,
+        119.5001,
+        118.0511
       ],
       "alcancados": 23120
     },
@@ -211,14 +211,14 @@
       "usuario_partida": 1199,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 85.8569,
-      "tempo_mediano_ms": 87.9149,
+      "tempo_medio_ms": 38.7194,
+      "tempo_mediano_ms": 36.6047,
       "tempos_ms": [
-        87.9149,
-        100.0685,
-        77.7975,
-        88.9939,
-        74.5099
+        36.6047,
+        41.257,
+        36.2638,
+        43.4213,
+        36.0504
       ],
       "alcancados": 23120
     },
@@ -229,14 +229,14 @@
       "usuario_partida": 1199,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 269.2372,
-      "tempo_mediano_ms": 254.0235,
+      "tempo_medio_ms": 117.2866,
+      "tempo_mediano_ms": 116.1778,
       "tempos_ms": [
-        344.0092,
-        274.71,
-        254.0235,
-        248.9064,
-        224.5368
+        125.5164,
+        116.1778,
+        112.5905,
+        116.7852,
+        115.3629
       ],
       "alcancados": 23120
     },
@@ -247,14 +247,14 @@
       "usuario_partida": 48088,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 303.2402,
-      "tempo_mediano_ms": 303.4612,
+      "tempo_medio_ms": 154.5628,
+      "tempo_mediano_ms": 141.1778,
       "tempos_ms": [
-        303.4612,
-        366.6892,
-        332.7135,
-        282.5644,
-        230.7725
+        139.1412,
+        141.1778,
+        158.945,
+        136.8739,
+        196.676
       ],
       "alcancados": 67272
     },
@@ -265,14 +265,14 @@
       "usuario_partida": 48088,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 1021.6786,
-      "tempo_mediano_ms": 905.2861,
+      "tempo_medio_ms": 576.8142,
+      "tempo_mediano_ms": 552.0939,
       "tempos_ms": [
-        1205.1175,
-        1284.0428,
-        905.2861,
-        898.4726,
-        815.4739
+        530.2178,
+        567.5298,
+        689.6771,
+        552.0939,
+        544.5524
       ],
       "alcancados": 67272
     },
@@ -283,14 +283,14 @@
       "usuario_partida": 4710,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 224.2364,
-      "tempo_mediano_ms": 221.7416,
+      "tempo_medio_ms": 145.7384,
+      "tempo_mediano_ms": 143.3663,
       "tempos_ms": [
-        240.6706,
-        212.5705,
-        221.7416,
-        220.5752,
-        225.624
+        143.3663,
+        141.3388,
+        150.8589,
+        142.373,
+        150.7551
       ],
       "alcancados": 67266
     },
@@ -301,14 +301,14 @@
       "usuario_partida": 4710,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 811.954,
-      "tempo_mediano_ms": 848.086,
+      "tempo_medio_ms": 523.8017,
+      "tempo_mediano_ms": 511.6772,
       "tempos_ms": [
-        747.2806,
-        859.8245,
-        848.086,
-        743.9446,
-        860.6343
+        547.8792,
+        549.1828,
+        508.2718,
+        501.9974,
+        511.6772
       ],
       "alcancados": 67266
     },
@@ -319,14 +319,14 @@
       "usuario_partida": 1199,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 276.4541,
-      "tempo_mediano_ms": 274.2378,
+      "tempo_medio_ms": 155.5386,
+      "tempo_mediano_ms": 133.3103,
       "tempos_ms": [
-        243.1707,
-        361.1958,
-        223.4092,
-        274.2378,
-        280.2569
+        221.724,
+        132.1614,
+        126.6598,
+        133.3103,
+        163.8375
       ],
       "alcancados": 67266
     },
@@ -337,14 +337,14 @@
       "usuario_partida": 1199,
       "pesos": "sem pesos (cada seta é um passo)",
       "execucoes": 5,
-      "tempo_medio_ms": 935.155,
-      "tempo_mediano_ms": 808.8386,
+      "tempo_medio_ms": 525.8172,
+      "tempo_mediano_ms": 536.146,
       "tempos_ms": [
-        784.6856,
-        1031.3757,
-        732.216,
-        808.8386,
-        1318.6593
+        536.146,
+        536.8607,
+        497.0907,
+        509.7451,
+        549.2436
       ],
       "alcancados": 67266
     },
@@ -355,14 +355,14 @@
       "usuario_partida": 48088,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 15.5154,
-      "tempo_mediano_ms": 5.8194,
+      "tempo_medio_ms": 4.0355,
+      "tempo_mediano_ms": 4.7004,
       "tempos_ms": [
-        5.1069,
-        3.928,
-        56.0524,
-        6.6702,
-        5.8194
+        6.4946,
+        4.8849,
+        4.7004,
+        2.2116,
+        1.8858
       ],
       "alcancados": 1412
     },
@@ -373,14 +373,14 @@
       "usuario_partida": 48088,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 19.7159,
-      "tempo_mediano_ms": 17.8683,
+      "tempo_medio_ms": 7.5088,
+      "tempo_mediano_ms": 7.5478,
       "tempos_ms": [
-        13.0609,
-        9.5678,
-        38.2453,
-        19.837,
-        17.8683
+        11.3126,
+        8.3258,
+        7.5478,
+        6.171,
+        4.1868
       ],
       "alcancados": 1412
     },
@@ -391,14 +391,14 @@
       "usuario_partida": 4710,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 0.0038,
-      "tempo_mediano_ms": 0.0021,
+      "tempo_medio_ms": 0.0032,
+      "tempo_mediano_ms": 0.0019,
       "tempos_ms": [
-        0.0101,
-        0.0032,
-        0.0021,
+        0.0078,
+        0.0026,
         0.0019,
-        0.0019
+        0.0019,
+        0.0018
       ],
       "alcancados": 2
     },
@@ -409,14 +409,14 @@
       "usuario_partida": 4710,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 0.0049,
-      "tempo_mediano_ms": 0.0039,
+      "tempo_medio_ms": 0.0039,
+      "tempo_mediano_ms": 0.0028,
       "tempos_ms": [
-        0.0093,
-        0.0051,
+        0.0072,
         0.0039,
-        0.0032,
-        0.0031
+        0.0028,
+        0.0028,
+        0.0026
       ],
       "alcancados": 2
     },
@@ -427,14 +427,14 @@
       "usuario_partida": 1199,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 2.2801,
-      "tempo_mediano_ms": 2.2828,
+      "tempo_medio_ms": 4.0299,
+      "tempo_mediano_ms": 4.3224,
       "tempos_ms": [
-        2.5428,
-        2.42,
-        2.1155,
-        2.2828,
-        2.0396
+        4.3224,
+        2.1338,
+        5.1034,
+        4.8623,
+        3.7275
       ],
       "alcancados": 1411
     },
@@ -445,14 +445,14 @@
       "usuario_partida": 1199,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 7.1072,
-      "tempo_mediano_ms": 6.7556,
+      "tempo_medio_ms": 4.9847,
+      "tempo_mediano_ms": 4.792,
       "tempos_ms": [
-        6.7556,
-        5.0271,
-        9.8705,
-        4.7689,
-        9.1137
+        6.0055,
+        5.1436,
+        4.3024,
+        4.792,
+        4.6798
       ],
       "alcancados": 1411
     },
@@ -463,14 +463,14 @@
       "usuario_partida": 48088,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 160.4122,
-      "tempo_mediano_ms": 116.5564,
+      "tempo_medio_ms": 83.3749,
+      "tempo_mediano_ms": 80.6588,
       "tempos_ms": [
-        114.5761,
-        108.6069,
-        116.5564,
-        205.1481,
-        257.1735
+        80.6588,
+        84.9514,
+        80.2692,
+        77.7385,
+        93.2568
       ],
       "alcancados": 23123
     },
@@ -481,14 +481,14 @@
       "usuario_partida": 48088,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 195.4871,
-      "tempo_mediano_ms": 162.8731,
+      "tempo_medio_ms": 139.3138,
+      "tempo_mediano_ms": 127.6447,
       "tempos_ms": [
-        159.6693,
-        162.8731,
-        149.6633,
-        176.2526,
-        328.9774
+        151.4191,
+        194.6116,
+        112.9912,
+        109.9022,
+        127.6447
       ],
       "alcancados": 23123
     },
@@ -499,14 +499,14 @@
       "usuario_partida": 4710,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 209.7928,
-      "tempo_mediano_ms": 148.8321,
+      "tempo_medio_ms": 84.7593,
+      "tempo_mediano_ms": 78.8996,
       "tempos_ms": [
-        381.1297,
-        228.8765,
-        147.1387,
-        142.9871,
-        148.8321
+        78.814,
+        78.8996,
+        78.0053,
+        90.7053,
+        97.3723
       ],
       "alcancados": 23120
     },
@@ -517,14 +517,14 @@
       "usuario_partida": 4710,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 247.3093,
-      "tempo_mediano_ms": 176.1571,
+      "tempo_medio_ms": 109.443,
+      "tempo_mediano_ms": 108.7304,
       "tempos_ms": [
-        371.8587,
-        359.4725,
-        167.3548,
-        176.1571,
-        161.7035
+        117.2453,
+        108.7304,
+        102.905,
+        102.563,
+        115.7712
       ],
       "alcancados": 23120
     },
@@ -535,14 +535,14 @@
       "usuario_partida": 1199,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 128.2112,
-      "tempo_mediano_ms": 121.7462,
+      "tempo_medio_ms": 86.5546,
+      "tempo_mediano_ms": 83.1931,
       "tempos_ms": [
-        124.2489,
-        117.3292,
-        102.1385,
-        175.5931,
-        121.7462
+        98.8176,
+        97.5484,
+        83.1931,
+        80.2121,
+        73.0017
       ],
       "alcancados": 23120
     },
@@ -553,14 +553,14 @@
       "usuario_partida": 1199,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 176.4345,
-      "tempo_mediano_ms": 176.2188,
+      "tempo_medio_ms": 130.6796,
+      "tempo_mediano_ms": 118.8951,
       "tempos_ms": [
-        173.0717,
-        176.2188,
-        154.1159,
-        193.1474,
-        185.6187
+        165.1837,
+        147.7544,
+        110.4353,
+        118.8951,
+        111.1294
       ],
       "alcancados": 23120
     },
@@ -571,14 +571,14 @@
       "usuario_partida": 48088,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 787.5115,
-      "tempo_mediano_ms": 796.261,
+      "tempo_medio_ms": 282.9697,
+      "tempo_mediano_ms": 284.0382,
       "tempos_ms": [
-        374.5303,
-        893.5382,
-        1205.2816,
-        667.9462,
-        796.261
+        290.1697,
+        290.8312,
+        284.0382,
+        268.4836,
+        281.3256
       ],
       "alcancados": 67272
     },
@@ -589,14 +589,14 @@
       "usuario_partida": 48088,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 840.8633,
-      "tempo_mediano_ms": 965.5414,
+      "tempo_medio_ms": 378.9966,
+      "tempo_mediano_ms": 385.5504,
       "tempos_ms": [
-        476.5615,
-        711.5987,
-        1058.7094,
-        965.5414,
-        991.9053
+        372.3522,
+        391.9522,
+        359.0457,
+        386.0824,
+        385.5504
       ],
       "alcancados": 67272
     },
@@ -607,14 +607,14 @@
       "usuario_partida": 4710,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 700.6488,
-      "tempo_mediano_ms": 680.302,
+      "tempo_medio_ms": 314.1199,
+      "tempo_mediano_ms": 293.8065,
       "tempos_ms": [
-        742.6084,
-        665.193,
-        605.67,
-        680.302,
-        809.4706
+        282.9412,
+        289.2355,
+        293.8065,
+        311.9009,
+        392.7156
       ],
       "alcancados": 67266
     },
@@ -625,14 +625,14 @@
       "usuario_partida": 4710,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 826.5266,
-      "tempo_mediano_ms": 845.8686,
+      "tempo_medio_ms": 393.8728,
+      "tempo_mediano_ms": 398.9802,
       "tempos_ms": [
-        845.8686,
-        967.4065,
-        673.0601,
-        744.1588,
-        902.1392
+        409.0526,
+        398.9802,
+        410.6116,
+        370.2991,
+        380.4203
       ],
       "alcancados": 67266
     },
@@ -643,14 +643,14 @@
       "usuario_partida": 1199,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 682.4589,
-      "tempo_mediano_ms": 671.0909,
+      "tempo_medio_ms": 301.4529,
+      "tempo_mediano_ms": 295.868,
       "tempos_ms": [
-        862.4384,
-        593.0971,
-        671.0909,
-        697.2275,
-        588.4406
+        282.7914,
+        295.868,
+        346.0571,
+        297.3444,
+        285.2035
       ],
       "alcancados": 67266
     },
@@ -661,14 +661,14 @@
       "usuario_partida": 1199,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 827.9231,
-      "tempo_mediano_ms": 818.5846,
+      "tempo_medio_ms": 408.5689,
+      "tempo_mediano_ms": 370.3686,
       "tempos_ms": [
-        867.5894,
-        818.5846,
-        792.5268,
-        875.0529,
-        785.8618
+        365.0681,
+        383.9677,
+        365.3542,
+        370.3686,
+        558.0858
       ],
       "alcancados": 67266
     },
@@ -679,14 +679,14 @@
       "usuario_partida": 48080,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 8.8403,
-      "tempo_mediano_ms": 0.0046,
+      "tempo_medio_ms": 0.8604,
+      "tempo_mediano_ms": 0.0019,
       "tempos_ms": [
-        44.1655,
-        0.0269,
-        0.0046,
-        0.0024,
-        0.0022
+        4.2718,
+        0.0263,
+        0.0019,
+        0.0012,
+        0.001
       ],
       "destino": 8068,
       "custo": null,
@@ -699,14 +699,14 @@
       "usuario_partida": 19563,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 578.9081,
-      "tempo_mediano_ms": 441.6024,
+      "tempo_medio_ms": 384.1161,
+      "tempo_mediano_ms": 363.59,
       "tempos_ms": [
-        677.1533,
-        441.6024,
-        431.547,
-        383.1389,
-        961.0987
+        349.889,
+        329.2256,
+        447.0101,
+        430.866,
+        363.59
       ],
       "destino": 653,
       "custo": 3,
@@ -719,14 +719,14 @@
       "usuario_partida": 9765,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 494.2595,
-      "tempo_mediano_ms": 470.0554,
+      "tempo_medio_ms": 398.4487,
+      "tempo_mediano_ms": 401.895,
       "tempos_ms": [
-        749.4528,
-        470.0554,
-        471.0999,
-        420.9285,
-        359.7607
+        360.5512,
+        405.0835,
+        431.1201,
+        401.895,
+        393.5939
       ],
       "destino": 3451,
       "custo": 2,
@@ -739,14 +739,14 @@
       "usuario_partida": 134,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 364.3367,
-      "tempo_mediano_ms": 356.1963,
+      "tempo_medio_ms": 496.8625,
+      "tempo_mediano_ms": 474.8344,
       "tempos_ms": [
-        388.7982,
-        356.1963,
-        354.3041,
-        339.5015,
-        382.8832
+        474.8344,
+        592.7866,
+        519.6476,
+        430.3154,
+        466.7285
       ],
       "destino": 21299,
       "custo": 4,
@@ -759,14 +759,14 @@
       "usuario_partida": 11021,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 394.1544,
-      "tempo_mediano_ms": 374.8336,
+      "tempo_medio_ms": 381.4731,
+      "tempo_mediano_ms": 397.4063,
       "tempos_ms": [
-        444.6981,
-        445.4449,
-        374.8336,
-        342.169,
-        363.6264
+        397.4063,
+        411.0816,
+        432.1745,
+        350.7248,
+        315.9785
       ],
       "destino": 7733,
       "custo": 4,
@@ -779,14 +779,14 @@
       "usuario_partida": 16592,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 368.6555,
-      "tempo_mediano_ms": 362.0879,
+      "tempo_medio_ms": 325.369,
+      "tempo_mediano_ms": 317.6905,
       "tempos_ms": [
-        355.5752,
-        339.4017,
-        362.0879,
-        421.4093,
-        364.8035
+        382.6126,
+        364.346,
+        317.6905,
+        285.4657,
+        276.73
       ],
       "destino": 19236,
       "custo": 3,
@@ -799,14 +799,14 @@
       "usuario_partida": 29495,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 379.6878,
-      "tempo_mediano_ms": 384.5006,
+      "tempo_medio_ms": 275.866,
+      "tempo_mediano_ms": 278.0976,
       "tempos_ms": [
-        407.7012,
-        384.5006,
-        374.4733,
-        392.8861,
-        338.8776
+        282.4462,
+        270.4464,
+        278.0976,
+        262.5483,
+        285.7916
       ],
       "destino": 3381,
       "custo": 6,
@@ -819,14 +819,14 @@
       "usuario_partida": 3078,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 374.4804,
-      "tempo_mediano_ms": 360.5663,
+      "tempo_medio_ms": 341.4112,
+      "tempo_mediano_ms": 337.6936,
       "tempos_ms": [
-        350.1128,
-        353.9309,
-        360.5663,
-        432.1056,
-        375.6865
+        310.357,
+        304.3102,
+        337.6936,
+        361.152,
+        393.5431
       ],
       "destino": 19094,
       "custo": 2,
@@ -839,14 +839,14 @@
       "usuario_partida": 277,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 351.0953,
-      "tempo_mediano_ms": 332.8919,
+      "tempo_medio_ms": 305.6742,
+      "tempo_mediano_ms": 288.3416,
       "tempos_ms": [
-        422.3852,
-        322.7086,
-        332.8919,
-        350.4639,
-        327.0268
+        376.3382,
+        295.4425,
+        284.1769,
+        288.3416,
+        284.0716
       ],
       "destino": 65476,
       "custo": 6,
@@ -859,14 +859,14 @@
       "usuario_partida": 36599,
       "pesos": "amigo 1, inimigo 2",
       "execucoes": 5,
-      "tempo_medio_ms": 415.4946,
-      "tempo_mediano_ms": 398.2859,
+      "tempo_medio_ms": 299.493,
+      "tempo_mediano_ms": 292.1849,
       "tempos_ms": [
-        336.2451,
-        396.9559,
-        467.0339,
-        478.952,
-        398.2859
+        292.1849,
+        294.3185,
+        281.9307,
+        291.1383,
+        337.8927
       ],
       "destino": 47238,
       "custo": 4,
@@ -879,14 +879,14 @@
       "usuario_partida": 11038,
       "pesos": "sinal original (amigo +1, inimigo -1)",
       "execucoes": 5,
-      "tempo_medio_ms": 0.0669,
-      "tempo_mediano_ms": 0.0606,
+      "tempo_medio_ms": 0.0526,
+      "tempo_mediano_ms": 0.0471,
       "tempos_ms": [
-        0.1147,
-        0.0606,
-        0.0463,
-        0.0515,
-        0.0616
+        0.0837,
+        0.0489,
+        0.0471,
+        0.0411,
+        0.0423
       ],
       "alcancados": 13,
       "ciclo_negativo": null
@@ -898,14 +898,14 @@
       "usuario_partida": 11038,
       "pesos": "sinal original (amigo +1, inimigo -1)",
       "execucoes": 5,
-      "tempo_medio_ms": 17.5946,
-      "tempo_mediano_ms": 18.0844,
+      "tempo_medio_ms": 10.991,
+      "tempo_mediano_ms": 10.2356,
       "tempos_ms": [
-        16.1428,
-        21.9816,
-        18.0844,
-        21.1203,
-        10.6439
+        13.8234,
+        9.4763,
+        11.6435,
+        9.7763,
+        10.2356
       ],
       "ciclo_negativo": [
         919,
