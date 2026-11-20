@@ -12,7 +12,7 @@ O trabalho combina modelagem de grafos, análise de desempenho e visualização 
 ```text
 src/        Leitura, estrutura do grafo, algoritmos, execução e visualização
 data/       Mapas e dataset do Slashdot
-notebooks/  Exploração e visualização dos dados
+notebooks/  01: exploração dos dados (AVD) · 02: algoritmos da Parte 2 (Grafos)
 tests/      Testes automatizados
 docs/       Documentação e materiais da entrega
 out/        Resultados e figuras
@@ -20,12 +20,11 @@ out/        Resultados e figuras
 
 ## Estado atual
 
-- Estrutura de grafo dirigido e algoritmos BFS, DFS, Dijkstra e Bellman-Ford implementados.
-- Leitura e validação dos mapas disponíveis pelo terminal.
-- Leitura, validação e construção do grafo do dataset implementadas.
-- Base de desenho dos mapas e início do notebook de exploração preparados.
+- Grafo dirigido e algoritmos BFS, DFS, Dijkstra e Bellman-Ford implementados pelo grupo e testados com `pytest`.
+- Parte 1: leitura e validação dos mapas, grafo de posições e grafo de estados; `src.solve` gera as saídas e as figuras em `out/parte1/`.
+- Parte 2: exploração dos dados no notebook `01_exploracao_dados.ipynb`, algoritmos e medições no notebook `02_grafos_algoritmos.ipynb` e execução pelo terminal com `--dataset`.
 
-A construção dos grafos dos labirintos, a integração das buscas pelo terminal e os experimentos da Parte 2 ainda estão em desenvolvimento.
+Em desenvolvimento: labirinto interativo, mapas do grupo, comandos da Parte 1 pelo terminal (`--alg` com `--mapa`), visualizações de AVD e relatório em PDF.
 
 ## Instalação
 
@@ -58,6 +57,43 @@ Mapa valido: 5 linhas e 13 colunas.
 
 O comando verifica o formato e mostra as dimensões. Um mapa válido não necessariamente possui solução. Para consultar a ajuda, use `.\.venv\Scripts\python.exe -m src.cli --help`.
 
+### Gerar as saídas da Parte 1
+
+```powershell
+.\.venv\Scripts\python.exe -m src.solve
+```
+
+Gera em `out/parte1/` os arcos, as métricas, as camadas, os graus, as soluções dos algoritmos e as figuras de todos os mapas de `data/mapas/`.
+
+### Rodar um algoritmo no dataset (Parte 2)
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli --dataset data/dataset_parte2/ --alg DIJKSTRA --source 9765 --target 3451 --out out/parte2/
+```
+
+| Opção | Significado |
+| --- | --- |
+| `--alg` | `BFS`, `DFS`, `DIJKSTRA` ou `BELLMAN_FORD` |
+| `--source` | Usuário de partida |
+| `--target` | Usuário de chegada (opcional) |
+| `--recorte` | `10`, `50` ou `100`: porcentagem dos usuários, com os mesmos recortes do notebook (padrão: `100`) |
+| `--out` | Pasta onde o resultado é salvo em JSON (padrão: `out/parte2/`) |
+
+BFS e DFS contam passos. O Dijkstra usa amigo = 1 e inimigo = 2, porque não aceita peso negativo. O Bellman-Ford usa os sinais originais (+1 e −1) e, quando encontra um ciclo negativo, mostra o ciclo e o custo dele. Exemplos sem ciclo negativo (recorte de 10%) e com ciclo negativo (rede completa):
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli --dataset data/dataset_parte2/ --alg BELLMAN_FORD --source 11038 --recorte 10
+.\.venv\Scripts\python.exe -m src.cli --dataset data/dataset_parte2/ --alg BELLMAN_FORD --source 11038
+```
+
+### Medir o desempenho (Parte 2)
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli --dataset data/dataset_parte2/ --benchmark --out out/parte2/
+```
+
+Mede os quatro algoritmos nos recortes de 10%, 50% e 100% (5 execuções cada), o Dijkstra nas dez marcações do piloto e os dois casos do Bellman-Ford. O resultado é gravado em `out/parte2/parte2_report.json`, no mesmo formato gerado pelo notebook `02_grafos_algoritmos.ipynb`.
+
 ## Dataset da Parte 2
 
 Utilizamos o **Slashdot Zoo**, versão `soc-sign-Slashdot090221`, aprovada para o projeto. A base contém **82.140 usuários e 549.202 relações dirigidas**, com sinais `1` (amigo) e `-1` (inimigo).
@@ -76,7 +112,10 @@ A tabela possui as colunas `origem`, `destino` e `sinal`. O objeto `grafo` é cr
 
 - [Fonte e download — SNAP / Stanford](https://snap.stanford.edu/data/soc-sign-Slashdot090221.html).
 - Referência: J. Leskovec, D. Huttenlocher e J. Kleinberg. *Signed Networks in Social Media*. CHI 2010.
-- [Notebook de exploração inicial](notebooks/01_exploracao_dados.ipynb): descrição das colunas, leitura e primeiras linhas. Abra o notebook, selecione o Python da `.venv` e execute as células em ordem.
+- [01_exploracao_dados.ipynb](notebooks/01_exploracao_dados.ipynb): exploração dos dados (AVD), com estrutura, distribuições, relações e outliers.
+- [02_grafos_algoritmos.ipynb](notebooks/02_grafos_algoritmos.ipynb): amostragem, BFS, DFS, Dijkstra, Bellman-Ford, escalabilidade e relatório de desempenho. Gera `out/parte2/parte2_report.json` e `out/parte2/passos_volta.csv`.
+
+Abra os notebooks, selecione o Python da `.venv` e execute as células em ordem.
 
 ## Testes
 
@@ -84,7 +123,7 @@ A tabela possui as colunas `origem`, `destino` e `sinal`. O objeto `grafo` é cr
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-Os testes verificam a estrutura do grafo, os algoritmos, a leitura dos mapas e o comando do terminal. `networkx` é utilizado somente nos testes para conferir resultados; os algoritmos são implementados pelo grupo.
+Os testes verificam a estrutura do grafo, os algoritmos, a leitura dos mapas e os comandos do terminal das duas partes. `networkx` é utilizado somente nos testes para conferir resultados; os algoritmos são implementados pelo grupo.
 
 ## Equipe e contato
 

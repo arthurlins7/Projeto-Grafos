@@ -108,10 +108,13 @@ def test_comando_recusa_argumentos_incorretos(argumentos):
     assert "Traceback" not in resultado.stderr
 
 
+# [IA] Claude - ajuste do teste de ajuda para incluir os comandos da Parte 2
 def test_comando_mostra_ajuda():
     resultado = executar_cli("--help")
     assert resultado.returncode == 0
     assert "--mapa" in resultado.stdout
     assert "--validar-mapa" in resultado.stdout
-    assert "--alg" not in resultado.stdout
+    assert "--dataset" in resultado.stdout
+    assert "--alg" in resultado.stdout
+    assert "--benchmark" in resultado.stdout
     assert resultado.stderr == ""

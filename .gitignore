@@ -224,6 +224,7 @@ __marimo__/
 REGRAS/
 RESPOSTAS_DECLARACAO_IA.md
 *DECLARACAO*IA*
-docs/DECLARACAO_IA.pdf
+# a declaracao assinada precisa ir para o repositorio
+!docs/DECLARACAO_IA.pdf
 .claude/
 
