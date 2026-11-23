@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!-- [IA] Claude Code – estrutura HTML da pagina do projeto, incluindo os textos explicativos -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projeto Grafos · Labirintos e Slashdot</title>
+<meta name="description" content="BFS, DFS, Dijkstra e Bellman-Ford em labirintos com chaves e portas e na rede social Slashdot.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<header class="nav">
+  <a class="brand" href="#topo"><span class="brand-dot"></span>Projeto Grafos</a>
+  <nav>
+    <a href="#parte1">Labirintos</a>
+    <a href="#modelagem">Modelagem</a>
+    <a href="#parte2">Slashdot</a>
+    <a href="#graficos">Gráficos</a>
+    <a href="#equipe">Equipe</a>
+  </nav>
+</header>
+
+<main id="topo">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <span class="pill">Teoria dos Grafos + AVD · 2026.2</span>
+      <h1>Encontrando o <em>melhor caminho</em><br>em labirintos e redes sociais</h1>
+      <p class="lead">Quatro algoritmos, dois cenários. Comparamos <strong>BFS, DFS, Dijkstra e Bellman-Ford</strong> em labirintos com chaves, portas e esteiras e na rede de 82 mil usuários do Slashdot.</p>
+      <div class="cta">
+        <a class="btn primary" href="#parte1">Explorar os labirintos</a>
+        <a class="btn ghost" href="#parte2">Ver a rede Slashdot</a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <svg viewBox="0 0 420 360" class="net">
+        <g class="edges" stroke="url(#g1)" stroke-width="2" fill="none">
+          <path d="M60 180 L150 90 L270 120 L350 60"/>
+          <path d="M60 180 L140 270 L260 250 L350 300"/>
+          <path d="M150 90 L140 270"/>
+          <path d="M270 120 L260 250"/>
+          <path d="M350 60 L390 180 L350 300"/>
+          <path d="M270 120 L390 180"/>
+          <path class="route" d="M60 180 L150 90 L270 120 L390 180 L350 300"/>
+        </g>
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+        </defs>
+        <g class="nodes">
+          <circle cx="60" cy="180" r="16" class="n start"/><text x="60" y="185" text-anchor="middle">S</text>
+          <circle cx="150" cy="90" r="11" class="n"/>
+          <circle cx="270" cy="120" r="11" class="n"/>
+          <circle cx="350" cy="60" r="10" class="n"/>
+          <circle cx="140" cy="270" r="11" class="n"/>
+          <circle cx="260" cy="250" r="11" class="n"/>
+          <circle cx="390" cy="180" r="11" class="n"/>
+          <circle cx="350" cy="300" r="16" class="n goal"/><text x="350" y="305" text-anchor="middle">G</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- NUMEROS -->
+  <section class="stats" id="stats">
+    <div class="stat"><b data-count="4">0</b><span>algoritmos</span></div>
+    <div class="stat"><b data-count="8">0</b><span>mapas de labirinto</span></div>
+    <div class="stat"><b data-count="82140">0</b><span>usuários no Slashdot</span></div>
+    <div class="stat"><b data-count="549202">0</b><span>relações dirigidas</span></div>
+  </section>
+
+  <!-- ALGORITMOS -->
+  <section class="block">
+    <div class="head"><span class="eyebrow">Os protagonistas</span><h2>Quatro formas de achar o caminho</h2></div>
+    <div class="algos">
+      <article class="card algo" style="--c:#22d3ee">
+        <h3>BFS</h3><p class="tag">Busca em largura</p>
+        <p>Explora em camadas e acha o caminho com <b>menos passos</b>, ignorando o custo das casas.</p>
+      </article>
+      <article class="card algo" style="--c:#f472b6">
+        <h3>DFS</h3><p class="tag">Busca em profundidade</p>
+        <p>Mergulha por um ramo até o fim. Acha <b>um</b> caminho, quase nunca o melhor.</p>
+      </article>
+      <article class="card algo" style="--c:#a78bfa">
+        <h3>Dijkstra</h3><p class="tag">Menor custo</p>
+        <p>Minimiza o custo total, mas <b>não aceita pesos negativos</b>.</p>
+      </article>
+      <article class="card algo" style="--c:#fbbf24">
+        <h3>Bellman-Ford</h3><p class="tag">Pesos negativos</p>
+        <p>Aceita pesos negativos e <b>detecta ciclos negativos</b>, onde o custo cai sem parar.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- PARTE 1 -->
+  <section class="block" id="parte1">
+    <div class="head"><span class="eyebrow">Parte 1</span><h2>Labirinto interativo</h2>
+      <p>Escolha um mapa e um algoritmo e veja o percurso real calculado pelo nosso código.</p></div>
+
+    <div class="lab card">
+      <div class="lab-controls">
+        <div class="field"><label for="selMapa">Mapa</label><select id="selMapa"></select></div>
+        <div class="field grow"><label>Algoritmo</label><div class="seg" id="segAlg"></div></div>
+      </div>
+
+      <div class="lab-main">
+        <div class="canvas-wrap"><canvas id="cv" aria-label="Labirinto"></canvas>
+          <div class="overlay" id="overlay" hidden></div></div>
+
+        <aside class="lab-side">
+          <div class="readout">
+            <div><span>Passo</span><b id="rdPasso">0</b></div>
+            <div><span>Custo acumulado</span><b id="rdCusto">0</b></div>
+            <div><span>Chaves</span><b id="rdChaves">—</b></div>
+          </div>
+          <div class="result" id="resultado"></div>
+          <div class="legend" id="legenda"></div>
+        </aside>
+      </div>
+
+      <div class="player">
+        <button class="icon-btn" id="btnPlay" aria-label="Reproduzir">▶</button>
+        <button class="icon-btn" id="btnReset" aria-label="Reiniciar">↺</button>
+        <input type="range" id="scrub" min="0" value="0" aria-label="Linha do tempo">
+        <label class="speed">Velocidade <input type="range" id="speed" min="1" max="10" value="5"></label>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <h3>Comparativo dos algoritmos no mapa <span id="tbMapa"></span></h3>
+      <div class="table-scroll"><table id="tbl"></table></div>
+    </div>
+  </section>
+
+  <!-- MODELAGEM -->
+  <section class="block" id="modelagem">
+    <div class="head"><span class="eyebrow">Modelagem</span><h2>Por que usar grafo de estados?</h2>
+      <p>Posição sozinha não basta: quem tem a chave <i>a</i> não está no mesmo estado de quem não tem. O nó guarda <code>(linha,coluna)|chaves|{bônus}</code>.</p></div>
+    <div class="two">
+      <div class="card"><h3>Tamanho dos grafos por mapa</h3><div id="chartModel" class="bars"></div>
+        <p class="note">Nós de <b class="k1">G_pos</b> (só posição) contra nós de <b class="k2">G_est</b> (posição + chaves + bônus).</p></div>
+      <div class="card"><h3>O que dá errado só com posições</h3><div id="armadilhas" class="traps"></div></div>
+    </div>
+  </section>
+
+  <!-- PARTE 2 -->
+  <section class="block" id="parte2">
+    <div class="head"><span class="eyebrow">Parte 2</span><h2>A rede social Slashdot</h2>
+      <p>Cada seta é uma marcação: <b class="friend">amigo (+1)</b> ou <b class="foe">inimigo (−1)</b>. Dataset <code id="dsNome"></code>.</p></div>
+
+    <div class="slash-grid">
+      <div class="card"><h3>Tempo por recorte da rede</h3><p class="note top">Mediana em ms, média de três usuários de partida. Escala logarítmica.</p><div id="chartEscala"></div></div>
+      <div class="card"><h3>Recortes do dataset</h3><div class="table-scroll"><table id="tblRec"></table></div>
+        <div class="negcycle" id="negCycle"></div></div>
+    </div>
+
+    <div class="card table-card">
+      <h3>Caminhos de volta: marcações do piloto</h3>
+      <p class="note top">Quem recebeu a marcação consegue chegar de volta a quem marcou? Dijkstra com amigo = 1 e inimigo = 2.</p>
+      <div class="table-scroll"><table id="tblPiloto"></table></div>
+    </div>
+  </section>
+
+  <!-- GRAFICOS -->
+  <section class="block" id="graficos">
+    <div class="head"><span class="eyebrow">AVD</span><h2>Galeria de visualizações</h2><p>Figuras geradas pelos notebooks do grupo. Clique para ampliar.</p></div>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <!-- EQUIPE -->
+  <section class="block" id="equipe">
+    <div class="head"><span class="eyebrow">Time</span><h2>Quem fez</h2></div>
+    <div class="team">
+      <div class="card person"><div class="av" style="--h:260">AL</div><b>Arthur Lins</b></div>
+      <div class="card person"><div class="av" style="--h:190">DS</div><b>Davi Santiago</b></div>
+      <div class="card person"><div class="av" style="--h:320">JP</div><b>João Pedro Patriota</b></div>
+      <div class="card person"><div class="av" style="--h:40">LR</div><b>Lucas Ramon</b></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Projeto acadêmico · Teoria dos Grafos e AVD · 2026.2 · <a href="https://github.com/arthurlins7/Projeto-Grafos" target="_blank" rel="noopener">Repositório no GitHub</a></p>
+  <p class="small">Dataset: SNAP/Stanford, Leskovec, Huttenlocher e Kleinberg, <i>Signed Networks in Social Media</i>, CHI 2010.</p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden><img alt=""><p></p></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
