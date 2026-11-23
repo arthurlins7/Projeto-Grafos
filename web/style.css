@@ -5,6 +5,7 @@
   --ok:#34d399; --bad:#fb7185; --r:18px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth;scroll-padding-top:80px}
 body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
 code{font-family:"JetBrains Mono",monospace;font-size:.85em;background:rgba(124,92,255,.15);padding:.1em .4em;border-radius:6px;color:#c4b5fd}
@@ -84,6 +85,20 @@ select:focus{outline:2px solid var(--a)}
 .seg button:hover{color:#fff}
 .seg button.on{color:#fff;border-color:var(--c);background:color-mix(in srgb,var(--c) 22%,#161a35);box-shadow:0 0 0 1px var(--c) inset}
 .seg button:disabled{opacity:.4;cursor:not-allowed}
+.lab-layers{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-end;margin-bottom:18px}
+.seg.layers button{flex:0 1 auto;min-width:0;padding:8px 14px;font-size:.84rem;font-family:"JetBrains Mono",monospace}
+.seg.layers button.on{--c:#22d3ee}
+.seg.layers button.live{box-shadow:0 0 0 1px #22d3ee inset,0 0 14px rgba(34,211,238,.35)}
+.switch{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--muted);user-select:none;padding-bottom:9px}
+.switch input{position:absolute;opacity:0;pointer-events:none}
+.switch .knob{width:42px;height:24px;border-radius:99px;background:#1c2042;border:1px solid var(--line);position:relative;transition:.25s;flex:none}
+.switch .knob::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#9aa0c3;transition:.25s}
+.switch input:checked+.knob{background:rgba(244,63,94,.28);border-color:#f43f5e}
+.switch input:checked+.knob::after{left:20px;background:#fb7185}
+.switch input:checked~*,.switch:has(input:checked){color:#fecdd3}
+.switch input:focus-visible+.knob{outline:2px solid var(--a);outline-offset:2px}
+.layer-info{margin:12px 0 0;padding:11px 14px;border-radius:12px;font-size:.82rem;color:var(--muted);background:#10132b;border:1px solid var(--line);line-height:1.5}
+.layer-info b{color:#fff}.layer-info .trap{color:#fb7185}
 .lab-main{display:grid;grid-template-columns:1fr 270px;gap:22px}
 .canvas-wrap{position:relative;background:#080a16;border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;align-items:center;justify-content:center;min-height:240px}
 canvas{max-width:100%;height:auto;border-radius:8px;image-rendering:auto}

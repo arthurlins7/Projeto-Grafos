@@ -41,6 +41,39 @@ def ler_solucoes():
     return saida
 
 
+def ler_armadilhas():
+    """Estados alcancaveis que nao chegam ao ALVO (armadilhas_m04.csv e armadilhas_m07.csv)."""
+    saida = {}
+    for arq in sorted((RAIZ / "out" / "parte1").glob("armadilhas_m*.csv")):
+        with open(arq, encoding="utf-8") as f:
+            saida[arq.stem[-3:]] = [
+                [int(l["linha"]), int(l["coluna"]), "" if l["chaves"] == "-" else l["chaves"]]
+                for l in csv.DictReader(f)
+            ]
+    return saida
+
+
+def ler_camadas():
+    """Casas presentes em cada camada (conjunto de chaves) do grafo de estados, a partir de arestas_m*.csv."""
+    resumo = json.loads((RAIZ / "out" / "parte1" / "camadas.json").read_text(encoding="utf-8"))
+    saida = {}
+    for mapa, info in resumo.items():
+        casas = defaultdict(set)
+        with open(RAIZ / "out" / "parte1" / f"arestas_{mapa}.csv", encoding="utf-8") as f:
+            for lin in csv.DictReader(f):
+                for estado in (lin["origem"], lin["destino"]):
+                    achou = PADRAO_ESTADO.match(estado)
+                    if achou:
+                        r, c, chaves = achou.groups()
+                        casas["" if chaves == "-" else chaves].add((int(r), int(c)))
+        saida[mapa] = {
+            "ordem": ["" if k == "-" else k for k in info["camadas"]],
+            "casas": {k: sorted([r, c] for r, c in v) for k, v in casas.items()},
+            "arcos_entre_camadas": info["arcos_entre_camadas"],
+        }
+    return saida
+
+
 def ler_parte2():
     rel = json.loads((RAIZ / "out" / "parte2" / "parte2_report.json").read_text(encoding="utf-8"))
     tempos = defaultdict(list)
@@ -75,6 +108,8 @@ def main():
         "solucoes": ler_solucoes(),
         "metricas": json.loads((RAIZ / "out" / "parte1" / "metricas_global.json").read_text(encoding="utf-8")),
         "parte2": ler_parte2(),
+        "armadilhas": ler_armadilhas(),
+        "camadas": ler_camadas(),
     }
     with open(RAIZ / "out" / "parte1" / "comparacao_modelagem.csv", encoding="utf-8") as f:
         dados["modelagem"] = list(csv.DictReader(f))

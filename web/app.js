@@ -23,6 +23,7 @@ const LEGENDA = [
   ["#1a1d3a", "Parede"], ["#0f1226", "Chão (1)"], ["#6b4f2a", "Lama (3)"], ["#1d4ed8", "Água (5)"],
   ["#facc15", "Chave"], ["#f97316", "Porta"], ["#34d399", "Bônus (−4)"], ["#e879f9", "Fonte (−2)"],
   ["#10b981", "Início S"], ["#f43f5e", "Saída G"],
+  ["rgba(244,63,94,.55)", "Estado-armadilha"], ["rgba(255,255,255,.08)", "Fora da camada"],
 ];
 const SETA = { "^": [0, -1], ">": [1, 0], v: [0, 1], "<": [-1, 0] };
 
@@ -36,20 +37,29 @@ function custoEntrada(ch, pos, vistos, fonteConsumivel) {
 }
 
 /* percorre o caminho calculando custo e chaves em cada passo */
+function indicesBonus(mapa) {
+  if (mapa._bi) return mapa._bi;
+  const m = {}; let n = 0;
+  mapa.grade.forEach((l, r) => [...l].forEach((ch, c) => { if (ch === "+") m[r + "," + c] = n++; }));
+  return (mapa._bi = m);
+}
+
 function simular(mapa, caminho, fonteConsumivel) {
   const out = []; let custo = 0; const chaves = new Set(); const vistos = new Set();
+  const bonus = new Set(), idx = indicesBonus(mapa);
   caminho.forEach(([r, c], i) => {
     const ch = mapa.grade[r][c];
     if (i > 0) custo += custoEntrada(ch, [r, c], vistos, fonteConsumivel);
+    if (i > 0 && ch === "+") bonus.add(idx[r + "," + c]);
     if (/[a-d]/.test(ch)) chaves.add(ch);
-    out.push({ custo, chaves: [...chaves].sort().join("") });
+    out.push({ custo, chaves: [...chaves].sort().join(""), bonus: [...bonus].sort((a, b) => a - b) });
   });
   return out;
 }
 
 /* ---------- labirinto ---------- */
 const cv = $("#cv"), ctx = cv.getContext("2d");
-const S = { mapa: null, alg: "BFS", sol: null, sim: [], passo: 0, tocando: false, acc: 0, ultimo: 0, cell: 24 };
+const S = { mapa: null, alg: "BFS", sol: null, sim: [], passo: 0, tocando: false, acc: 0, ultimo: 0, cell: 24, camada: "auto", armadilha: false };
 
 function solucaoDe(mapa, alg) {
   const s = D.solucoes[mapa][alg === "BELLMAN_FORD_FONTE_CONSUMIVEL" ? alg : alg];
@@ -67,6 +77,49 @@ function montarMapas() {
   $("#legenda").innerHTML = LEGENDA.map(([c, t]) => `<span><i style="background:${c}"></i>${t}</span>`).join("");
 }
 
+/* ---------- camadas e estados-armadilha ---------- */
+const rotCamada = (k) => (k === "" ? "sem chaves" : "chaves " + k.split("").join(" "));
+
+function camadaVisivel() {
+  return S.camada === "auto" ? (S.sim[S.passo]?.chaves || "") : S.camada;
+}
+function armadilhasDa(mapaId) { return D.armadilhas[mapaId] || []; }
+
+function montarCamadas() {
+  const info = D.camadas[S.mapa.id], seg = $("#segCamada");
+  seg.parentElement.hidden = info.ordem.length < 2;
+  seg.innerHTML = "";
+  [["auto", "Seguir o percurso"], ...info.ordem.map((k) => [k, k === "" ? "−" : k])].forEach(([k, t]) => {
+    const b = document.createElement("button");
+    b.textContent = t; b.dataset.k = k; b.title = k === "auto" ? "A camada acompanha as chaves do jogador" : rotCamada(k);
+    b.onclick = () => { S.camada = k; atualizarCamadas(); desenhar(); };
+    seg.appendChild(b);
+  });
+  const chk = $("#chkArmadilha"), temArm = armadilhasDa(S.mapa.id).length > 0;
+  chk.disabled = !temArm;
+  chk.parentElement.style.opacity = temArm ? 1 : .45;
+  chk.parentElement.title = temArm ? "Estados alcançáveis a partir de S, mas sem caminho até o ALVO" : "Este mapa não tem estados-armadilha";
+  if (!temArm) { chk.checked = false; S.armadilha = false; }
+  atualizarCamadas();
+}
+
+function atualizarCamadas() {
+  const info = D.camadas[S.mapa.id], vis = camadaVisivel();
+  [...$("#segCamada").children].forEach((b) => {
+    b.classList.toggle("on", b.dataset.k === S.camada);
+    b.classList.toggle("live", S.camada !== "auto" && b.dataset.k === (S.sim[S.passo]?.chaves || "") && b.dataset.k !== S.camada);
+  });
+  const casas = (info.casas[vis] || []).length;
+  const arm = armadilhasDa(S.mapa.id).filter((a) => a[2] === vis).length;
+  let h = `Camada exibida: <b>${rotCamada(vis)}</b> · <b>${casas}</b> casas alcançáveis`;
+  if (arm) h += ` · <span class="trap"><b>${arm}</b> estados-armadilha</span>`;
+  if (info.ordem.length > 1) h += `<br>Arcos entre camadas: <b>${info.arcos_entre_camadas}</b>`;
+  $("#infoCamada").innerHTML = h;
+}
+$("#chkArmadilha").onchange = (e) => { S.armadilha = e.target.checked; desenhar(); };
+/* o realce pulsa: redesenha mesmo com o percurso parado */
+(function pulsar() { if (S.armadilha && !S.tocando) desenhar(); requestAnimationFrame(pulsar); })();
+
 function montarAlgs() {
   const seg = $("#segAlg"); seg.innerHTML = "";
   ALGS.forEach((a) => {
@@ -83,6 +136,8 @@ function montarAlgs() {
 function escolherMapa(id) {
   S.mapa = D.mapas[id];
   $("#selMapa").value = id;
+  S.camada = "auto";
+  montarCamadas();
   montarAlgs();
   dimensionar();
   const ok = [...$("#segAlg").children].some((b) => b.dataset.id === S.alg);
@@ -178,6 +233,24 @@ function desenhar() {
       for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rad = (i % 2 ? .13 : .3) * k; ctx.lineTo(x + k / 2 + Math.cos(a) * rad, y + k / 2 + Math.sin(a) * rad); } ctx.fill(); ctx.globalAlpha = 1; }
     else if (ch === "*") { ctx.fillStyle = "#e879f9"; ctx.beginPath(); ctx.moveTo(x + k * .56, y + k * .12); ctx.lineTo(x + k * .3, y + k * .55); ctx.lineTo(x + k * .5, y + k * .55); ctx.lineTo(x + k * .42, y + k * .88); ctx.lineTo(x + k * .72, y + k * .42); ctx.lineTo(x + k * .5, y + k * .42); ctx.closePath(); ctx.fill(); }
   }
+  /* camada exibida: esmaece casas que nao existem nela; realca armadilhas */
+  const info = D.camadas[S.mapa.id], vis = camadaVisivel();
+  if (info.ordem.length > 1) {
+    const dentro = new Set((info.casas[vis] || []).map(([r, c]) => r + "," + c));
+    ctx.fillStyle = "rgba(8,10,22,.72)";
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++)
+      if (g[r][c] !== "#" && !dentro.has(r + "," + c)) { rr(c * k, r * k, k, k, k * 0.14); ctx.fill(); }
+  }
+  if (S.armadilha) {
+    const pulso = 0.5 + 0.5 * Math.sin(performance.now() / 380);
+    armadilhasDa(S.mapa.id).filter((a) => a[2] === vis).forEach(([r, c]) => {
+      const x = c * k, y = r * k, p = Math.max(1, k * 0.06);
+      ctx.fillStyle = `rgba(244,63,94,${0.38 + 0.2 * pulso})`; rr(x + p, y + p, k - 2 * p, k - 2 * p, k * 0.14); ctx.fill();
+      ctx.strokeStyle = "#fb7185"; ctx.lineWidth = Math.max(1.5, k * .08); ctx.stroke();
+      if (k >= 11) { ctx.strokeStyle = "#fff"; ctx.lineWidth = Math.max(1.2, k * .07); ctx.lineCap = "round"; const q = k * .3;
+        ctx.beginPath(); ctx.moveTo(x + q, y + q); ctx.lineTo(x + k - q, y + k - q); ctx.moveTo(x + k - q, y + q); ctx.lineTo(x + q, y + k - q); ctx.stroke(); }
+    });
+  }
   /* trilha */
   if (cam.length && S.passo > 0) {
     const cor = ALGS.find((a) => a.id === S.alg).cor, cen = ([r, c]) => [c * k + k / 2, r * k + k / 2];
@@ -198,6 +271,9 @@ function atualizarLeitura() {
   $("#rdPasso").textContent = S.sim.length ? S.passo : "—";
   $("#rdCusto").textContent = e ? e.custo : "—";
   $("#rdChaves").textContent = e ? (e.chaves ? e.chaves.split("").join(" ") : "nenhuma") : "—";
+  const total = Object.keys(indicesBonus(S.mapa)).length;
+  $("#rdBonus").textContent = !e ? "—" : !total ? "sem bônus" : e.bonus.length ? "{" + e.bonus.join(",") + "}" : "nenhum";
+  atualizarCamadas();
   $("#scrub").value = S.passo;
 }
 
@@ -342,6 +418,7 @@ montarMapas(); modelagem(); parte2(); galeria(); efeitos();
   const q = new URLSearchParams(location.search);
   if (q.get("alg")) S.alg = q.get("alg");
   escolherMapa(D.mapas[q.get("mapa")] ? q.get("mapa") : "m02");
+  if (q.has("armadilha")) { const c = $("#chkArmadilha"); if (!c.disabled) { c.checked = true; c.dispatchEvent(new Event("change")); } }
 }
 window.__S = S; /* depuracao */
 })();

@@ -109,6 +109,13 @@
         <div class="field grow"><label>Algoritmo</label><div class="seg" id="segAlg"></div></div>
       </div>
 
+      <div class="lab-layers">
+        <div class="field grow"><label>Camada do grafo de estados (chaves coletadas)</label><div class="seg layers" id="segCamada"></div></div>
+        <label class="switch" title="Estados alcançáveis a partir de S, mas sem caminho até o ALVO">
+          <input type="checkbox" id="chkArmadilha"><span class="knob"></span>Realçar estados-armadilha
+        </label>
+      </div>
+
       <div class="lab-main">
         <div class="canvas-wrap"><canvas id="cv" aria-label="Labirinto"></canvas>
           <div class="overlay" id="overlay" hidden></div></div>
@@ -118,7 +125,9 @@
             <div><span>Passo</span><b id="rdPasso">0</b></div>
             <div><span>Custo acumulado</span><b id="rdCusto">0</b></div>
             <div><span>Chaves</span><b id="rdChaves">—</b></div>
+            <div><span>Bônus consumidos</span><b id="rdBonus">—</b></div>
           </div>
+          <div class="layer-info" id="infoCamada"></div>
           <div class="result" id="resultado"></div>
           <div class="legend" id="legenda"></div>
         </aside>
