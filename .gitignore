@@ -228,3 +228,6 @@ RESPOSTAS_DECLARACAO_IA.md
 !docs/DECLARACAO_IA.pdf
 .claude/
 
+
+# dataset descompactado (o projeto usa o arquivo .gz)
+data/dataset_parte2/*.txt/
