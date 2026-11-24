@@ -1,7 +1,8 @@
 # [IA] ChatGPT - apoio na implementacao do comando de validacao dos mapas
 # [IA] Claude - comandos da Parte 2 (--dataset, --alg, --source, --target, --recorte, --benchmark)
-# [IA] Claude - comandos da Parte 1 (--alg com --mapa, --fonte-consumivel, --armadilhas)
+# [IA] Claude - comandos da Parte 1 (--alg com --mapa, --fonte-consumivel, --armadilhas, --interactive)
 import argparse
+import webbrowser
 from pathlib import Path
 
 from src.graphs.io import ler_dataset, ler_mapa, montar_grafo_dataset
@@ -17,7 +18,7 @@ from src.parte2 import (
     salvar_resultado,
     sem_acentos,
 )
-from src.solve import armadilhas_do_mapa, resolver_mapa
+from src.solve import PAGINA_INTERATIVA, armadilhas_do_mapa, resolver_mapa
 
 
 PASTA_SAIDA_PARTE2 = Path("out/parte2")
@@ -31,6 +32,10 @@ def criar_parser():
     entrada = parser.add_mutually_exclusive_group(required=True)
     entrada.add_argument("--mapa", help="Parte 1: caminho do arquivo do mapa.")
     entrada.add_argument("--dataset", help="Parte 2: pasta do dataset ou o proprio arquivo .txt/.txt.gz.")
+    entrada.add_argument(
+        "--interactive", action="store_true",
+        help=f"Parte 1: abre a pagina interativa ({PAGINA_INTERATIVA.as_posix()}) no navegador.",
+    )
     parser.add_argument(
         "--validar-mapa", action="store_true", help="Parte 1: valida o mapa sem executar buscas."
     )
@@ -63,12 +68,31 @@ def criar_parser():
 def main(argv=None):
     parser = criar_parser()
     args = parser.parse_args(argv)
+    if args.interactive:
+        return comando_interativo(parser, args)
     if args.mapa is not None:
         return comando_mapa(parser, args)
     return comando_dataset(parser, args)
 
 
 # ---------------------------------------------------------------- Parte 1
+
+def comando_interativo(parser, args):
+    extras = [nome for nome, valor in (
+        ("--validar-mapa", args.validar_mapa), ("--alg", args.alg),
+        ("--fonte-consumivel", args.fonte_consumivel), ("--armadilhas", args.armadilhas),
+        ("--source", args.source), ("--target", args.target), ("--recorte", args.recorte),
+        ("--benchmark", args.benchmark), ("--out", args.out),
+    ) if valor]
+    if extras:
+        parser.error(f"--interactive nao usa {', '.join(extras)}.")
+    if not PAGINA_INTERATIVA.exists():
+        parser.error(f"{PAGINA_INTERATIVA.as_posix()} nao existe; rode antes: python -m src.solve")
+
+    print(f"Abrindo {PAGINA_INTERATIVA.as_posix()} no navegador...")
+    webbrowser.open(PAGINA_INTERATIVA.resolve().as_uri())
+    return 0
+
 
 def comando_mapa(parser, args):
     opcoes_da_parte2 = [

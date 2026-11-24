@@ -1,4 +1,4 @@
-# [IA] Claude - testes dos comandos da Parte 1 no terminal (--alg, --fonte-consumivel, --armadilhas)
+# [IA] Claude - testes dos comandos da Parte 1 no terminal (--alg, --fonte-consumivel, --armadilhas, --interactive)
 import subprocess
 import sys
 from pathlib import Path
@@ -79,6 +79,8 @@ def test_dfs_mostra_os_tipos_de_arco():
     ["--mapa", "mapa.txt", "--alg", "BFS", "--source", "1"],
     ["--dataset", "dados", "--armadilhas"],
     ["--dataset", "dados", "--alg", "BFS", "--source", "1", "--fonte-consumivel"],
+    ["--interactive", "--alg", "BFS"],
+    ["--interactive", "--mapa", "mapa.txt"],
 ])
 def test_recusa_combinacoes_invalidas(argumentos):
     resultado = executar_cli(*argumentos)
@@ -91,3 +93,14 @@ def test_ajuda_mostra_as_opcoes_da_parte1():
     resultado = executar_cli("--help")
     assert "--fonte-consumivel" in resultado.stdout
     assert "--armadilhas" in resultado.stdout
+    assert "--interactive" in resultado.stdout
+
+
+def test_pagina_interativa_tem_os_mapas_e_os_algoritmos(tmp_path):
+    from src.solve import gerar_pagina_interativa
+    destino = gerar_pagina_interativa(tmp_path / "pagina.html")
+    html = destino.read_text(encoding="utf-8")
+    assert "/*DADOS*/" not in html
+    assert '"m01"' in html and '"m08"' in html
+    assert "BELLMAN_FORD_FONTE_CONSUMIVEL" in html
+    assert "<script src=" not in html   # tudo dentro de um arquivo so

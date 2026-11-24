@@ -21,6 +21,8 @@ from src.graphs.estados import (
 PASTA_MAPAS = Path("data/mapas")
 PASTA_MAPAS_GRUPO = Path("data/mapas_grupo")
 PASTA_SAIDA = Path("out/parte1")
+PAGINA_INTERATIVA = PASTA_SAIDA / "labirinto_interativo.html"
+MODELO_PAGINA = Path(__file__).parent / "labirinto_template.html"
 
 
 def listar_mapas(pasta=None):
@@ -512,8 +514,93 @@ def gerar_figuras(pasta_mapas=None, pasta_saida=PASTA_SAIDA):
             salvar_figura(fig, pasta_saida / "heatmap_multiplicidade_m08.png")
 
 
+# ----------------------------------------------------------------------------
+# Secao 9: pagina interativa
+# ----------------------------------------------------------------------------
+
+def percurso_com_custos(g_est, caminho):
+    # cada passo vira [linha, coluna, chaves, bonus consumidos, custo acumulado]
+    passos = []
+    acumulado = 0
+    for i, estado in enumerate(caminho):
+        if i > 0:
+            acumulado += custo_caminho(g_est, [caminho[i - 1], estado])
+        posicao, chaves, bonus = decompor_estado(estado)
+        passos.append([posicao[0], posicao[1], chaves, list(bonus), acumulado])
+    return passos
+
+
+def dados_da_pagina():
+    # tudo que a pagina interativa precisa, mapa por mapa
+    dados = {}
+    for caminho in listar_mapas():
+        nome = nome_curto(caminho)
+        linhas = ler_mapa(caminho)
+        g_est = construir_grafo_estados(linhas)
+
+        # camadas: casas que existem para cada conjunto de chaves
+        camadas = {}
+        for no in grafo_estados_sem_alvo(g_est).nos():
+            posicao, chaves, bonus = decompor_estado(no)
+            camadas.setdefault(chaves, set()).add(posicao)
+        camadas = {k: sorted(camadas[k]) for k in sorted(camadas, key=lambda k: (len(k.strip("-")), k))}
+
+        armadilhas = []
+        for estado in estados_armadilha(g_est):
+            posicao, chaves, bonus = decompor_estado(estado)
+            armadilhas.append([posicao[0], posicao[1], chaves])
+
+        nomes_alg = ["BFS", "DFS", "DIJKSTRA", "BELLMAN_FORD"]
+        if any("*" in linha for linha in linhas):
+            nomes_alg.append("BELLMAN_FORD_FONTE_CONSUMIVEL")
+
+        algoritmos = {}
+        for alg in nomes_alg:
+            fonte = alg == "BELLMAN_FORD_FONTE_CONSUMIVEL"
+            r = resolver_mapa(linhas, "BELLMAN_FORD" if fonte else alg, fonte)
+            grafo = construir_grafo_estados(linhas, fonte_consumivel=True) if fonte else g_est
+            percurso = []
+            if "caminho" in r:
+                percurso = percurso_com_custos(grafo, r["caminho"])
+            elif "ciclo" in r:
+                percurso = percurso_com_custos(grafo, r["ciclo"])
+            algoritmos[alg] = {
+                "status": r["status"],
+                "passos": r.get("passos"),
+                "custo": r.get("custo"),
+                "mensagem": r.get("mensagem"),
+                "custo_ciclo": r.get("custo_ciclo"),
+                "percurso": percurso,
+            }
+
+        partes = Path(caminho).stem.split("_", 1)
+        dados[nome] = {
+            "titulo": partes[1].replace("_", " ") if len(partes) > 1 else "mapa do grupo",
+            "grade": linhas,
+            "camadas": camadas,
+            "armadilhas": armadilhas,
+            "algoritmos": algoritmos,
+        }
+    return dados
+
+
+def gerar_pagina_interativa(destino=PAGINA_INTERATIVA):
+    # o modelo (src/labirinto_template.html) tem o HTML e o JavaScript;
+    # aqui so colocamos os dados dentro dele e salvamos em out/parte1/
+    modelo = MODELO_PAGINA.read_text(encoding="utf-8")
+    marcador = "/*DADOS*/{}"
+    if marcador not in modelo:
+        raise ValueError(f"O modelo {MODELO_PAGINA} precisa ter a linha: const DADOS = {marcador};")
+    html = modelo.replace(marcador, json.dumps(dados_da_pagina(), ensure_ascii=False))
+    destino = Path(destino)
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    destino.write_text(html, encoding="utf-8")
+    return destino
+
+
 if __name__ == "__main__":
     gerar_arestas_metricas_camadas()
     gerar_resultados_algoritmos()
     gerar_figuras()
+    gerar_pagina_interativa()
     print(f"Arquivos gerados em {PASTA_SAIDA}/")
