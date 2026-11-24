@@ -144,5 +144,46 @@
       "(5,37) c": 2,
       "(3,29) d": 1
     }
+  },
+  "g01": {
+    "camadas": {
+      "-": {
+        "ordem": 2,
+        "tamanho": 2,
+        "densidade": 1.0
+      },
+      "a": {
+        "ordem": 12,
+        "tamanho": 22,
+        "densidade": 0.16666666666666666
+      },
+      "ab": {
+        "ordem": 43,
+        "tamanho": 80,
+        "densidade": 0.044296788482835
+      },
+      "abc": {
+        "ordem": 11,
+        "tamanho": 19,
+        "densidade": 0.17272727272727273
+      }
+    },
+    "arcos_entre_camadas": 3,
+    "casas_que_mudam_de_camada": {
+      "(7,3) a": 1,
+      "(5,7) b": 1,
+      "(1,7) c": 1
+    }
+  },
+  "g02": {
+    "camadas": {
+      "-": {
+        "ordem": 21,
+        "tamanho": 36,
+        "densidade": 0.08571428571428572
+      }
+    },
+    "arcos_entre_camadas": 0,
+    "casas_que_mudam_de_camada": {}
   }
 }

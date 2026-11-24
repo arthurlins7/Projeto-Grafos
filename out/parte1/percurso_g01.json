@@ -1,0 +1,345 @@
+{
+  "algoritmo": "BELLMAN_FORD",
+  "passos": 30,
+  "custo_total": 29,
+  "percurso": [
+    {
+      "passo": 0,
+      "estado": "(7,1)|-|{}",
+      "linha": 7,
+      "coluna": 1,
+      "casa": "S",
+      "chaves": "-",
+      "bonus_consumidos": [],
+      "custo_acumulado": 0
+    },
+    {
+      "passo": 1,
+      "estado": "(7,2)|-|{}",
+      "linha": 7,
+      "coluna": 2,
+      "casa": ".",
+      "chaves": "-",
+      "bonus_consumidos": [],
+      "custo_acumulado": 1
+    },
+    {
+      "passo": 2,
+      "estado": "(7,3)|a|{}",
+      "linha": 7,
+      "coluna": 3,
+      "casa": "a",
+      "chaves": "a",
+      "bonus_consumidos": [],
+      "custo_acumulado": 2
+    },
+    {
+      "passo": 3,
+      "estado": "(7,4)|a|{}",
+      "linha": 7,
+      "coluna": 4,
+      "casa": ".",
+      "chaves": "a",
+      "bonus_consumidos": [],
+      "custo_acumulado": 3
+    },
+    {
+      "passo": 4,
+      "estado": "(7,5)|a|{}",
+      "linha": 7,
+      "coluna": 5,
+      "casa": "A",
+      "chaves": "a",
+      "bonus_consumidos": [],
+      "custo_acumulado": 4
+    },
+    {
+      "passo": 5,
+      "estado": "(7,6)|a|{}",
+      "linha": 7,
+      "coluna": 6,
+      "casa": ".",
+      "chaves": "a",
+      "bonus_consumidos": [],
+      "custo_acumulado": 5
+    },
+    {
+      "passo": 6,
+      "estado": "(6,6)|a|{}",
+      "linha": 6,
+      "coluna": 6,
+      "casa": ".",
+      "chaves": "a",
+      "bonus_consumidos": [],
+      "custo_acumulado": 6
+    },
+    {
+      "passo": 7,
+      "estado": "(5,6)|a|{}",
+      "linha": 5,
+      "coluna": 6,
+      "casa": ".",
+      "chaves": "a",
+      "bonus_consumidos": [],
+      "custo_acumulado": 7
+    },
+    {
+      "passo": 8,
+      "estado": "(5,7)|ab|{}",
+      "linha": 5,
+      "coluna": 7,
+      "casa": "b",
+      "chaves": "ab",
+      "bonus_consumidos": [],
+      "custo_acumulado": 8
+    },
+    {
+      "passo": 9,
+      "estado": "(5,6)|ab|{}",
+      "linha": 5,
+      "coluna": 6,
+      "casa": ".",
+      "chaves": "ab",
+      "bonus_consumidos": [],
+      "custo_acumulado": 9
+    },
+    {
+      "passo": 10,
+      "estado": "(5,5)|ab|{}",
+      "linha": 5,
+      "coluna": 5,
+      "casa": "~",
+      "chaves": "ab",
+      "bonus_consumidos": [],
+      "custo_acumulado": 14
+    },
+    {
+      "passo": 11,
+      "estado": "(5,4)|ab|{}",
+      "linha": 5,
+      "coluna": 4,
+      "casa": ".",
+      "chaves": "ab",
+      "bonus_consumidos": [],
+      "custo_acumulado": 15
+    },
+    {
+      "passo": 12,
+      "estado": "(5,3)|ab|{}",
+      "linha": 5,
+      "coluna": 3,
+      "casa": ".",
+      "chaves": "ab",
+      "bonus_consumidos": [],
+      "custo_acumulado": 16
+    },
+    {
+      "passo": 13,
+      "estado": "(5,2)|ab|{}",
+      "linha": 5,
+      "coluna": 2,
+      "casa": "B",
+      "chaves": "ab",
+      "bonus_consumidos": [],
+      "custo_acumulado": 17
+    },
+    {
+      "passo": 14,
+      "estado": "(5,1)|ab|{}",
+      "linha": 5,
+      "coluna": 1,
+      "casa": ".",
+      "chaves": "ab",
+      "bonus_consumidos": [],
+      "custo_acumulado": 18
+    },
+    {
+      "passo": 15,
+      "estado": "(4,1)|ab|{}",
+      "linha": 4,
+      "coluna": 1,
+      "casa": ".",
+      "chaves": "ab",
+      "bonus_consumidos": [],
+      "custo_acumulado": 19
+    },
+    {
+      "passo": 16,
+      "estado": "(3,1)|ab|{}",
+      "linha": 3,
+      "coluna": 1,
+      "casa": ".",
+      "chaves": "ab",
+      "bonus_consumidos": [],
+      "custo_acumulado": 20
+    },
+    {
+      "passo": 17,
+      "estado": "(3,2)|ab|{0}",
+      "linha": 3,
+      "coluna": 2,
+      "casa": "+",
+      "chaves": "ab",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 16
+    },
+    {
+      "passo": 18,
+      "estado": "(3,3)|ab|{0}",
+      "linha": 3,
+      "coluna": 3,
+      "casa": ">",
+      "chaves": "ab",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 17
+    },
+    {
+      "passo": 19,
+      "estado": "(3,4)|ab|{0}",
+      "linha": 3,
+      "coluna": 4,
+      "casa": ">",
+      "chaves": "ab",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 18
+    },
+    {
+      "passo": 20,
+      "estado": "(3,5)|ab|{0}",
+      "linha": 3,
+      "coluna": 5,
+      "casa": ">",
+      "chaves": "ab",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 19
+    },
+    {
+      "passo": 21,
+      "estado": "(3,6)|ab|{0}",
+      "linha": 3,
+      "coluna": 6,
+      "casa": ".",
+      "chaves": "ab",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 20
+    },
+    {
+      "passo": 22,
+      "estado": "(2,6)|ab|{0}",
+      "linha": 2,
+      "coluna": 6,
+      "casa": ".",
+      "chaves": "ab",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 21
+    },
+    {
+      "passo": 23,
+      "estado": "(1,6)|ab|{0}",
+      "linha": 1,
+      "coluna": 6,
+      "casa": ".",
+      "chaves": "ab",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 22
+    },
+    {
+      "passo": 24,
+      "estado": "(1,7)|abc|{0}",
+      "linha": 1,
+      "coluna": 7,
+      "casa": "c",
+      "chaves": "abc",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 23
+    },
+    {
+      "passo": 25,
+      "estado": "(1,6)|abc|{0}",
+      "linha": 1,
+      "coluna": 6,
+      "casa": ".",
+      "chaves": "abc",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 24
+    },
+    {
+      "passo": 26,
+      "estado": "(1,5)|abc|{0}",
+      "linha": 1,
+      "coluna": 5,
+      "casa": ".",
+      "chaves": "abc",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 25
+    },
+    {
+      "passo": 27,
+      "estado": "(1,4)|abc|{0}",
+      "linha": 1,
+      "coluna": 4,
+      "casa": "C",
+      "chaves": "abc",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 26
+    },
+    {
+      "passo": 28,
+      "estado": "(1,3)|abc|{0}",
+      "linha": 1,
+      "coluna": 3,
+      "casa": ".",
+      "chaves": "abc",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 27
+    },
+    {
+      "passo": 29,
+      "estado": "(1,2)|abc|{0}",
+      "linha": 1,
+      "coluna": 2,
+      "casa": ".",
+      "chaves": "abc",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 28
+    },
+    {
+      "passo": 30,
+      "estado": "(1,1)|abc|{0}",
+      "linha": 1,
+      "coluna": 1,
+      "casa": "G",
+      "chaves": "abc",
+      "bonus_consumidos": [
+        0
+      ],
+      "custo_acumulado": 29
+    }
+  ]
+}

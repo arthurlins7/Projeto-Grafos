@@ -110,5 +110,33 @@
     },
     "teto_teorico": 18704,
     "taxa_ocupacao": 0.156062874251497
+  },
+  "g01": {
+    "G_pos": {
+      "ordem": 31,
+      "tamanho": 56,
+      "densidade": 0.060215053763440864
+    },
+    "G_est": {
+      "ordem": 68,
+      "tamanho": 126,
+      "densidade": 0.0276558384547849
+    },
+    "teto_teorico": 496,
+    "taxa_ocupacao": 0.13709677419354838
+  },
+  "g02": {
+    "G_pos": {
+      "ordem": 21,
+      "tamanho": 36,
+      "densidade": 0.08571428571428572
+    },
+    "G_est": {
+      "ordem": 21,
+      "tamanho": 36,
+      "densidade": 0.08571428571428572
+    },
+    "teto_teorico": 21,
+    "taxa_ocupacao": 1.0
   }
 }

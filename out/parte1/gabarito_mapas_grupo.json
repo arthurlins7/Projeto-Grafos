@@ -1,0 +1,24 @@
+{
+  "g01": {
+    "estados": 68,
+    "arcos": 126,
+    "passos_bfs": 30,
+    "custo": 29,
+    "algoritmo_custo": "BELLMAN_FORD",
+    "pega_bonus": true,
+    "passa_por_esteira": true,
+    "armadilhas": 0,
+    "porcentagem_armadilhas": 0.0
+  },
+  "g02": {
+    "estados": 21,
+    "arcos": 36,
+    "passos_bfs": 6,
+    "custo": 6,
+    "algoritmo_custo": "DIJKSTRA",
+    "pega_bonus": false,
+    "passa_por_esteira": false,
+    "armadilhas": 14,
+    "porcentagem_armadilhas": 66.7
+  }
+}

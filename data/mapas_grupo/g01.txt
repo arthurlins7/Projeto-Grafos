@@ -1,0 +1,10 @@
+; g01: caminho em zigue-zague de baixo para cima, chaves na ordem a, b, c
+#########
+#G..C..c#
+######.##
+#.+>>>..#
+#.#######
+#.B..~.b#
+######.##
+#S.a.A..#
+#########

@@ -19,10 +19,14 @@ from src.graphs.estados import (
 
 
 PASTA_MAPAS = Path("data/mapas")
+PASTA_MAPAS_GRUPO = Path("data/mapas_grupo")
 PASTA_SAIDA = Path("out/parte1")
 
 
-def listar_mapas(pasta=PASTA_MAPAS):
+def listar_mapas(pasta=None):
+    # sem pasta: mapas fornecidos (m01 a m08) e depois os mapas do grupo
+    if pasta is None:
+        return sorted(PASTA_MAPAS.glob("*.txt")) + sorted(PASTA_MAPAS_GRUPO.glob("*.txt"))
     return sorted(Path(pasta).glob("*.txt"))
 
 
@@ -82,7 +86,7 @@ def camadas_do_mapa(g_est):
     }
 
 
-def gerar_arestas_metricas_camadas(pasta_mapas=PASTA_MAPAS, pasta_saida=PASTA_SAIDA):
+def gerar_arestas_metricas_camadas(pasta_mapas=None, pasta_saida=PASTA_SAIDA):
     pasta_saida = Path(pasta_saida)
     metricas = {}
     camadas = {}
@@ -208,7 +212,7 @@ def bfs_ate_saida_g_pos(linhas, portas_como):
     return dist[melhor], montar_caminho(pai, melhor)
 
 
-def comparar_modelagens(pasta_mapas=PASTA_MAPAS, pasta_saida=PASTA_SAIDA, mapas=("m02", "m03", "m04")):
+def comparar_modelagens(pasta_mapas=None, pasta_saida=PASTA_SAIDA, mapas=("m02", "m03", "m04")):
     linhas_csv = []
     for caminho in listar_mapas(pasta_mapas):
         nome = nome_curto(caminho)
@@ -254,7 +258,7 @@ def linha_solucao(nome, algoritmo, grafo, dist, pai):
     return [nome, algoritmo, passos, custo, "OK", " -> ".join(caminho)]
 
 
-def rodar_algoritmos(pasta_mapas=PASTA_MAPAS, pasta_saida=PASTA_SAIDA):
+def rodar_algoritmos(pasta_mapas=None, pasta_saida=PASTA_SAIDA):
     solucoes = []
     classificacao_dfs = []
 
@@ -359,7 +363,34 @@ def ciclo_negativo(linhas):
     return resultado
 
 
-def gerar_resultados_algoritmos(pasta_mapas=PASTA_MAPAS, pasta_saida=PASTA_SAIDA):
+def gabarito_do_mapa(linhas):
+    # Secao 10: numeros que vao para o PDF (estados, arcos, passos e custo)
+    g_est = construir_grafo_estados(linhas)
+    sem_alvo = grafo_estados_sem_alvo(g_est)
+    dist, pai, ordem = bfs(g_est, estado_inicial(linhas))
+    armadilhas = estados_armadilha(g_est)
+    resultado = percurso_menor_custo(linhas)
+
+    gabarito = {
+        "estados": sem_alvo.ordem(),
+        "arcos": sem_alvo.tamanho(),
+        "passos_bfs": dist[NO_ALVO] - 1 if NO_ALVO in dist else None,
+        "custo": None,
+        "algoritmo_custo": None,
+        "pega_bonus": False,
+        "passa_por_esteira": False,
+        "armadilhas": len(armadilhas),
+        "porcentagem_armadilhas": round(100 * len(armadilhas) / sem_alvo.ordem(), 1),
+    }
+    if resultado is not None:
+        gabarito["custo"] = resultado["custo_total"]
+        gabarito["algoritmo_custo"] = resultado["algoritmo"]
+        gabarito["pega_bonus"] = any(p["casa"] == "+" for p in resultado["percurso"])
+        gabarito["passa_por_esteira"] = any(p["casa"] in "><^v" for p in resultado["percurso"])
+    return gabarito
+
+
+def gerar_resultados_algoritmos(pasta_mapas=None, pasta_saida=PASTA_SAIDA):
     pasta_saida = Path(pasta_saida)
 
     resumo = {}
@@ -374,11 +405,11 @@ def gerar_resultados_algoritmos(pasta_mapas=PASTA_MAPAS, pasta_saida=PASTA_SAIDA
     for caminho in listar_mapas(pasta_mapas):
         nome = nome_curto(caminho)
         linhas = ler_mapa(caminho)
-        if nome in ("m03", "m08"):
+        if nome in ("m03", "m08", "g01"):
             salvar_json(percurso_menor_custo(linhas), pasta_saida / f"percurso_{nome}.json")
         if nome == "m06":
             salvar_json(ciclo_negativo(linhas), pasta_saida / "ciclo_negativo_m06.json")
-        if nome in ("m04", "m07"):
+        if nome in ("m04", "m07", "g02"):
             linhas_csv = []
             for estado in estados_armadilha(construir_grafo_estados(linhas)):
                 posicao, chaves, bonus = decompor_estado(estado)
@@ -386,12 +417,17 @@ def gerar_resultados_algoritmos(pasta_mapas=PASTA_MAPAS, pasta_saida=PASTA_SAIDA
             salvar_csv(linhas_csv, ["estado", "linha", "coluna", "casa", "chaves"],
                        pasta_saida / f"armadilhas_{nome}.csv")
 
+    gabarito = {}
+    for caminho in listar_mapas(PASTA_MAPAS_GRUPO):
+        gabarito[nome_curto(caminho)] = gabarito_do_mapa(ler_mapa(caminho))
+    salvar_json(gabarito, pasta_saida / "gabarito_mapas_grupo.json")
+
 
 # ----------------------------------------------------------------------------
 # Bloco 3: figuras da Secao 8
 # ----------------------------------------------------------------------------
 
-def gerar_figuras(pasta_mapas=PASTA_MAPAS, pasta_saida=PASTA_SAIDA):
+def gerar_figuras(pasta_mapas=None, pasta_saida=PASTA_SAIDA):
     from src.viz import (desenhar_arvore_bfs, desenhar_camadas, desenhar_heatmap,
                          desenhar_percurso, salvar_figura)
     pasta_saida = Path(pasta_saida)
@@ -401,7 +437,7 @@ def gerar_figuras(pasta_mapas=PASTA_MAPAS, pasta_saida=PASTA_SAIDA):
         nome = nome_curto(caminho)
         linhas = ler_mapa(caminho)
 
-        if nome in ("m03", "m08"):
+        if nome in ("m03", "m08", "g01"):
             resultado = percurso_menor_custo(linhas)
             fig, ax = desenhar_percurso(linhas, resultado["percurso"],
                                         f"{nome}: caminho de menor custo (custo {resultado['custo_total']})")

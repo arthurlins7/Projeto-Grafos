@@ -1,0 +1,10 @@
+; g02: corredor vertical com esteiras que empurram para salas sem volta
+#########
+#S>....##
+#.#######
+#.>..####
+#.#######
+#.>.....#
+#.#######
+#G#######
+#########

@@ -416,5 +416,58 @@
     ],
     "becos": [],
     "quantidade_armadilhas": 0
+  },
+  "g01": {
+    "maior_grau_saida": {
+      "estado": "(1,6)|ab|{0}",
+      "grau": 3
+    },
+    "maior_grau_entrada": {
+      "estado": "(1,6)|abc|{0}",
+      "grau": 3
+    },
+    "multiplicidade_maxima": 4,
+    "casas_com_multiplicidade_maxima": [
+      "(7,1)",
+      "(7,2)"
+    ],
+    "becos": [],
+    "quantidade_armadilhas": 0
+  },
+  "g02": {
+    "maior_grau_saida": {
+      "estado": "(3,1)|-|{}",
+      "grau": 3
+    },
+    "maior_grau_entrada": {
+      "estado": "(1,2)|-|{}",
+      "grau": 2
+    },
+    "multiplicidade_maxima": 1,
+    "casas_com_multiplicidade_maxima": [
+      "(1,1)",
+      "(1,2)",
+      "(1,3)",
+      "(1,4)",
+      "(1,5)",
+      "(1,6)",
+      "(2,1)",
+      "(3,1)",
+      "(3,2)",
+      "(3,3)",
+      "(3,4)",
+      "(4,1)",
+      "(5,1)",
+      "(5,2)",
+      "(5,3)",
+      "(5,4)",
+      "(5,5)",
+      "(5,6)",
+      "(5,7)",
+      "(6,1)",
+      "(7,1)"
+    ],
+    "becos": [],
+    "quantidade_armadilhas": 14
   }
 }
