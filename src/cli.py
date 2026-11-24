@@ -1,5 +1,6 @@
 # [IA] ChatGPT - apoio na implementacao do comando de validacao dos mapas
 # [IA] Claude - comandos da Parte 2 (--dataset, --alg, --source, --target, --recorte, --benchmark)
+# [IA] Claude - comandos da Parte 1 (--alg com --mapa, --fonte-consumivel, --armadilhas)
 import argparse
 from pathlib import Path
 
@@ -16,6 +17,7 @@ from src.parte2 import (
     salvar_resultado,
     sem_acentos,
 )
+from src.solve import armadilhas_do_mapa, resolver_mapa
 
 
 PASTA_SAIDA_PARTE2 = Path("out/parte2")
@@ -24,7 +26,7 @@ CAMINHO_MAXIMO_NA_TELA = 20  # caminhos maiores aparecem resumidos (o JSON guard
 
 def criar_parser():
     parser = argparse.ArgumentParser(
-        description="Valida mapas de labirinto (Parte 1) e roda os algoritmos no dataset do Slashdot (Parte 2)."
+        description="Valida e resolve mapas de labirinto (Parte 1) e roda os algoritmos no dataset do Slashdot (Parte 2)."
     )
     entrada = parser.add_mutually_exclusive_group(required=True)
     entrada.add_argument("--mapa", help="Parte 1: caminho do arquivo do mapa.")
@@ -33,7 +35,16 @@ def criar_parser():
         "--validar-mapa", action="store_true", help="Parte 1: valida o mapa sem executar buscas."
     )
     parser.add_argument(
-        "--alg", type=str.upper, choices=ALGORITMOS, help="Parte 2: algoritmo a executar."
+        "--alg", type=str.upper, choices=ALGORITMOS,
+        help="Algoritmo a executar: no mapa (Parte 1, com --mapa) ou no dataset (Parte 2, com --dataset).",
+    )
+    parser.add_argument(
+        "--fonte-consumivel", action="store_true",
+        help="Parte 1: a fonte (*) vale -2 so na primeira vez, como o bonus (corrige o ciclo do m06).",
+    )
+    parser.add_argument(
+        "--armadilhas", action="store_true",
+        help="Parte 1: lista os estados alcancaveis de onde nao da mais para chegar na saida.",
     )
     parser.add_argument("--source", type=int, help="Parte 2: usuario de partida.")
     parser.add_argument("--target", type=int, help="Parte 2: usuario de chegada (opcional).")
@@ -62,7 +73,7 @@ def main(argv=None):
 def comando_mapa(parser, args):
     opcoes_da_parte2 = [
         nome for nome, valor in (
-            ("--alg", args.alg), ("--source", args.source), ("--target", args.target),
+            ("--source", args.source), ("--target", args.target),
             ("--recorte", args.recorte), ("--out", args.out),
         )
         if valor is not None
@@ -72,8 +83,15 @@ def comando_mapa(parser, args):
     if opcoes_da_parte2:
         parser.error(f"{', '.join(opcoes_da_parte2)}: opcao da Parte 2, use com --dataset.")
 
-    if not args.validar_mapa:
-        parser.error("Informe --validar-mapa para validar o arquivo.")
+    acoes = [nome for nome, valor in (
+        ("--validar-mapa", args.validar_mapa), ("--alg", args.alg), ("--armadilhas", args.armadilhas),
+    ) if valor]
+    if not acoes:
+        parser.error("Informe --validar-mapa, --alg ou --armadilhas.")
+    if args.validar_mapa and len(acoes) > 1:
+        parser.error("--validar-mapa so valida o arquivo; nao use junto com --alg ou --armadilhas.")
+    if args.fonte_consumivel and args.validar_mapa:
+        parser.error("--fonte-consumivel so faz sentido com --alg ou --armadilhas.")
 
     try:
         linhas = ler_mapa(args.mapa)
@@ -84,8 +102,52 @@ def comando_mapa(parser, args):
     except ValueError as erro:
         parser.error(str(erro))
 
-    print(f"Mapa valido: {len(linhas)} linhas e {len(linhas[0])} colunas.")
+    if args.validar_mapa:
+        print(f"Mapa valido: {len(linhas)} linhas e {len(linhas[0])} colunas.")
+        return 0
+
+    nome = Path(args.mapa).stem
+    if args.alg:
+        imprimir_resultado_mapa(nome, resolver_mapa(linhas, args.alg, args.fonte_consumivel))
+    if args.armadilhas:
+        if args.alg:
+            print()
+        armadilhas, total = armadilhas_do_mapa(linhas, args.fonte_consumivel)
+        imprimir_armadilhas(nome, armadilhas, total)
     return 0
+
+
+def imprimir_resultado_mapa(nome, resultado):
+    extra = " | fonte consumivel" if resultado["fonte_consumivel"] else ""
+    print(f"Mapa: {nome} | {resultado['estados']} estados{extra}")
+    print(f"Algoritmo: {resultado['algoritmo']}")
+    print(f"Status: {resultado['status']}")
+
+    if resultado["status"] == "RECUSA":
+        print(resultado["mensagem"])
+        print("Use --alg BELLMAN_FORD, que aceita pesos negativos.")
+    elif resultado["status"] == "CICLO_NEGATIVO":
+        print(f"Ciclo negativo: {formatar_caminho(resultado['ciclo'], 'estados')} (custo {resultado['custo_ciclo']})")
+        print("Com um ciclo negativo alcancavel, o menor custo nao fica definido.")
+        print("Tente de novo com --fonte-consumivel.")
+    elif resultado["status"] == "SEM_SOLUCAO":
+        print("Nao existe caminho do inicio ate a saida.")
+    else:
+        rotulo = "Caminho na arvore da DFS (nao e necessariamente o menor)" if resultado["algoritmo"] == "DFS" else "Caminho"
+        print(f"{rotulo}: {formatar_caminho(resultado['caminho'], 'estados')}")
+        print(f"Passos: {resultado['passos']} | custo: {resultado['custo']}")
+
+    if resultado["algoritmo"] == "DFS":
+        tipos = ", ".join(f"{tipo}={qtd}" for tipo, qtd in resultado["arcos_por_tipo"].items())
+        print(f"Arcos por tipo (DFS): {tipos}")
+        print(f"Tem ciclo: {'sim' if resultado['tem_ciclo'] else 'nao'}")
+
+
+def imprimir_armadilhas(nome, armadilhas, total):
+    print(f"Mapa: {nome} | estados-armadilha: {len(armadilhas)} de {total} "
+          f"({100 * len(armadilhas) / total:.1f}%)")
+    for estado in armadilhas:
+        print(f"  {estado}")
 
 
 # ---------------------------------------------------------------- Parte 2
@@ -93,6 +155,8 @@ def comando_mapa(parser, args):
 def comando_dataset(parser, args):
     if args.validar_mapa:
         parser.error("--validar-mapa so pode ser usado com --mapa.")
+    if args.fonte_consumivel or args.armadilhas:
+        parser.error("--fonte-consumivel e --armadilhas so podem ser usados com --mapa.")
     if args.benchmark:
         extras = [nome for nome, valor in (
             ("--alg", args.alg), ("--source", args.source), ("--target", args.target), ("--recorte", args.recorte),
@@ -139,12 +203,12 @@ def comando_dataset(parser, args):
     return 0
 
 
-def formatar_caminho(caminho):
+def formatar_caminho(caminho, unidade="usuarios"):
     if len(caminho) <= CAMINHO_MAXIMO_NA_TELA:
         return " -> ".join(map(str, caminho))
     inicio = " -> ".join(map(str, caminho[:10]))
     fim = " -> ".join(map(str, caminho[-10:]))
-    return f"{inicio} -> ... -> {fim} ({len(caminho)} usuarios)"
+    return f"{inicio} -> ... -> {fim} ({len(caminho)} {unidade})"
 
 
 def imprimir_resultado(resultado, grafo):

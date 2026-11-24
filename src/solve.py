@@ -249,6 +249,15 @@ def comparar_modelagens(pasta_mapas=None, pasta_saida=PASTA_SAIDA, mapas=("m02",
     return linhas_csv
 
 
+def contar_tipos_dfs(classificacao):
+    # nao conta os arcos que vao para o ALVO
+    contagem = {"arvore": 0, "retorno": 0, "avanco": 0, "cruzamento": 0}
+    for u, v, tipo in classificacao:
+        if v != NO_ALVO:
+            contagem[tipo] += 1
+    return contagem
+
+
 def linha_solucao(nome, algoritmo, grafo, dist, pai):
     if NO_ALVO not in dist:
         return [nome, algoritmo, "", "", "SEM_SOLUCAO", ""]
@@ -292,11 +301,7 @@ def rodar_algoritmos(pasta_mapas=None, pasta_saida=PASTA_SAIDA):
         # a DFS nao calcula distancia; o pai ja diz quem foi alcancado
         solucoes.append(linha_solucao(nome, "DFS", g_est, pai, pai))
 
-        # a classificacao do csv nao conta os arcos que vao para o ALVO
-        contagem = {"arvore": 0, "retorno": 0, "avanco": 0, "cruzamento": 0}
-        for u, v, tipo in classificacao:
-            if v != NO_ALVO:
-                contagem[tipo] += 1
+        contagem = contar_tipos_dfs(classificacao)
         classificacao_dfs.append([nome, contagem["arvore"], contagem["retorno"],
                                   contagem["avanco"], contagem["cruzamento"], tem_ciclo])
 
@@ -361,6 +366,56 @@ def ciclo_negativo(linhas):
         "custo_ate_alvo": dist.get(NO_ALVO) if ciclo2 is None else None,
     }
     return resultado
+
+
+def resolver_mapa(linhas, algoritmo, fonte_consumivel=False):
+    # usado pelo cli.py: roda um algoritmo no G_est de um mapa so
+    g_est = construir_grafo_estados(linhas, fonte_consumivel=fonte_consumivel)
+    inicio = estado_inicial(linhas)
+    resultado = {
+        "algoritmo": algoritmo,
+        "fonte_consumivel": fonte_consumivel,
+        "estados": grafo_estados_sem_alvo(g_est).ordem(),
+    }
+
+    if algoritmo == "BFS":
+        dist, pai, ordem = bfs(g_est, inicio)
+    elif algoritmo == "DIJKSTRA":
+        try:
+            dist, pai, ordem = dijkstra(g_est, inicio)
+        except ValueError as erro:
+            resultado["status"] = "RECUSA"
+            resultado["mensagem"] = str(erro)
+            return resultado
+    elif algoritmo == "BELLMAN_FORD":
+        dist, pai, ciclo = bellman_ford(g_est, inicio)
+        if ciclo is not None:
+            resultado["status"] = "CICLO_NEGATIVO"
+            resultado["ciclo"] = ciclo
+            resultado["custo_ciclo"] = custo_caminho(g_est, ciclo)
+            return resultado
+    elif algoritmo == "DFS":
+        pai, ordem, classificacao, tem_ciclo = dfs(g_est, inicio)
+        dist = pai   # a DFS nao calcula distancia; o pai ja diz quem foi alcancado
+        resultado["arcos_por_tipo"] = contar_tipos_dfs(classificacao)
+        resultado["tem_ciclo"] = tem_ciclo
+    else:
+        raise ValueError(f"Algoritmo desconhecido: {algoritmo}")
+
+    linha = linha_solucao("", algoritmo, g_est, dist, pai)
+    resultado["status"] = linha[4]
+    if linha[4] == "OK":
+        resultado["passos"] = linha[2]
+        resultado["custo"] = linha[3]
+        resultado["caminho"] = montar_caminho(pai, NO_ALVO)[:-1]
+    return resultado
+
+
+def armadilhas_do_mapa(linhas, fonte_consumivel=False):
+    # usado pelo cli.py: estados-armadilha em ordem de leitura e o total de estados
+    g_est = construir_grafo_estados(linhas, fonte_consumivel=fonte_consumivel)
+    armadilhas = sorted(estados_armadilha(g_est), key=chave_de_leitura)
+    return armadilhas, grafo_estados_sem_alvo(g_est).ordem()
 
 
 def gabarito_do_mapa(linhas):
