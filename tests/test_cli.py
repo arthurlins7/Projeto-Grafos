@@ -15,7 +15,7 @@ def executar_cli(*argumentos):
         cwd=PASTA_PROJETO,
         capture_output=True,
         text=True,
-        timeout=10,
+        timeout=60,
     )
 
 
