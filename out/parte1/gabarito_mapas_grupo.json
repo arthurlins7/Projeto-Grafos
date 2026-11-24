@@ -11,14 +11,14 @@
     "porcentagem_armadilhas": 0.0
   },
   "g02": {
-    "estados": 21,
-    "arcos": 36,
-    "passos_bfs": 6,
-    "custo": 6,
+    "estados": 37,
+    "arcos": 67,
+    "passos_bfs": 22,
+    "custo": 28,
     "algoritmo_custo": "DIJKSTRA",
     "pega_bonus": false,
     "passa_por_esteira": false,
-    "armadilhas": 14,
-    "porcentagem_armadilhas": 66.7
+    "armadilhas": 11,
+    "porcentagem_armadilhas": 29.7
   }
 }

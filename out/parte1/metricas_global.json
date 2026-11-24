@@ -127,16 +127,16 @@
   },
   "g02": {
     "G_pos": {
-      "ordem": 21,
-      "tamanho": 36,
-      "densidade": 0.08571428571428572
+      "ordem": 37,
+      "tamanho": 67,
+      "densidade": 0.0503003003003003
     },
     "G_est": {
-      "ordem": 21,
-      "tamanho": 36,
-      "densidade": 0.08571428571428572
+      "ordem": 37,
+      "tamanho": 67,
+      "densidade": 0.0503003003003003
     },
-    "teto_teorico": 21,
+    "teto_teorico": 37,
     "taxa_ocupacao": 1.0
   }
 }

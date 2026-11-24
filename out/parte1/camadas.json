@@ -178,9 +178,9 @@
   "g02": {
     "camadas": {
       "-": {
-        "ordem": 21,
-        "tamanho": 36,
-        "densidade": 0.08571428571428572
+        "ordem": 37,
+        "tamanho": 67,
+        "densidade": 0.0503003003003003
       }
     },
     "arcos_entre_camadas": 0,

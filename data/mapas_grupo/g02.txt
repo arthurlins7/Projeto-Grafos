@@ -1,10 +1,10 @@
-; g02: corredor vertical com esteiras que empurram para salas sem volta
-#########
-#S>....##
-#.#######
-#.>..####
-#.#######
-#.>.....#
-#.#######
-#G#######
-#########
+; g02: zigue-zague com uma armadilha em cada curva
+###########
+#S.....>.##
+######.####
+#.<....~..#
+#########.#
+#.<.....,.#
+###.#######
+#G..>....##
+###########
