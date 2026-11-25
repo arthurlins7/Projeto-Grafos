@@ -6,11 +6,11 @@ const $ = (s) => document.querySelector(s);
 const fmt = (n) => n.toLocaleString("pt-BR");
 
 const ALGS = [
-  { id: "BFS", nome: "BFS", cor: "#22d3ee" },
-  { id: "DFS", nome: "DFS", cor: "#f472b6" },
-  { id: "DIJKSTRA", nome: "Dijkstra", cor: "#a78bfa" },
-  { id: "BELLMAN_FORD", nome: "Bellman-Ford", cor: "#fbbf24" },
-  { id: "BELLMAN_FORD_FONTE_CONSUMIVEL", nome: "Bellman-Ford (fonte consumível)", cor: "#fb923c" },
+  { id: "BFS", nome: "BFS", cor: "#4c8ddb" },
+  { id: "DFS", nome: "DFS", cor: "#e8a06a" },
+  { id: "DIJKSTRA", nome: "Dijkstra", cor: "#2fafa3" },
+  { id: "BELLMAN_FORD", nome: "Bellman-Ford", cor: "#a9b4c0" },
+  { id: "BELLMAN_FORD_FONTE_CONSUMIVEL", nome: "Bellman-Ford (fonte consumível)", cor: "#7f8a9a" },
 ];
 
 /* ---------- regras das casas ---------- */
@@ -349,7 +349,7 @@ function parte2() {
       Custo do ciclo: <b>${P.custo_ciclo}</b>. Dois usuários que se marcam como inimigos permitem reduzir o custo indefinidamente.`;
   }
   /* grafico de barras agrupadas, escala log */
-  const algs = [["BFS", "#22d3ee"], ["DFS", "#f472b6"], ["Dijkstra", "#a78bfa"], ["Bellman-Ford", "#fbbf24"]];
+  const algs = [["BFS", "#4c8ddb"], ["DFS", "#e8a06a"], ["Dijkstra", "#2fafa3"], ["Bellman-Ford", "#a9b4c0"]];
   const W = 640, H = 330, m = { l: 52, r: 10, t: 14, b: 62 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
   const lo = Math.log10(.5), hi = Math.log10(1000), y = (v) => m.t + ih - ((Math.log10(v) - lo) / (hi - lo)) * ih;
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tempo por recorte">`;
