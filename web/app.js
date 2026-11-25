@@ -389,7 +389,7 @@ const FOTOS = [
   { f: "parte2/distribuicao_graus.png", titulo: "Distribuição dos graus", grupo: "exp", origem: "Notebook 01 · seção 5.4 · exploratória 1",
     mostra: "O gráfico compara, em cada faixa de grau, a porcentagem dos 82.140 usuários do Slashdot que receberam aquela quantidade de marcações (azul) e a porcentagem que fizeram aquela quantidade (laranja).",
     insight: "A diferença é especialmente clara na faixa zero. Quase metade dos usuários (46,4%) não fez nenhuma marcação, enquanto 14,4% não receberam nenhuma. No outro extremo, alguns usuários receberam 501 marcações ou mais. Nenhum usuário fez tantas marcações: o maior grau de saída foi 428." },
-  { f: "parte2/avd_concentracao_negativas.png", titulo: "Concentração das marcações negativas", grupo: "exp", origem: "Notebook 01 · seção 5.5 · exploratória 2",
+  { f: "parte2/avd_concentracao_negativas.png", titulo: "Concentração das marcações de inimigo", grupo: "exp", origem: "Notebook 01 · seção 5.5 · exploratória 2",
     mostra: "A porcentagem acumulada das 124.130 marcações de inimigo conforme se incluem os usuários, de quem tem mais para quem tem menos, com uma curva para as feitas (laranja) e outra para as recebidas (azul).",
     insight: "Os 10% do topo fizeram 94,41% das negativas e receberam 77,33%. Elas se concentram mais em quem marca." },
   { f: "parte2/avd_recebidas_feitas.png", titulo: "Marcações recebidas e feitas", grupo: "exp", origem: "Notebook 01 · seção 6.2 · exploratória 3",
