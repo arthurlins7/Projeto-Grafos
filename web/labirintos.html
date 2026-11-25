@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- [IA] Claude Code – estrutura HTML da pagina do projeto, incluindo os textos explicativos -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Labirintos · Projeto Grafos</title>
+<meta name="description" content="BFS, DFS, Dijkstra e Bellman-Ford em labirintos com chaves e portas e na rede social Slashdot.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<header class="nav">
+  <a class="brand" href="index.html"><span class="brand-dot"></span>Projeto Grafos</a>
+  <nav>
+    <a href="labirintos.html" class="on" aria-current="page">Labirintos</a>
+    <a href="modelagem.html">Modelagem</a>
+    <a href="slashdot.html">Slashdot</a>
+    <a href="graficos.html">Gráficos</a>
+    <a href="equipe.html">Equipe</a>
+  </nav>
+</header>
+
+<main id="topo">
+
+  <!-- PARTE 1 -->
+  <section class="block" id="parte1">
+    <div class="head"><span class="eyebrow">Parte 1</span><h2>Labirinto interativo</h2>
+      <p>Escolha um mapa e um algoritmo e veja o percurso real calculado pelo nosso código.</p></div>
+
+    <div class="lab card">
+      <div class="lab-controls">
+        <div class="field"><label for="selMapa">Mapa</label><select id="selMapa"></select></div>
+        <div class="field grow"><label>Algoritmo</label><div class="seg" id="segAlg"></div></div>
+      </div>
+
+      <div class="lab-layers">
+        <div class="field grow"><label>Camada do grafo de estados (chaves coletadas)</label><div class="seg layers" id="segCamada"></div></div>
+        <label class="switch" title="Estados alcançáveis a partir de S, mas sem caminho até o ALVO">
+          <input type="checkbox" id="chkArmadilha"><span class="knob"></span>Realçar estados-armadilha
+        </label>
+      </div>
+
+      <div class="lab-main">
+        <div class="canvas-wrap"><canvas id="cv" aria-label="Labirinto"></canvas>
+          <div class="overlay" id="overlay" hidden></div></div>
+
+        <aside class="lab-side">
+          <div class="readout">
+            <div><span>Passo</span><b id="rdPasso">0</b></div>
+            <div><span>Custo acumulado</span><b id="rdCusto">0</b></div>
+            <div><span>Chaves</span><b id="rdChaves">—</b></div>
+            <div><span>Bônus consumidos</span><b id="rdBonus">—</b></div>
+          </div>
+          <div class="layer-info" id="infoCamada"></div>
+          <div class="result" id="resultado"></div>
+          <div class="legend" id="legenda"></div>
+        </aside>
+      </div>
+
+      <div class="player">
+        <button class="icon-btn" id="btnPlay" aria-label="Reproduzir">▶</button>
+        <button class="icon-btn" id="btnReset" aria-label="Reiniciar">↺</button>
+        <input type="range" id="scrub" min="0" value="0" aria-label="Linha do tempo">
+        <label class="speed">Velocidade <input type="range" id="speed" min="1" max="10" value="5"></label>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <h3>Comparativo dos algoritmos no mapa <span id="tbMapa"></span></h3>
+      <div class="table-scroll"><table id="tbl"></table></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Projeto acadêmico · Teoria dos Grafos e AVD · 2026.2 · <a href="https://github.com/arthurlins7/Projeto-Grafos" target="_blank" rel="noopener">Repositório no GitHub</a></p>
+  <p class="small">Dataset: SNAP/Stanford, Leskovec, Huttenlocher e Kleinberg, <i>Signed Networks in Social Media</i>, CHI 2010.</p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden><img alt=""><p></p></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

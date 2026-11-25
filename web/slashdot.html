@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- [IA] Claude Code – estrutura HTML da pagina do projeto, incluindo os textos explicativos -->
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slashdot · Projeto Grafos</title>
+<meta name="description" content="BFS, DFS, Dijkstra e Bellman-Ford em labirintos com chaves e portas e na rede social Slashdot.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<header class="nav">
+  <a class="brand" href="index.html"><span class="brand-dot"></span>Projeto Grafos</a>
+  <nav>
+    <a href="labirintos.html">Labirintos</a>
+    <a href="modelagem.html">Modelagem</a>
+    <a href="slashdot.html" class="on" aria-current="page">Slashdot</a>
+    <a href="graficos.html">Gráficos</a>
+    <a href="equipe.html">Equipe</a>
+  </nav>
+</header>
+
+<main id="topo">
+
+  <!-- PARTE 2 -->
+  <section class="block" id="parte2">
+    <div class="head"><span class="eyebrow">Parte 2</span><h2>A rede social Slashdot</h2>
+      <p>Cada seta é uma marcação: <b class="friend">amigo (+1)</b> ou <b class="foe">inimigo (−1)</b>. Dataset <code id="dsNome"></code>.</p></div>
+
+    <div class="slash-grid">
+      <div class="card"><h3>Tempo por recorte da rede</h3><p class="note top">Mediana em ms, média de três usuários de partida. Escala logarítmica.</p><div id="chartEscala"></div></div>
+      <div class="card"><h3>Recortes do dataset</h3><div class="table-scroll"><table id="tblRec"></table></div>
+        <div class="negcycle" id="negCycle"></div></div>
+    </div>
+
+    <div class="card table-card">
+      <h3>Caminhos de volta: marcações do piloto</h3>
+      <p class="note top">Quem recebeu a marcação consegue chegar de volta a quem marcou? Dijkstra com amigo = 1 e inimigo = 2.</p>
+      <div class="table-scroll"><table id="tblPiloto"></table></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Projeto acadêmico · Teoria dos Grafos e AVD · 2026.2 · <a href="https://github.com/arthurlins7/Projeto-Grafos" target="_blank" rel="noopener">Repositório no GitHub</a></p>
+  <p class="small">Dataset: SNAP/Stanford, Leskovec, Huttenlocher e Kleinberg, <i>Signed Networks in Social Media</i>, CHI 2010.</p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden><img alt=""><p></p></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

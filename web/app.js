@@ -58,7 +58,7 @@ function simular(mapa, caminho, fonteConsumivel) {
 }
 
 /* ---------- labirinto ---------- */
-const cv = $("#cv"), ctx = cv.getContext("2d");
+const cv = $("#cv"), ctx = cv ? cv.getContext("2d") : null;
 const S = { mapa: null, alg: "BFS", sol: null, sim: [], passo: 0, tocando: false, acc: 0, ultimo: 0, cell: 24, camada: "auto", armadilha: false };
 
 function solucaoDe(mapa, alg) {
@@ -116,7 +116,7 @@ function atualizarCamadas() {
   if (info.ordem.length > 1) h += `<br>Arcos entre camadas: <b>${info.arcos_entre_camadas}</b>`;
   $("#infoCamada").innerHTML = h;
 }
-$("#chkArmadilha").onchange = (e) => { S.armadilha = e.target.checked; desenhar(); };
+if (cv) $("#chkArmadilha").onchange = (e) => { S.armadilha = e.target.checked; desenhar(); };
 /* o realce pulsa: redesenha mesmo com o percurso parado */
 (function pulsar() { if (S.armadilha && !S.tocando) desenhar(); requestAnimationFrame(pulsar); })();
 
@@ -293,13 +293,15 @@ function loop(t) {
   if (S.passo >= n - 1) return tocar(false);
   requestAnimationFrame(loop);
 }
-$("#btnPlay").onclick = () => {
-  if (!S.sim.length) return;
-  if (!S.tocando && S.passo >= S.sim.length - 1) S.passo = 0;
-  tocar(!S.tocando);
-};
-$("#btnReset").onclick = () => { tocar(false); S.passo = 0; desenhar(); atualizarLeitura(); };
-$("#scrub").oninput = (e) => { tocar(false); S.passo = +e.target.value; desenhar(); atualizarLeitura(); };
+if (cv) {
+  $("#btnPlay").onclick = () => {
+    if (!S.sim.length) return;
+    if (!S.tocando && S.passo >= S.sim.length - 1) S.passo = 0;
+    tocar(!S.tocando);
+  };
+  $("#btnReset").onclick = () => { tocar(false); S.passo = 0; desenhar(); atualizarLeitura(); };
+  $("#scrub").oninput = (e) => { tocar(false); S.passo = +e.target.value; desenhar(); atualizarLeitura(); };
+}
 let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (S.mapa) { dimensionar(); desenhar(); } }, 120); });
 
 /* ---------- tabela comparativa ---------- */
@@ -413,8 +415,12 @@ function efeitos() {
   document.querySelectorAll(".stat").forEach((s) => co.observe(s));
 }
 
-montarMapas(); modelagem(); parte2(); galeria(); efeitos();
-{
+if (cv) montarMapas();
+if ($("#chartModel")) modelagem();
+if ($("#chartEscala")) parte2();
+if ($("#gallery")) galeria();
+efeitos();
+if (cv) {
   const q = new URLSearchParams(location.search);
   if (q.get("alg")) S.alg = q.get("alg");
   escolherMapa(D.mapas[q.get("mapa")] ? q.get("mapa") : "m02");

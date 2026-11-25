@@ -16,13 +16,13 @@
 <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
 
 <header class="nav">
-  <a class="brand" href="#topo"><span class="brand-dot"></span>Projeto Grafos</a>
+  <a class="brand" href="index.html"><span class="brand-dot"></span>Projeto Grafos</a>
   <nav>
-    <a href="#parte1">Labirintos</a>
-    <a href="#modelagem">Modelagem</a>
-    <a href="#parte2">Slashdot</a>
-    <a href="#graficos">Gráficos</a>
-    <a href="#equipe">Equipe</a>
+    <a href="labirintos.html">Labirintos</a>
+    <a href="modelagem.html">Modelagem</a>
+    <a href="slashdot.html">Slashdot</a>
+    <a href="graficos.html">Gráficos</a>
+    <a href="equipe.html">Equipe</a>
   </nav>
 </header>
 
@@ -35,8 +35,8 @@
       <h1>Encontrando o <em>melhor caminho</em><br>em labirintos e redes sociais</h1>
       <p class="lead">Quatro algoritmos, dois cenários. Comparamos <strong>BFS, DFS, Dijkstra e Bellman-Ford</strong> em labirintos com chaves, portas e esteiras e na rede de 82 mil usuários do Slashdot.</p>
       <div class="cta">
-        <a class="btn primary" href="#parte1">Explorar os labirintos</a>
-        <a class="btn ghost" href="#parte2">Ver a rede Slashdot</a>
+        <a class="btn primary" href="labirintos.html">Explorar os labirintos</a>
+        <a class="btn ghost" href="slashdot.html">Ver a rede Slashdot</a>
       </div>
     </div>
     <div class="hero-visual" aria-hidden="true">
@@ -98,100 +98,6 @@
     </div>
   </section>
 
-  <!-- PARTE 1 -->
-  <section class="block" id="parte1">
-    <div class="head"><span class="eyebrow">Parte 1</span><h2>Labirinto interativo</h2>
-      <p>Escolha um mapa e um algoritmo e veja o percurso real calculado pelo nosso código.</p></div>
-
-    <div class="lab card">
-      <div class="lab-controls">
-        <div class="field"><label for="selMapa">Mapa</label><select id="selMapa"></select></div>
-        <div class="field grow"><label>Algoritmo</label><div class="seg" id="segAlg"></div></div>
-      </div>
-
-      <div class="lab-layers">
-        <div class="field grow"><label>Camada do grafo de estados (chaves coletadas)</label><div class="seg layers" id="segCamada"></div></div>
-        <label class="switch" title="Estados alcançáveis a partir de S, mas sem caminho até o ALVO">
-          <input type="checkbox" id="chkArmadilha"><span class="knob"></span>Realçar estados-armadilha
-        </label>
-      </div>
-
-      <div class="lab-main">
-        <div class="canvas-wrap"><canvas id="cv" aria-label="Labirinto"></canvas>
-          <div class="overlay" id="overlay" hidden></div></div>
-
-        <aside class="lab-side">
-          <div class="readout">
-            <div><span>Passo</span><b id="rdPasso">0</b></div>
-            <div><span>Custo acumulado</span><b id="rdCusto">0</b></div>
-            <div><span>Chaves</span><b id="rdChaves">—</b></div>
-            <div><span>Bônus consumidos</span><b id="rdBonus">—</b></div>
-          </div>
-          <div class="layer-info" id="infoCamada"></div>
-          <div class="result" id="resultado"></div>
-          <div class="legend" id="legenda"></div>
-        </aside>
-      </div>
-
-      <div class="player">
-        <button class="icon-btn" id="btnPlay" aria-label="Reproduzir">▶</button>
-        <button class="icon-btn" id="btnReset" aria-label="Reiniciar">↺</button>
-        <input type="range" id="scrub" min="0" value="0" aria-label="Linha do tempo">
-        <label class="speed">Velocidade <input type="range" id="speed" min="1" max="10" value="5"></label>
-      </div>
-    </div>
-
-    <div class="card table-card">
-      <h3>Comparativo dos algoritmos no mapa <span id="tbMapa"></span></h3>
-      <div class="table-scroll"><table id="tbl"></table></div>
-    </div>
-  </section>
-
-  <!-- MODELAGEM -->
-  <section class="block" id="modelagem">
-    <div class="head"><span class="eyebrow">Modelagem</span><h2>Por que usar grafo de estados?</h2>
-      <p>Posição sozinha não basta: quem tem a chave <i>a</i> não está no mesmo estado de quem não tem. O nó guarda <code>(linha,coluna)|chaves|{bônus}</code>.</p></div>
-    <div class="two">
-      <div class="card"><h3>Tamanho dos grafos por mapa</h3><div id="chartModel" class="bars"></div>
-        <p class="note">Nós de <b class="k1">G_pos</b> (só posição) contra nós de <b class="k2">G_est</b> (posição + chaves + bônus).</p></div>
-      <div class="card"><h3>O que dá errado só com posições</h3><div id="armadilhas" class="traps"></div></div>
-    </div>
-  </section>
-
-  <!-- PARTE 2 -->
-  <section class="block" id="parte2">
-    <div class="head"><span class="eyebrow">Parte 2</span><h2>A rede social Slashdot</h2>
-      <p>Cada seta é uma marcação: <b class="friend">amigo (+1)</b> ou <b class="foe">inimigo (−1)</b>. Dataset <code id="dsNome"></code>.</p></div>
-
-    <div class="slash-grid">
-      <div class="card"><h3>Tempo por recorte da rede</h3><p class="note top">Mediana em ms, média de três usuários de partida. Escala logarítmica.</p><div id="chartEscala"></div></div>
-      <div class="card"><h3>Recortes do dataset</h3><div class="table-scroll"><table id="tblRec"></table></div>
-        <div class="negcycle" id="negCycle"></div></div>
-    </div>
-
-    <div class="card table-card">
-      <h3>Caminhos de volta: marcações do piloto</h3>
-      <p class="note top">Quem recebeu a marcação consegue chegar de volta a quem marcou? Dijkstra com amigo = 1 e inimigo = 2.</p>
-      <div class="table-scroll"><table id="tblPiloto"></table></div>
-    </div>
-  </section>
-
-  <!-- GRAFICOS -->
-  <section class="block" id="graficos">
-    <div class="head"><span class="eyebrow">AVD</span><h2>Galeria de visualizações</h2><p>Figuras geradas pelos notebooks do grupo. Clique para ampliar.</p></div>
-    <div class="gallery" id="gallery"></div>
-  </section>
-
-  <!-- EQUIPE -->
-  <section class="block" id="equipe">
-    <div class="head"><span class="eyebrow">Time</span><h2>Quem fez</h2></div>
-    <div class="team">
-      <div class="card person"><div class="av" style="--h:260">AL</div><b>Arthur Lins</b></div>
-      <div class="card person"><div class="av" style="--h:190">DS</div><b>Davi Santiago</b></div>
-      <div class="card person"><div class="av" style="--h:320">JP</div><b>João Pedro Patriota</b></div>
-      <div class="card person"><div class="av" style="--h:40">LR</div><b>Lucas Ramon</b></div>
-    </div>
-  </section>
 </main>
 
 <footer>
