@@ -6,11 +6,12 @@ const $ = (s) => document.querySelector(s);
 const fmt = (n) => n.toLocaleString("pt-BR");
 
 const ALGS = [
-  { id: "BFS", nome: "BFS", cor: "#4c8ddb" },
-  { id: "DFS", nome: "DFS", cor: "#e8a06a" },
-  { id: "DIJKSTRA", nome: "Dijkstra", cor: "#2fafa3" },
-  { id: "BELLMAN_FORD", nome: "Bellman-Ford", cor: "#a9b4c0" },
-  { id: "BELLMAN_FORD_FONTE_CONSUMIVEL", nome: "Bellman-Ford (fonte consumível)", cor: "#7f8a9a" },
+  // [IA] Claude – cores dos algoritmos iguais as dos graficos dos notebooks (CORES_ALGORITMOS, notebook 02, secao 12)
+  { id: "BFS", nome: "BFS", cor: "#0072B2" },
+  { id: "DFS", nome: "DFS", cor: "#D55E00" },
+  { id: "DIJKSTRA", nome: "Dijkstra", cor: "#009E73" },
+  { id: "BELLMAN_FORD", nome: "Bellman-Ford", cor: "#CC79A7" },
+  { id: "BELLMAN_FORD_FONTE_CONSUMIVEL", nome: "Bellman-Ford (fonte consumível)", cor: "#E3AFCB" },
 ];
 
 /* ---------- regras das casas ---------- */
@@ -351,7 +352,7 @@ function parte2() {
       Custo do ciclo: <b>${P.custo_ciclo}</b>. Dois usuários que se marcam como inimigos permitem reduzir o custo indefinidamente.`;
   }
   /* grafico de barras agrupadas, escala log */
-  const algs = [["BFS", "#4c8ddb"], ["DFS", "#e8a06a"], ["Dijkstra", "#2fafa3"], ["Bellman-Ford", "#a9b4c0"]];
+  const algs = ALGS.slice(0, 4).map((a) => [a.nome, a.cor]); // [IA] Claude – mesmas cores dos notebooks
   const W = 640, H = 330, m = { l: 52, r: 10, t: 14, b: 62 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
   const lo = Math.log10(.5), hi = Math.log10(1000), y = (v) => m.t + ih - ((Math.log10(v) - lo) / (hi - lo)) * ih;
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tempo por recorte">`;
@@ -376,20 +377,70 @@ function parte2() {
       <td>${p.custo === null ? '<span class="badge SEM_SOLUCAO">sem volta</span>' : '<span class="badge OK">volta existe</span>'}</td></tr>`).join("") + "</tbody>";
 }
 
-/* ---------- galeria ---------- */
-const FOTOS = [
-  ["parte2/distribuicao_graus.png", "Distribuição dos graus"], ["parte2/avd_boxplot_graus.png", "Boxplot dos graus"],
-  ["parte2/avd_recebidas_feitas.png", "Marcações recebidas e feitas"], ["parte2/avd_concentracao_negativas.png", "Concentração das marcações negativas"],
-  ["parte2/avd_caminhos_de_volta.png", "Caminhos de volta"], ["parte2/avd_retorno_por_grau_saida.png", "Retorno por grau de saída"],
-  ["parte2/alg_tempo_recortes.png", "Tempo por recorte"], ["parte2/alg_profundidade_buscas.png", "Profundidade das buscas"],
-  ["parte2/alg_passos_volta_piloto.png", "Passos de volta do piloto"], ["parte1/percurso_m03.png", "Percurso no mapa M03"],
-  ["parte1/percurso_m08.png", "Percurso no mapa M08"], ["parte1/heatmap_multiplicidade_m08.png", "Multiplicidade de estados (M08)"],
-  ["parte1/camadas_m02.png", "Camadas do BFS (M02)"], ["parte1/arvore_bfs_m02.png", "Árvore BFS (M02)"],
+/* ---------- graficos em topicos ---------- */
+// [IA] Claude – pagina de graficos em topicos (um cartao por grafico). Os textos sao copiados das notas analiticas escritas pelo grupo nos notebooks
+const BLOCOS = [
+  { id: "exploratorias", grupo: "exp", eyebrow: "Parte 2 · AVD", titulo: "Visualizações exploratórias", texto: "Quatro gráficos para entender o comportamento dos dados do Slashdot (notebook 01)." },
+  { id: "explanatorias", grupo: "expl", eyebrow: "Parte 2 · AVD", titulo: "Visualizações explanatórias", texto: "Dois gráficos que comunicam a resposta à pergunta de pesquisa (notebook 01)." },
+  { id: "algoritmos", grupo: "alg", eyebrow: "Parte 2 · Grafos", titulo: "Comparação dos algoritmos", texto: "Tempo, comportamento e caminhos de BFS, DFS, Dijkstra e Bellman-Ford (notebook 02, seção 12)." },
+  { id: "labirintos", grupo: "p1", eyebrow: "Parte 1", titulo: "Labirintos", texto: "Figuras dos mapas geradas pelo src/solve.py." },
 ];
-function galeria() {
-  $("#gallery").innerHTML = FOTOS.map(([f, t]) => `<figure class="shot" data-src="../out/${f}" data-t="${t}"><div class="img"><img loading="lazy" src="../out/${f}" alt="${t}"></div><p>${t}</p></figure>`).join("");
-  const lb = $("#lightbox");
-  $("#gallery").onclick = (e) => { const f = e.target.closest(".shot"); if (!f) return; lb.querySelector("img").src = f.dataset.src; lb.querySelector("p").textContent = f.dataset.t; lb.hidden = false; };
+const FOTOS = [
+  { f: "parte2/distribuicao_graus.png", titulo: "Distribuição dos graus", grupo: "exp", origem: "Notebook 01 · seção 5.4 · exploratória 1",
+    mostra: "O gráfico compara, em cada faixa de grau, a porcentagem dos 82.140 usuários do Slashdot que receberam aquela quantidade de marcações (azul) e a porcentagem que fizeram aquela quantidade (laranja).",
+    insight: "A diferença é especialmente clara na faixa zero. Quase metade dos usuários (46,4%) não fez nenhuma marcação, enquanto 14,4% não receberam nenhuma. No outro extremo, alguns usuários receberam 501 marcações ou mais. Nenhum usuário fez tantas marcações: o maior grau de saída foi 428." },
+  { f: "parte2/avd_concentracao_negativas.png", titulo: "Concentração das marcações negativas", grupo: "exp", origem: "Notebook 01 · seção 5.5 · exploratória 2",
+    mostra: "A porcentagem acumulada das 124.130 marcações de inimigo conforme se incluem os usuários, de quem tem mais para quem tem menos, com uma curva para as feitas (laranja) e outra para as recebidas (azul).",
+    insight: "Os 10% do topo fizeram 94,41% das negativas e receberam 77,33%. Elas se concentram mais em quem marca." },
+  { f: "parte2/avd_recebidas_feitas.png", titulo: "Marcações recebidas e feitas", grupo: "exp", origem: "Notebook 01 · seção 6.2 · exploratória 3",
+    mostra: "A porcentagem dos 82.140 usuários em três grupos: recebeu mais do que fez (azul), recebeu e fez igual (cinza) e fez mais do que recebeu (cinza).",
+    insight: "A maioria (59,2%) recebeu mais do que fez, contra 33,7% que fizeram mais e 7,1% com a mesma quantidade." },
+  { f: "parte2/avd_boxplot_graus.png", titulo: "Boxplot dos graus", grupo: "exp", origem: "Notebook 01 · seção 7.2 · exploratória 4",
+    mostra: "Boxplots das marcações recebidas e feitas, com a mediana em linha escura e, em vermelho, os graus sinalizados pelo IQR.",
+    insight: "A mediana foi 1 nos dois lados, mas os extremos diferem: 2.543 recebidas contra 428 feitas." },
+  { f: "parte2/avd_caminhos_de_volta.png", titulo: "Caminhos de volta", grupo: "expl", origem: "Notebook 01 · seção 8.2 · explanatória 1",
+    mostra: "A porcentagem das 1.000 marcações de cada tipo por passos de volta, de 1 a 7, e nos dois casos sem volta, com amigo em azul e inimigo em verde-azulado.",
+    insight: "A volta direta foi mais comum em amigo (22,5% contra 9,8%), e a de três passos, em inimigo (24,8% contra 15,0%)." },
+  { f: "parte2/avd_retorno_por_grau_saida.png", titulo: "Retorno por grau de saída", grupo: "expl", origem: "Notebook 01 · seção 9.1 · explanatória 2",
+    mostra: "A porcentagem de casos com volta por faixa de marcações feitas por quem recebeu (1 a 3, 4 a 10 e 11 ou mais), com amigo em azul e inimigo em verde-azulado.",
+    insight: "Inimigo teve volta mais vezes nas três faixas: 79,6% contra 70,4%, 97,7% contra 88,7% e 96,7% contra 92,5%." },
+  { f: "parte2/alg_tempo_recortes.png", titulo: "Tempo por recorte", grupo: "alg", origem: "Notebook 02 · seção 12.1",
+    mostra: "Cada linha é um algoritmo, e cada ponto é o tempo médio de 15 execuções. Dijkstra e Bellman-Ford usaram peso 1 para amigo e 2 para inimigo.",
+    insight: "Nos recortes de 50% e 100%, a ordem do mais lento ao mais rápido foi DFS, Bellman-Ford, Dijkstra e BFS. Na rede completa, os tempos foram de cerca de 542, 394, 300 e 152 ms." },
+  { f: "parte2/alg_profundidade_buscas.png", titulo: "Profundidade das buscas", grupo: "alg", origem: "Notebook 02 · seção 12.2",
+    mostra: "Cada par compara a maior distância mínima da BFS com o ramo mais profundo da DFS, para a mesma origem e o mesmo recorte. Os dois máximos podem ser de usuários diferentes.",
+    insight: "Nos nove casos, a BFS ficou entre 1 e 10 passos, enquanto a DFS chegou a 6.636. Por isso a BFS mede a menor volta. Na seção 6.2, ela encontrou 2 passos para o mesmo destino que a DFS alcançou em 775." },
+  { f: "parte2/alg_passos_volta_piloto.png", titulo: "Passos de volta do piloto", grupo: "alg", origem: "Notebook 02 · seção 12.3",
+    mostra: "Cada par de barras compara os passos de volta da BFS e do Dijkstra para uma marcação. A de 8068 para 48080 aparece sem barra porque nenhum dos dois encontrou volta.",
+    insight: "Das nove marcações com volta, oito tiveram o mesmo número de passos, e só a de 3381 para 29495 passou de 5 na BFS para 6 no Dijkstra. Em três das oito, os caminhos passaram por usuários diferentes, como mostram as seções 6.1 e 7.1." },
+  { f: "parte1/percurso_m03.png", titulo: "Percurso no mapa M03", grupo: "p1", origem: "Parte 1 · gerada pelo src/solve.py" },
+  { f: "parte1/percurso_m08.png", titulo: "Percurso no mapa M08", grupo: "p1", origem: "Parte 1 · gerada pelo src/solve.py" },
+  { f: "parte1/heatmap_multiplicidade_m08.png", titulo: "Multiplicidade de estados (M08)", grupo: "p1", origem: "Parte 1 · gerada pelo src/solve.py" },
+  { f: "parte1/camadas_m02.png", titulo: "Grafo de estados por conjunto de chaves (M02)", grupo: "p1", origem: "Parte 1 · gerada pelo src/solve.py" },
+  { f: "parte1/arvore_bfs_m02.png", titulo: "Árvore BFS (M02)", grupo: "p1", origem: "Parte 1 · gerada pelo src/solve.py" },
+];
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function graficosEmTopicos() {
+  const alvo = $("#topicos"), lb = $("#lightbox");
+  let n = 0;
+  const topico = (x) => {
+    n += 1;
+    const texto = x.mostra
+      ? `<div class="topico-texto"><div><h4>O que está sendo mostrado</h4><p>${esc(x.mostra)}</p></div><div><h4>Insight</h4><p>${esc(x.insight)}</p></div></div>`
+      : "";
+    return `<article class="card topico">
+      <div class="topico-head"><span class="num">${n}</span><div><h3>${esc(x.titulo)}</h3><p class="note">${esc(x.origem)}</p></div></div>
+      <figure class="topico-img" data-src="../out/${x.f}" data-t="${esc(x.titulo)}"><img loading="lazy" src="../out/${x.f}" alt="${esc(x.titulo)}"></figure>
+      ${texto}</article>`;
+  };
+  $("#indice").innerHTML = BLOCOS.map((b) => `<a href="#${b.id}">${b.titulo}</a>`).join("");
+  alvo.innerHTML = BLOCOS.map((b) => `<section class="block" id="${b.id}">
+    <div class="head"><span class="eyebrow">${b.eyebrow}</span><h2>${b.titulo}</h2><p>${b.texto}</p></div>
+    <div class="topicos">${FOTOS.filter((x) => x.grupo === b.grupo).map(topico).join("")}</div></section>`).join("");
+  alvo.onclick = (e) => {
+    const f = e.target.closest(".topico-img"); if (!f) return;
+    lb.querySelector("img").src = f.dataset.src; lb.querySelector("p").textContent = f.dataset.t; lb.hidden = false;
+  };
   lb.onclick = () => (lb.hidden = true);
   document.addEventListener("keydown", (e) => e.key === "Escape" && (lb.hidden = true));
 }
@@ -418,7 +469,7 @@ function efeitos() {
 if (cv) montarMapas();
 if ($("#chartModel")) modelagem();
 if ($("#chartEscala")) parte2();
-if ($("#gallery")) galeria();
+if ($("#topicos")) graficosEmTopicos();
 efeitos();
 if (cv) {
   const q = new URLSearchParams(location.search);
