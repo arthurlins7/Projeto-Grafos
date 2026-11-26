@@ -458,6 +458,17 @@ def armadilhas_do_mapa(linhas, fonte_consumivel=False):
     return armadilhas, grafo_estados_sem_alvo(g_est).ordem()
 
 
+def salvar_armadilhas_csv(linhas, caminho, fonte_consumivel=False):
+    # usado pelo solve.py (m04, m07 e g02) e pelo cli.py (--armadilhas --out)
+    g_est = construir_grafo_estados(linhas, fonte_consumivel=fonte_consumivel)
+    linhas_csv = []
+    for estado in estados_armadilha(g_est):
+        posicao, chaves, bonus = decompor_estado(estado)
+        linhas_csv.append([estado, posicao[0], posicao[1], linhas[posicao[0]][posicao[1]], chaves])
+    salvar_csv(linhas_csv, ["estado", "linha", "coluna", "casa", "chaves"], caminho)
+    return caminho
+
+
 def gabarito_do_mapa(linhas):
     # Secao 10: numeros que vao para o PDF (estados, arcos, passos e custo)
     g_est = construir_grafo_estados(linhas)
@@ -505,12 +516,7 @@ def gerar_resultados_algoritmos(pasta_mapas=None, pasta_saida=PASTA_SAIDA):
         if nome == "m06":
             salvar_json(ciclo_negativo(linhas), pasta_saida / "ciclo_negativo_m06.json")
         if nome in ("m04", "m07", "g02"):
-            linhas_csv = []
-            for estado in estados_armadilha(construir_grafo_estados(linhas)):
-                posicao, chaves, bonus = decompor_estado(estado)
-                linhas_csv.append([estado, posicao[0], posicao[1], linhas[posicao[0]][posicao[1]], chaves])
-            salvar_csv(linhas_csv, ["estado", "linha", "coluna", "casa", "chaves"],
-                       pasta_saida / f"armadilhas_{nome}.csv")
+            salvar_armadilhas_csv(linhas, pasta_saida / f"armadilhas_{nome}.csv")
 
     gabarito = {}
     for caminho in listar_mapas(PASTA_MAPAS_GRUPO):
@@ -568,11 +574,34 @@ def percurso_com_custos(g_est, caminho):
     return passos
 
 
-def dados_da_pagina():
-    # tudo que a pagina interativa precisa, mapa por mapa
+def chave_na_pagina(caminho, dados):
+    # nome do mapa no seletor da pagina: "m03", "g01"... sem repetir nome
+    nome = nome_curto(caminho)
+    if nome in dados:
+        nome = Path(caminho).stem
+    base, n = nome, 2
+    while nome in dados:
+        nome = f"{base}_{n}"
+        n += 1
+    return nome
+
+
+def dados_da_pagina(mapa_extra=None):
+    # tudo que a pagina interativa precisa, mapa por mapa.
+    # mapa_extra: um mapa a mais (ex.: um mapa novo passado no --mapa do cli)
+    # devolve (dados, nome do mapa extra na pagina)
+    caminhos = listar_mapas()
+    chave_extra = None
+    if mapa_extra is not None:
+        mapa_extra = Path(mapa_extra)
+        if not any(c.resolve() == mapa_extra.resolve() for c in caminhos):
+            caminhos.append(mapa_extra)
+
     dados = {}
-    for caminho in listar_mapas():
-        nome = nome_curto(caminho)
+    for caminho in caminhos:
+        nome = chave_na_pagina(caminho, dados)
+        if mapa_extra is not None and Path(caminho).resolve() == mapa_extra.resolve():
+            chave_extra = nome
         linhas = ler_mapa(caminho)
         g_est = construir_grafo_estados(linhas)
 
@@ -612,24 +641,35 @@ def dados_da_pagina():
             }
 
         partes = Path(caminho).stem.split("_", 1)
+        if len(partes) > 1:
+            titulo = partes[1].replace("_", " ")
+        elif Path(caminho).parent.resolve() == PASTA_MAPAS_GRUPO.resolve():
+            titulo = "mapa do grupo"
+        else:
+            titulo = "mapa novo"
         dados[nome] = {
-            "titulo": partes[1].replace("_", " ") if len(partes) > 1 else "mapa do grupo",
+            "titulo": titulo,
             "grade": linhas,
             "camadas": camadas,
             "armadilhas": armadilhas,
             "algoritmos": algoritmos,
         }
-    return dados
+    return dados, chave_extra
 
 
-def gerar_pagina_interativa(destino=PAGINA_INTERATIVA):
+def gerar_pagina_interativa(destino=PAGINA_INTERATIVA, mapa=None):
     # o modelo (src/labirinto_template.html) tem o HTML e o JavaScript;
-    # aqui so colocamos os dados dentro dele e salvamos em out/parte1/
+    # aqui so colocamos os dados dentro dele e salvamos em out/parte1/.
+    # mapa: a pagina ja abre nesse mapa (se for um mapa novo, ele entra na pagina)
     modelo = MODELO_PAGINA.read_text(encoding="utf-8")
     marcador = "/*DADOS*/{}"
-    if marcador not in modelo:
-        raise ValueError(f"O modelo {MODELO_PAGINA} precisa ter a linha: const DADOS = {marcador};")
-    html = modelo.replace(marcador, json.dumps(dados_da_pagina(), ensure_ascii=False))
+    marcador_inicial = '/*MAPA_INICIAL*/""'
+    if marcador not in modelo or marcador_inicial not in modelo:
+        raise ValueError(f"O modelo {MODELO_PAGINA} precisa ter as linhas: const DADOS = {marcador}; "
+                         f"e const MAPA_INICIAL = {marcador_inicial};")
+    dados, mapa_inicial = dados_da_pagina(mapa)
+    html = modelo.replace(marcador, json.dumps(dados, ensure_ascii=False))
+    html = html.replace(marcador_inicial, json.dumps(mapa_inicial or ""))
     destino = Path(destino)
     destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(html, encoding="utf-8")

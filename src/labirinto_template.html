@@ -77,6 +77,8 @@
 <script>
 // dados gerados pelo src/solve.py (gerar_pagina_interativa)
 const DADOS = /*DADOS*/{};
+// mapa em que a pagina abre (o cli coloca aqui o --mapa; vazio = primeiro da lista)
+const MAPA_INICIAL = /*MAPA_INICIAL*/"";
 
 const NOMES_ALG = {
   BFS: "BFS (menos passos)",
@@ -153,6 +155,7 @@ function desenhar() {
     });
   });
 
+  mostrarMensagem();
   $("rdStatus").textContent = resultado.status;
   $("rdCamada").textContent = chavesTexto(camada);
   if (atual) {
@@ -176,8 +179,17 @@ function mostrarMensagem() {
     SEM_SOLUCAO: `Nao existe caminho do inicio ate a saida. ` +
       `Ligue "Realcar estados-armadilha" para ver onde o jogador fica preso.`,
   };
-  let texto = textos[resultado.status] || `Chegou na saida em ${resultado.passos} passos, custo ${resultado.custo}.`;
-  if (resultado.status === "OK" && $("selAlg").value === "DFS") texto += " (a DFS nao garante o menor caminho)";
+  let texto = textos[resultado.status];
+  if (resultado.status === "OK") {
+    // so diz que chegou quando a animacao chega no ultimo passo
+    if (passo === resultado.percurso.length - 1) {
+      texto = `Chegou na saida em ${resultado.passos} passos, custo ${resultado.custo}.`;
+    } else {
+      texto = `Caminho encontrado: ${resultado.passos} passos, custo ${resultado.custo}. ` +
+        `Use Play ou Passo > para acompanhar.`;
+    }
+    if ($("selAlg").value === "DFS") texto += " (a DFS nao garante o menor caminho)";
+  }
   msg.textContent = texto;
   msg.hidden = false;
 }
@@ -186,7 +198,6 @@ function escolherAlgoritmo() {
   parar();
   resultado = mapa.algoritmos[$("selAlg").value];
   passo = 0;
-  mostrarMensagem();
   desenhar();
 }
 
@@ -262,6 +273,7 @@ if (Object.keys(DADOS).length === 0) {
     '<p class="msg">Sem dados: rode <code>python -m src.solve</code> e abra ' +
     '<code>out/parte1/labirinto_interativo.html</code> (ou <code>python -m src.cli --interactive</code>).</p>');
 } else {
+  if (MAPA_INICIAL in DADOS) $("selMapa").value = MAPA_INICIAL;
   escolherMapa();
 }
 </script>

@@ -1,4 +1,6 @@
-# [IA] Claude - testes dos comandos da Parte 1 no terminal (--alg, --fonte-consumivel, --armadilhas, --interactive)
+# [IA] Claude - testes dos comandos da Parte 1 no terminal (--alg, --fonte-consumivel, --armadilhas, --interactive, --out)
+import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -11,12 +13,14 @@ PASTA_MAPAS = PASTA_PROJETO / "data" / "mapas"
 
 
 def executar_cli(*argumentos):
+    # NAO_ABRIR_NAVEGADOR: o --interactive so gera a pagina, sem abrir o navegador nos testes
     return subprocess.run(
         [sys.executable, "-m", "src.cli", *argumentos],
         cwd=PASTA_PROJETO,
         capture_output=True,
         text=True,
         timeout=120,
+        env={**os.environ, "NAO_ABRIR_NAVEGADOR": "1"},
     )
 
 
@@ -80,7 +84,9 @@ def test_dfs_mostra_os_tipos_de_arco():
     ["--dataset", "dados", "--armadilhas"],
     ["--dataset", "dados", "--alg", "BFS", "--source", "1", "--fonte-consumivel"],
     ["--interactive", "--alg", "BFS"],
-    ["--interactive", "--mapa", "mapa.txt"],
+    ["--interactive", "--dataset", "dados"],
+    ["--interactive", "--mapa", "nao_existe.txt"],
+    ["--mapa", "mapa.txt", "--validar-mapa", "--out", "pasta"],
 ])
 def test_recusa_combinacoes_invalidas(argumentos):
     resultado = executar_cli(*argumentos)
@@ -104,3 +110,64 @@ def test_pagina_interativa_tem_os_mapas_e_os_algoritmos(tmp_path):
     assert '"m01"' in html and '"m08"' in html
     assert "BELLMAN_FORD_FONTE_CONSUMIVEL" in html
     assert "<script src=" not in html   # tudo dentro de um arquivo so
+
+
+# ---------------------------------------------------------------- --out (comandos do enunciado)
+
+def test_comandos_do_enunciado_gravam_na_pasta_do_out(tmp_path):
+    comandos = [
+        ("m03_tres_chaves.txt", "--alg", "BFS"),
+        ("m03_tres_chaves.txt", "--alg", "DIJKSTRA"),
+        ("m05_bonus.txt", "--alg", "BELLMAN_FORD"),
+        ("m06_fonte.txt", "--alg", "BELLMAN_FORD", "--fonte-consumivel"),
+        ("m04_esteiras.txt", "--armadilhas"),
+    ]
+    for nome, *opcoes in comandos:
+        resultado = executar_cli("--mapa", mapa(nome), *opcoes, "--out", str(tmp_path) + "/")
+        assert resultado.returncode == 0, resultado.stderr
+
+    bfs = json.loads((tmp_path / "m03_bfs.json").read_text(encoding="utf-8"))
+    assert bfs["status"] == "OK" and bfs["passos"] == 87
+    assert json.loads((tmp_path / "m03_dijkstra.json").read_text(encoding="utf-8"))["custo"] == 99
+    assert json.loads((tmp_path / "m05_bellman_ford.json").read_text(encoding="utf-8"))["custo"] == 5
+    fonte = json.loads((tmp_path / "m06_bellman_ford_fonte_consumivel.json").read_text(encoding="utf-8"))
+    assert fonte["status"] == "OK" and fonte["custo"] == 10
+    # o CSV sai igual ao que o solve.py gera em out/parte1
+    gerado = (tmp_path / "armadilhas_m04.csv").read_bytes()
+    assert gerado == (PASTA_PROJETO / "out" / "parte1" / "armadilhas_m04.csv").read_bytes()
+
+
+def test_out_nao_pode_ser_um_arquivo(tmp_path):
+    arquivo = tmp_path / "arquivo.txt"
+    arquivo.write_text("x", encoding="utf-8")
+    resultado = executar_cli("--mapa", mapa("m03_tres_chaves.txt"), "--alg", "BFS", "--out", str(arquivo))
+    assert resultado.returncode == 2
+    assert "--out deve ser uma pasta" in resultado.stderr
+
+
+def test_interactive_com_mapa_e_out_gera_a_pagina_nesse_mapa(tmp_path):
+    resultado = executar_cli("--mapa", mapa("m03_tres_chaves.txt"), "--interactive", "--out", str(tmp_path) + "/")
+    assert resultado.returncode == 0, resultado.stderr
+    html = (tmp_path / "labirinto_interativo.html").read_text(encoding="utf-8")
+    assert 'const MAPA_INICIAL = "m03";' in html
+    assert '"g02"' in html
+
+
+def test_interactive_com_mapa_novo_coloca_o_mapa_na_pagina(tmp_path):
+    novo = tmp_path / "teste_professora.txt"
+    novo.write_text("#######\n#S..G.#\n#######\n", encoding="utf-8")
+    resultado = executar_cli("--mapa", str(novo), "--interactive", "--out", str(tmp_path / "pagina.html"))
+    assert resultado.returncode == 0, resultado.stderr
+    html = (tmp_path / "pagina.html").read_text(encoding="utf-8")
+    assert 'const MAPA_INICIAL = "teste";' in html
+    assert '"teste": {"titulo": "professora"' in html
+
+
+def test_interactive_avisa_quando_o_navegador_nao_abre(tmp_path, monkeypatch, capsys):
+    from src import cli
+    monkeypatch.delenv("NAO_ABRIR_NAVEGADOR", raising=False)
+    monkeypatch.setattr(cli.webbrowser, "open", lambda url: False)
+    with pytest.raises(SystemExit) as saida:
+        cli.main(["--mapa", mapa("m02_uma_chave.txt"), "--interactive", "--out", str(tmp_path)])
+    assert saida.value.code == 1
+    assert "nao foi possivel abrir o navegador" in capsys.readouterr().err
