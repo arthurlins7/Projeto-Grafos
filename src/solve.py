@@ -134,16 +134,44 @@ def chave_de_leitura(rotulo):
     return (posicao[0], posicao[1], chaves, bonus)
 
 
-def estados_armadilha(g_est):
+def estados_que_chegam_no_alvo(g_est):
     # quem chega no ALVO = quem a BFS alcanca saindo do ALVO no grafo transposto
     if not g_est.tem_no(NO_ALVO):
-        return []
+        return set()
     dist, pai, ordem = bfs(g_est.transposto(), NO_ALVO)
+    return set(dist)
+
+
+def estados_armadilha(g_est):
+    chegam = estados_que_chegam_no_alvo(g_est)
     armadilhas = []
     for no in g_est.nos():
-        if no != NO_ALVO and no not in dist:
+        if no != NO_ALVO and no not in chegam:
             armadilhas.append(no)
     return armadilhas
+
+
+def bellman_ford_ate_alvo(g_est, inicio):
+    # Bellman-Ford pensando no caminho ate o ALVO.
+    # Um ciclo negativo so atrapalha se dele ainda da pra chegar no ALVO.
+    # Se o ciclo fica num lugar de onde nao se chega mais na saida, o menor custo
+    # ate o ALVO continua definido: roda de novo so com os estados que chegam no ALVO.
+    # devolve (dist, pai, ciclo que atrapalha ou None, ciclo fora da rota ou None)
+    dist, pai, ciclo = bellman_ford(g_est, inicio)
+    if ciclo is None:
+        return dist, pai, None, None
+
+    chegam = estados_que_chegam_no_alvo(g_est)
+    if any(estado in chegam for estado in ciclo):
+        return dist, pai, ciclo, None
+
+    if inicio not in chegam:
+        # nem o inicio chega no ALVO: nao tem caminho, com ou sem ciclo
+        return {inicio: 0}, {inicio: None}, None, ciclo
+
+    sub = g_est.subgrafo_induzido(chegam)
+    dist, pai, ciclo_na_rota = bellman_ford(sub, inicio)
+    return dist, pai, ciclo_na_rota, ciclo
 
 
 def resumo_graus(linhas, g_est):
@@ -288,14 +316,17 @@ def rodar_algoritmos(pasta_mapas=None, pasta_saida=PASTA_SAIDA):
         except ValueError as erro:
             solucoes.append([nome, "DIJKSTRA", "", "", "RECUSA", str(erro)])
 
-        dist, pai, ciclo = bellman_ford(g_est, inicio)
+        dist, pai, ciclo, fora_da_rota = bellman_ford_ate_alvo(g_est, inicio)
         if ciclo is not None:
             solucoes.append([nome, "BELLMAN_FORD", "", custo_caminho(g_est, ciclo),
                              "CICLO_NEGATIVO", " -> ".join(ciclo)])
             g_corrigido = construir_grafo_estados(linhas, fonte_consumivel=True)
-            dist, pai, ciclo = bellman_ford(g_corrigido, inicio)
+            dist, pai, ciclo, fora_da_rota = bellman_ford_ate_alvo(g_corrigido, inicio)
             if ciclo is None:
                 solucoes.append(linha_solucao(nome, "BELLMAN_FORD_FONTE_CONSUMIVEL", g_corrigido, dist, pai))
+            else:
+                solucoes.append([nome, "BELLMAN_FORD_FONTE_CONSUMIVEL", "", custo_caminho(g_corrigido, ciclo),
+                                 "CICLO_NEGATIVO", " -> ".join(ciclo)])
         else:
             solucoes.append(linha_solucao(nome, "BELLMAN_FORD", g_est, dist, pai))
 
@@ -318,8 +349,11 @@ def percurso_menor_custo(linhas):
     g_est = construir_grafo_estados(linhas)
     inicio = estado_inicial(linhas)
     if g_est.tem_peso_neg:
-        dist, pai, ciclo = bellman_ford(g_est, inicio)
+        dist, pai, ciclo, fora_da_rota = bellman_ford_ate_alvo(g_est, inicio)
         algoritmo = "BELLMAN_FORD"
+        if ciclo is not None:
+            # ciclo negativo que chega no ALVO: o menor custo nao existe
+            return None
     else:
         dist, pai, ordem = dijkstra(g_est, inicio)
         algoritmo = "DIJKSTRA"
@@ -390,12 +424,16 @@ def resolver_mapa(linhas, algoritmo, fonte_consumivel=False):
             resultado["mensagem"] = str(erro)
             return resultado
     elif algoritmo == "BELLMAN_FORD":
-        dist, pai, ciclo = bellman_ford(g_est, inicio)
+        dist, pai, ciclo, fora_da_rota = bellman_ford_ate_alvo(g_est, inicio)
         if ciclo is not None:
             resultado["status"] = "CICLO_NEGATIVO"
             resultado["ciclo"] = ciclo
             resultado["custo_ciclo"] = custo_caminho(g_est, ciclo)
             return resultado
+        if fora_da_rota is not None:
+            # tem ciclo negativo, mas dele nao da pra chegar na saida
+            resultado["ciclo_fora_da_rota"] = fora_da_rota
+            resultado["custo_ciclo_fora_da_rota"] = custo_caminho(g_est, fora_da_rota)
     elif algoritmo == "DFS":
         pai, ordem, classificacao, tem_ciclo = dfs(g_est, inicio)
         dist = pai   # a DFS nao calcula distancia; o pai ja diz quem foi alcancado
