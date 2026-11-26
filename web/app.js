@@ -895,7 +895,9 @@ function efeitos() {
 }
 
 if (cv) montarMapas();
-if ($("#chartModel")) { modelagem(); montarViz(); arquivosOut(); }
+if ($("#chartModel")) modelagem();
+if ($("#vizArea")) montarViz();
+if ($("#listaArquivos")) arquivosOut();
 if ($("#segDados")) [...$("#segDados").children].forEach((b) => (b.onclick = () => { EXP.aba = b.dataset.aba; EXP.passo = -1; explorar(); }));
 if ($("#chartEscala")) parte2();
 if ($("#topicos")) graficosEmTopicos();

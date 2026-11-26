@@ -38,7 +38,7 @@ PASTA_WEB = Path("web")
 PASTA_OUT = Path("out")
 PAGINAS = [  # (id da pagina no site unico, arquivo em web/, nome no menu)
     ("inicio", "index.html", "Início"),
-    ("labirintos", "labirintos.html", "Labirintos"),
+    ("labirintos", "labirintos.html", "Labirintos e saídas"),
     ("modelagem", "modelagem.html", "Modelagem"),
     ("slashdot", "slashdot.html", "Slashdot"),
     ("graficos", "graficos.html", "Gráficos"),
@@ -300,7 +300,12 @@ def gerar_site_unico(destino=PASTA_SAIDA / "labirinto_interativo.html", mapa_ext
     cabeca = re.sub(r'<link rel="stylesheet" href="style.css">', "", cabeca)
     rodape = re.search(r"<footer>.*?</footer>", paginas["index.html"], re.S).group(0)
 
-    menu = "".join(f'<a href="#{pid}" data-pagina="{pid}">{nome}</a>' for pid, arquivo, nome in PAGINAS)
+        # o menu segue o de web/: Inicio, grupo Parte 1, grupo Parte 2 e Equipe
+    item = {pid: f'<a href="#{pid}" data-pagina="{pid}">{nome}</a>' for pid, arquivo, nome in PAGINAS}
+    menu = (item["inicio"]
+            + f'<div class="grupo"><span>Parte 1</span><div>{item["labirintos"]}{item["modelagem"]}</div></div>'
+            + f'<div class="grupo"><span>Parte 2</span><div>{item["slashdot"]}{item["graficos"]}</div></div>'
+            + item["equipe"])
     secoes = "".join(
         f'\n<div class="pagina" id="pg-{pid}" data-pagina="{pid}" hidden>{trocar_links(miolo(paginas[arquivo], arquivo))}</div>'
         for pid, arquivo, nome in PAGINAS

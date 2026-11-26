@@ -264,3 +264,11 @@ footer a{color:var(--a)}footer .small{font-size:.78rem;margin-top:6px;opacity:.7
 @media (max-width:900px){.arquivos{grid-template-columns:1fr}}
 .arquivos-ver .table-scroll{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:12px}
 .arquivos-ver th{position:sticky;top:0;background:#141833}
+
+html{scroll-padding-top:110px}
+.nav{padding-top:12px;padding-bottom:12px;min-height:84px}
+.nav nav{align-items:flex-end;gap:10px}
+.nav nav .grupo{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:4px 6px 0;border-left:1px solid var(--line)}
+.nav nav .grupo>span{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--a);padding-left:13px}
+.nav nav .grupo>div{display:flex;gap:4px}
+@media (max-width:900px){.nav nav{align-items:flex-start;flex-wrap:nowrap}.nav nav .grupo>div{flex-wrap:nowrap}}

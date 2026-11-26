@@ -278,13 +278,20 @@ footer a{color:var(--a)}footer .small{font-size:.78rem;margin-top:6px;opacity:.7
 .arquivos-ver .table-scroll{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:12px}
 .arquivos-ver th{position:sticky;top:0;background:#141833}
 
+html{scroll-padding-top:110px}
+.nav{padding-top:12px;padding-bottom:12px;min-height:84px}
+.nav nav{align-items:flex-end;gap:10px}
+.nav nav .grupo{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:4px 6px 0;border-left:1px solid var(--line)}
+.nav nav .grupo>span{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--a);padding-left:13px}
+.nav nav .grupo>div{display:flex;gap:4px}
+@media (max-width:900px){.nav nav{align-items:flex-start;flex-wrap:nowrap}.nav nav .grupo>div{flex-wrap:nowrap}}
 </style>
 </head>
 <body class="site-unico">
 <div class="bg-orbs" aria-hidden="true"><span></span><span></span><span></span></div>
 <header class="nav">
   <a class="brand" href="#inicio"><span class="brand-dot"></span>Projeto Grafos</a>
-  <nav><a href="#inicio" data-pagina="inicio">Início</a><a href="#labirintos" data-pagina="labirintos">Labirintos</a><a href="#modelagem" data-pagina="modelagem">Modelagem</a><a href="#slashdot" data-pagina="slashdot">Slashdot</a><a href="#graficos" data-pagina="graficos">Gráficos</a><a href="#equipe" data-pagina="equipe">Equipe</a></nav>
+  <nav><a href="#inicio" data-pagina="inicio">Início</a><div class="grupo"><span>Parte 1</span><div><a href="#labirintos" data-pagina="labirintos">Labirintos e saídas</a><a href="#modelagem" data-pagina="modelagem">Modelagem</a></div></div><div class="grupo"><span>Parte 2</span><div><a href="#slashdot" data-pagina="slashdot">Slashdot</a><a href="#graficos" data-pagina="graficos">Gráficos</a></div></div><a href="#equipe" data-pagina="equipe">Equipe</a></nav>
 </header>
 <main id="topo">
 <div class="pagina" id="pg-inicio" data-pagina="inicio" hidden>
@@ -364,7 +371,7 @@ footer a{color:var(--a)}footer .small{font-size:.78rem;margin-top:6px;opacity:.7
 
   <!-- PARTE 1 -->
   <section class="block" id="parte1">
-    <div class="head"><span class="eyebrow">Parte 1</span><h2>Labirinto interativo</h2>
+    <div class="head"><span class="eyebrow">Parte 1 · labirintos e saídas</span><h2>Labirinto interativo</h2>
       <p>Escolha um mapa e um algoritmo e veja o percurso real calculado pelo nosso código, passo a passo. No modo <b>Comparar os 4</b>, os quatro algoritmos andam juntos no mesmo mapa.</p></div>
 
     <div class="lab card">
@@ -435,6 +442,31 @@ footer a{color:var(--a)}footer .small{font-size:.78rem;margin-top:6px;opacity:.7
       <div id="tabelaDados"></div>
     </div>
 
+    <div class="card table-card" id="vizGrafo">
+      <h3>O grafo de estados, interativo</h3>
+      <p class="note top">Passe o mouse sobre um estado ou uma casa para ver os detalhes. Funciona para qualquer mapa, inclusive um mapa novo.</p>
+      <div class="lab-controls">
+        <div class="field"><label for="selMapaViz">Mapa</label><select id="selMapaViz"></select></div>
+        <div class="field grow"><label>Visualização</label><div class="seg layers" id="segViz">
+          <button data-viz="camadas" class="on">Grafo em camadas</button>
+          <button data-viz="arvore">Árvore da BFS</button>
+          <button data-viz="heatmap">Heatmap de multiplicidade</button></div></div>
+      </div>
+      <p class="note" id="vizTexto"></p>
+      <div class="viz-legenda" id="vizLegenda"></div>
+      <div class="viz-area" id="vizArea"></div>
+    </div>
+
+    <div class="card table-card" id="arquivosOut">
+      <h3>Arquivos de <code>out/parte1/</code></h3>
+      <p class="note top">Todos os CSV e JSON gerados pelo <code>src/solve.py</code>. Escolha um para ver o conteúdo ou baixar.</p>
+      <div class="arquivos">
+        <div class="arquivos-lista" id="listaArquivos"></div>
+        <div class="arquivos-ver"><div class="arquivos-topo"><b id="nomeArquivo"></b><button class="btn-baixar" id="btnBaixar">Baixar</button></div>
+          <div id="verArquivo"></div></div>
+      </div>
+    </div>
+
     <nav class="pager"><a href="#inicio">← Início</a><a href="#modelagem">Modelagem: por que grafo de estados →</a></nav>
   </section>
 </div>
@@ -470,32 +502,7 @@ footer a{color:var(--a)}footer .small{font-size:.78rem;margin-top:6px;opacity:.7
       </div>
     </div>
 
-    <div class="card table-card" id="vizGrafo">
-      <h3>O grafo de estados, interativo</h3>
-      <p class="note top">Passe o mouse sobre um estado ou uma casa para ver os detalhes. Funciona para qualquer mapa, inclusive um mapa novo.</p>
-      <div class="lab-controls">
-        <div class="field"><label for="selMapaViz">Mapa</label><select id="selMapaViz"></select></div>
-        <div class="field grow"><label>Visualização</label><div class="seg layers" id="segViz">
-          <button data-viz="camadas" class="on">Grafo em camadas</button>
-          <button data-viz="arvore">Árvore da BFS</button>
-          <button data-viz="heatmap">Heatmap de multiplicidade</button></div></div>
-      </div>
-      <p class="note" id="vizTexto"></p>
-      <div class="viz-legenda" id="vizLegenda"></div>
-      <div class="viz-area" id="vizArea"></div>
-    </div>
-
-    <div class="card table-card" id="arquivosOut">
-      <h3>Arquivos de <code>out/parte1/</code></h3>
-      <p class="note top">Todos os CSV e JSON gerados pelo <code>src/solve.py</code>. Escolha um para ver o conteúdo ou baixar.</p>
-      <div class="arquivos">
-        <div class="arquivos-lista" id="listaArquivos"></div>
-        <div class="arquivos-ver"><div class="arquivos-topo"><b id="nomeArquivo"></b><button class="btn-baixar" id="btnBaixar">Baixar</button></div>
-          <div id="verArquivo"></div></div>
-      </div>
-    </div>
-
-    <nav class="pager"><a href="#labirintos">← Labirintos</a><a href="#slashdot">Parte 2: a rede Slashdot →</a></nav>
+    <nav class="pager"><a href="#labirintos">← Labirintos e saídas</a><a href="#slashdot">Parte 2: a rede Slashdot →</a></nav>
   </section>
 </div>
 <div class="pagina" id="pg-slashdot" data-pagina="slashdot" hidden>
@@ -1448,7 +1455,9 @@ function efeitos() {
 }
 
 if (cv) montarMapas();
-if ($("#chartModel")) { modelagem(); montarViz(); arquivosOut(); }
+if ($("#chartModel")) modelagem();
+if ($("#vizArea")) montarViz();
+if ($("#listaArquivos")) arquivosOut();
 if ($("#segDados")) [...$("#segDados").children].forEach((b) => (b.onclick = () => { EXP.aba = b.dataset.aba; EXP.passo = -1; explorar(); }));
 if ($("#chartEscala")) parte2();
 if ($("#topicos")) graficosEmTopicos();

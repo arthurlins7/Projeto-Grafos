@@ -19,10 +19,8 @@
   <a class="brand" href="index.html"><span class="brand-dot"></span>Projeto Grafos</a>
   <nav>
     <a href="index.html">Início</a>
-    <a href="labirintos.html">Labirintos</a>
-    <a href="modelagem.html" class="on" aria-current="page">Modelagem</a>
-    <a href="slashdot.html">Slashdot</a>
-    <a href="graficos.html">Gráficos</a>
+    <div class="grupo"><span>Parte 1</span><div><a href="labirintos.html">Labirintos e saídas</a><a href="modelagem.html" class="on" aria-current="page">Modelagem</a></div></div>
+    <div class="grupo"><span>Parte 2</span><div><a href="slashdot.html">Slashdot</a><a href="graficos.html">Gráficos</a></div></div>
     <a href="equipe.html">Equipe</a>
   </nav>
 </header>
@@ -59,32 +57,7 @@
       </div>
     </div>
 
-    <div class="card table-card" id="vizGrafo">
-      <h3>O grafo de estados, interativo</h3>
-      <p class="note top">Passe o mouse sobre um estado ou uma casa para ver os detalhes. Funciona para qualquer mapa, inclusive um mapa novo.</p>
-      <div class="lab-controls">
-        <div class="field"><label for="selMapaViz">Mapa</label><select id="selMapaViz"></select></div>
-        <div class="field grow"><label>Visualização</label><div class="seg layers" id="segViz">
-          <button data-viz="camadas" class="on">Grafo em camadas</button>
-          <button data-viz="arvore">Árvore da BFS</button>
-          <button data-viz="heatmap">Heatmap de multiplicidade</button></div></div>
-      </div>
-      <p class="note" id="vizTexto"></p>
-      <div class="viz-legenda" id="vizLegenda"></div>
-      <div class="viz-area" id="vizArea"></div>
-    </div>
-
-    <div class="card table-card" id="arquivosOut">
-      <h3>Arquivos de <code>out/parte1/</code></h3>
-      <p class="note top">Todos os CSV e JSON gerados pelo <code>src/solve.py</code>. Escolha um para ver o conteúdo ou baixar.</p>
-      <div class="arquivos">
-        <div class="arquivos-lista" id="listaArquivos"></div>
-        <div class="arquivos-ver"><div class="arquivos-topo"><b id="nomeArquivo"></b><button class="btn-baixar" id="btnBaixar">Baixar</button></div>
-          <div id="verArquivo"></div></div>
-      </div>
-    </div>
-
-    <nav class="pager"><a href="labirintos.html">← Labirintos</a><a href="slashdot.html">Parte 2: a rede Slashdot →</a></nav>
+    <nav class="pager"><a href="labirintos.html">← Labirintos e saídas</a><a href="slashdot.html">Parte 2: a rede Slashdot →</a></nav>
   </section>
 </main>
 

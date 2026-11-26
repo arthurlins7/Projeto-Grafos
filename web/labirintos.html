@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Labirintos · Projeto Grafos</title>
+<title>Labirintos e saídas · Projeto Grafos</title>
 <meta name="description" content="BFS, DFS, Dijkstra e Bellman-Ford em labirintos com chaves e portas e na rede social Slashdot.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,10 +19,8 @@
   <a class="brand" href="index.html"><span class="brand-dot"></span>Projeto Grafos</a>
   <nav>
     <a href="index.html">Início</a>
-    <a href="labirintos.html" class="on" aria-current="page">Labirintos</a>
-    <a href="modelagem.html">Modelagem</a>
-    <a href="slashdot.html">Slashdot</a>
-    <a href="graficos.html">Gráficos</a>
+    <div class="grupo"><span>Parte 1</span><div><a href="labirintos.html" class="on" aria-current="page">Labirintos e saídas</a><a href="modelagem.html">Modelagem</a></div></div>
+    <div class="grupo"><span>Parte 2</span><div><a href="slashdot.html">Slashdot</a><a href="graficos.html">Gráficos</a></div></div>
     <a href="equipe.html">Equipe</a>
   </nav>
 </header>
@@ -31,7 +29,7 @@
 
   <!-- PARTE 1 -->
   <section class="block" id="parte1">
-    <div class="head"><span class="eyebrow">Parte 1</span><h2>Labirinto interativo</h2>
+    <div class="head"><span class="eyebrow">Parte 1 · labirintos e saídas</span><h2>Labirinto interativo</h2>
       <p>Escolha um mapa e um algoritmo e veja o percurso real calculado pelo nosso código, passo a passo. No modo <b>Comparar os 4</b>, os quatro algoritmos andam juntos no mesmo mapa.</p></div>
 
     <div class="lab card">
@@ -100,6 +98,31 @@
         <button data-aba="armadilhas">Estados-armadilha</button>
       </div>
       <div id="tabelaDados"></div>
+    </div>
+
+    <div class="card table-card" id="vizGrafo">
+      <h3>O grafo de estados, interativo</h3>
+      <p class="note top">Passe o mouse sobre um estado ou uma casa para ver os detalhes. Funciona para qualquer mapa, inclusive um mapa novo.</p>
+      <div class="lab-controls">
+        <div class="field"><label for="selMapaViz">Mapa</label><select id="selMapaViz"></select></div>
+        <div class="field grow"><label>Visualização</label><div class="seg layers" id="segViz">
+          <button data-viz="camadas" class="on">Grafo em camadas</button>
+          <button data-viz="arvore">Árvore da BFS</button>
+          <button data-viz="heatmap">Heatmap de multiplicidade</button></div></div>
+      </div>
+      <p class="note" id="vizTexto"></p>
+      <div class="viz-legenda" id="vizLegenda"></div>
+      <div class="viz-area" id="vizArea"></div>
+    </div>
+
+    <div class="card table-card" id="arquivosOut">
+      <h3>Arquivos de <code>out/parte1/</code></h3>
+      <p class="note top">Todos os CSV e JSON gerados pelo <code>src/solve.py</code>. Escolha um para ver o conteúdo ou baixar.</p>
+      <div class="arquivos">
+        <div class="arquivos-lista" id="listaArquivos"></div>
+        <div class="arquivos-ver"><div class="arquivos-topo"><b id="nomeArquivo"></b><button class="btn-baixar" id="btnBaixar">Baixar</button></div>
+          <div id="verArquivo"></div></div>
+      </div>
     </div>
 
     <nav class="pager"><a href="index.html">← Início</a><a href="modelagem.html">Modelagem: por que grafo de estados →</a></nav>
