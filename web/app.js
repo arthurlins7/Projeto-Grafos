@@ -347,9 +347,13 @@ function parte2() {
     P.recortes.map((r) => `<tr><td>${r["usuarios (%)"]}%</td><td>${fmt(r.nos)}</td><td>${fmt(r.arcos)}</td><td>${r["arcos (%)"].toString().replace(".", ",")}%</td></tr>`).join("") + "</tbody>";
   if (P.ciclo) {
     const nos = P.ciclo.slice(0, -1);
+    // [IA] Claude – a frase dos "dois usuarios" so aparece quando o ciclo e uma dupla de inimigos mutuos (custo -2)
+    const explicacao = nos.length === 2 && P.custo_ciclo === -2
+      ? "Dois usuários que se marcam como inimigos permitem reduzir o custo indefinidamente."
+      : "O custo diminui a cada volta completa pelo ciclo.";
     $("#negCycle").innerHTML = `<b>Ciclo negativo na rede completa</b> (Bellman-Ford)
       <div class="loop">${nos.map((n) => `<i>${n}</i><s>→</s>`).join("")}<i>${P.ciclo.at(-1)}</i></div>
-      Custo do ciclo: <b>${P.custo_ciclo}</b>. Dois usuários que se marcam como inimigos permitem reduzir o custo indefinidamente.`;
+      Custo do ciclo: <b>${P.custo_ciclo}</b>. ${explicacao}`;
   }
   /* grafico de barras agrupadas, escala log */
   const algs = ALGS.slice(0, 4).map((a) => [a.nome, a.cor]); // [IA] Claude – mesmas cores dos notebooks

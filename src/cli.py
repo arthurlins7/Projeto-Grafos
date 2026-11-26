@@ -3,6 +3,7 @@
 # [IA] Claude - comandos da Parte 1 (--alg com --mapa, --fonte-consumivel, --armadilhas, --interactive)
 import argparse
 import webbrowser
+import zlib
 from pathlib import Path
 
 from src.graphs.io import ler_dataset, ler_mapa, montar_grafo_dataset
@@ -193,9 +194,16 @@ def comando_dataset(parser, args):
         parser.error("Informe --source com o usuario de partida.")
 
     pasta_saida = Path(args.out) if args.out else PASTA_SAIDA_PARTE2
+    # [IA] Claude – confere o --out antes de rodar a busca ou o benchmark
+    if pasta_saida.exists() and not pasta_saida.is_dir():
+        parser.error(f"--out deve ser uma pasta, mas {pasta_saida} e um arquivo.")
+    arquivo = args.dataset
     try:
         arquivo = localizar_arquivo_dataset(args.dataset)
         dados = ler_dataset(arquivo)
+    except (EOFError, zlib.error):
+        # [IA] Claude – .gz cortado ou danificado vira mensagem clara, sem traceback
+        parser.error(f"Arquivo do dataset incompleto ou corrompido: {arquivo}")
     except (OSError, ValueError) as erro:
         parser.error(str(erro))
 
@@ -204,8 +212,12 @@ def comando_dataset(parser, args):
             relatorio = executar_benchmark(dados, nome_do_dataset(arquivo))
         except ValueError as erro:
             parser.error(str(erro))
-        caminho = salvar_relatorio(relatorio, pasta_saida)
         imprimir_resumo_benchmark(relatorio)
+        # [IA] Claude – falha ao gravar encerra com erro, sem anunciar sucesso
+        try:
+            caminho = salvar_relatorio(relatorio, pasta_saida)
+        except OSError as erro:
+            parser.exit(1, f"Erro: nao foi possivel salvar parte2_report.json em {pasta_saida}: {erro}\n")
         print(f"{len(relatorio['medicoes'])} medicoes salvas em {caminho}")
         return 0
 
@@ -222,7 +234,11 @@ def comando_dataset(parser, args):
     resultado["dataset"] = nome_do_dataset(arquivo)
     resultado["recorte_percentual"] = recorte
     imprimir_resultado(resultado, grafo)
-    caminho = salvar_resultado(resultado, pasta_saida, recorte)
+    # [IA] Claude – falha ao gravar encerra com erro, sem anunciar sucesso
+    try:
+        caminho = salvar_resultado(resultado, pasta_saida, recorte)
+    except OSError as erro:
+        parser.exit(1, f"Erro: nao foi possivel salvar o resultado em {pasta_saida}: {erro}\n")
     print(f"Resultado salvo em {caminho}")
     return 0
 
@@ -249,7 +265,12 @@ def imprimir_resultado(resultado, grafo):
         print(f"Ciclo negativo: {formatar_caminho(resultado['ciclo_negativo'])} (custo {resultado['custo_ciclo']})")
         if resultado["caminho_ate_ciclo"]:
             print(f"Caminho da origem ate o ciclo (BFS): {formatar_caminho(resultado['caminho_ate_ciclo'])}")
-        print("Com um ciclo negativo alcancavel, o menor custo nao fica definido.")
+        if resultado["destino"] is not None:
+            # [IA] Claude – com destino alcancavel, avisa que o custo nao foi calculado (o algoritmo para no ciclo)
+            print("Foi detectado um ciclo negativo alcancavel a partir da origem. "
+                  "A busca foi interrompida e o custo ate o destino nao foi calculado.")
+        else:
+            print("Com um ciclo negativo alcancavel, o menor custo nao fica definido.")
     else:
         print(f"Usuarios alcancados a partir da origem: {resultado['alcancados']}")
         if resultado["algoritmo"] == "DFS":

@@ -142,7 +142,7 @@ def test_cli_roda_dijkstra_e_salva_o_resultado(pasta_dataset, tmp_path):
     assert resultado.returncode == 0, resultado.stderr
     assert "Status: OK" in resultado.stdout
     assert "Caminho: 1 -> 3" in resultado.stdout
-    salvo = json.loads((saida / "cli_dijkstra_1_3.json").read_text(encoding="utf-8"))
+    salvo = json.loads((saida / "cli_pequeno_dijkstra_1_3.json").read_text(encoding="utf-8"))
     assert salvo["custo"] == 1
     assert salvo["recorte_percentual"] == 100
 
@@ -174,4 +174,68 @@ def test_cli_recusa_argumentos_incorretos(pasta_dataset, tmp_path, argumentos):
 def test_cli_recusa_mapa_e_dataset_juntos(pasta_dataset):
     resultado = executar_cli("--mapa", "data/mapas/m01_terreno.txt", "--dataset", pasta_dataset)
     assert resultado.returncode == 2
+    assert "Traceback" not in resultado.stderr
+
+
+# [IA] Claude – regressoes do checklist da Parte 2 (destino com ciclo negativo, .gz cortado e --out invalido)
+
+def test_bellman_ford_com_ciclo_e_destino_inalcancavel_da_sem_solucao(grafo):
+    # a partir de 6 ha o ciclo 4 -> 5 -> 4, mas nenhum caminho chega ao usuario 1
+    resultado = executar_algoritmo(grafo, "BELLMAN_FORD", 6, 1)
+    assert resultado["status"] == "SEM_SOLUCAO"
+    assert "ciclo_negativo" not in resultado
+
+
+def test_bellman_ford_com_ciclo_e_destino_alcancavel_nao_calcula_o_custo(grafo):
+    resultado = executar_algoritmo(grafo, "BELLMAN_FORD", 6, 5)
+    assert resultado["status"] == "CICLO_NEGATIVO"
+    assert resultado["custo_calculado"] is False
+    assert "custo" not in resultado
+
+
+def test_cli_bellman_ford_destino_inalcancavel(pasta_dataset, tmp_path):
+    resultado = executar_cli("--dataset", pasta_dataset, "--alg", "BELLMAN_FORD", "--source", 6, "--target", 1,
+                             "--out", tmp_path)
+    assert resultado.returncode == 0, resultado.stderr
+    assert "Status: SEM_SOLUCAO" in resultado.stdout
+    assert "Nao existe caminho de 6 ate 1." in resultado.stdout
+
+
+def test_cli_bellman_ford_destino_alcancavel_avisa_que_o_custo_nao_foi_calculado(pasta_dataset, tmp_path):
+    resultado = executar_cli("--dataset", pasta_dataset, "--alg", "BELLMAN_FORD", "--source", 6, "--target", 5,
+                             "--out", tmp_path)
+    assert resultado.returncode == 0, resultado.stderr
+    assert "Status: CICLO_NEGATIVO" in resultado.stdout
+    assert "o custo ate o destino nao foi calculado" in resultado.stdout
+
+
+def test_cli_gz_cortado_mostra_mensagem_sem_traceback(tmp_path):
+    import gzip
+    linhas = "\n".join(f"{i}\t{i + 1}\t1" for i in range(20000)) + "\n"
+    compactado = gzip.compress(linhas.encode("utf-8"))
+    arquivo = tmp_path / "cortado.txt.gz"
+    arquivo.write_bytes(compactado[: len(compactado) // 2])
+    resultado = executar_cli("--dataset", arquivo, "--alg", "BFS", "--source", 1, "--out", tmp_path / "saida")
+    assert resultado.returncode != 0
+    assert "incompleto ou corrompido" in resultado.stderr
+    assert "Traceback" not in resultado.stderr
+
+
+def test_cli_out_apontando_para_arquivo_falha_antes_da_busca(pasta_dataset, tmp_path):
+    arquivo = tmp_path / "nao_e_pasta.txt"
+    arquivo.write_text("x", encoding="utf-8")
+    resultado = executar_cli("--dataset", pasta_dataset, "--alg", "BFS", "--source", 1, "--out", arquivo)
+    assert resultado.returncode != 0
+    assert "Status:" not in resultado.stdout
+    assert "Traceback" not in resultado.stderr
+
+
+def test_cli_falha_ao_gravar_encerra_com_erro(pasta_dataset, tmp_path):
+    # uma pasta dentro de um arquivo nao pode ser criada: a gravacao falha depois da busca
+    arquivo = tmp_path / "arquivo.txt"
+    arquivo.write_text("x", encoding="utf-8")
+    resultado = executar_cli("--dataset", pasta_dataset, "--alg", "BFS", "--source", 1, "--out", arquivo / "sub")
+    assert resultado.returncode == 1
+    assert "nao foi possivel salvar" in resultado.stderr
+    assert "Resultado salvo" not in resultado.stdout
     assert "Traceback" not in resultado.stderr

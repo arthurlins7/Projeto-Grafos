@@ -117,6 +117,8 @@ A tabela possui as colunas `origem`, `destino` e `sinal`. O objeto `grafo` é cr
 
 Abra os notebooks, selecione o Python da `.venv` e execute as células em ordem.
 
+O notebook `02` gera `out/parte2/passos_volta.csv`, que o notebook `01` usa. Quando for preciso regenerar esse arquivo, rode o `02` e depois o `01`. Ao reexecutar as medições (notebook `02` ou `--benchmark`), os tempos variam conforme a máquina e a carga do sistema. Os valores citados no projeto correspondem à rodada de referência.
+
 ## Testes
 
 ```powershell

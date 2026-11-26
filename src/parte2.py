@@ -146,6 +146,15 @@ def executar_algoritmo(grafo, algoritmo, origem, destino=None):
     resultado["tempo_ms"] = round((perf_counter() - inicio) * 1000, 4)
 
     if ciclo is not None:
+        # [IA] Claude – com --target, a BFS confere se o destino e alcancavel antes de falar do ciclo
+        if destino is not None:
+            alcancaveis, _, _ = bfs(grafo, origem)
+            if destino not in alcancaveis:
+                resultado["status"] = "SEM_SOLUCAO"
+                resultado["alcancados"] = len(alcancaveis)
+                return resultado
+            # o Bellman-Ford para no primeiro ciclo encontrado: o custo ate o destino fica sem calculo
+            resultado["custo_calculado"] = False
         # com um ciclo negativo alcancavel, o menor custo deixa de existir
         resultado["status"] = "CICLO_NEGATIVO"
         resultado["ciclo_negativo"] = ciclo
@@ -179,7 +188,12 @@ def executar_algoritmo(grafo, algoritmo, origem, destino=None):
 
 
 def salvar_resultado(resultado, pasta_saida, recorte=100):
-    nome = f"cli_{resultado['algoritmo'].lower()}_{resultado['origem']}"
+    # [IA] Claude – o nome do dataset entra no arquivo para execucoes de datasets diferentes nao se sobrescreverem
+    partes = ["cli"]
+    if resultado.get("dataset"):
+        partes.append(resultado["dataset"])
+    partes += [resultado["algoritmo"].lower(), str(resultado["origem"])]
+    nome = "_".join(partes)
     if resultado["destino"] is not None:
         nome += f"_{resultado['destino']}"
     if recorte != 100:
