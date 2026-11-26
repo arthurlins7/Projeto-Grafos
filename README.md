@@ -23,8 +23,10 @@ out/        Resultados e figuras
 - Grafo dirigido e algoritmos BFS, DFS, Dijkstra e Bellman-Ford implementados pelo grupo e testados com `pytest`.
 - Parte 1: leitura e validação dos mapas, grafo de posições e grafo de estados; `src.solve` gera as saídas e as figuras em `out/parte1/`.
 - Parte 2: exploração dos dados no notebook `01_exploracao_dados.ipynb`, algoritmos e medições no notebook `02_grafos_algoritmos.ipynb` e execução pelo terminal com `--dataset`.
+- Parte 2: visualizações de comparação dos algoritmos e de análise dos dados em `out/parte2/`.
+- Parte 1: labirinto interativo, mapas do grupo em `data/mapas_grupo/` e comandos pelo terminal (`--alg` com `--mapa`).
 
-Em desenvolvimento: labirinto interativo, mapas do grupo, comandos da Parte 1 pelo terminal (`--alg` com `--mapa`), visualizações de AVD e relatório em PDF.
+Em elaboração: relatório em PDF e declaração de uso de IA.
 
 ## Instalação
 
