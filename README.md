@@ -20,13 +20,13 @@ out/        Resultados e figuras
 
 ## Estado atual
 
-- Grafo dirigido e algoritmos BFS, DFS, Dijkstra e Bellman-Ford implementados pelo grupo e testados com `pytest`.
+- Grafo dirigido e algoritmos BFS, DFS, Dijkstra e Bellman-Ford implementados no próprio projeto (sem bibliotecas prontas) e testados com `pytest`.
 - Parte 1: leitura e validação dos mapas, grafo de posições e grafo de estados; `src.solve` gera as saídas e as figuras em `out/parte1/`.
 - Parte 2: exploração dos dados no notebook `01_exploracao_dados.ipynb`, algoritmos e medições no notebook `02_grafos_algoritmos.ipynb` e execução pelo terminal com `--dataset`.
 - Parte 2: visualizações de comparação dos algoritmos e de análise dos dados em `out/parte2/`.
-- Parte 1: labirinto interativo, mapas do grupo em `data/mapas_grupo/` e comandos pelo terminal (`--alg` com `--mapa`).
-
-Em elaboração: relatório em PDF e declaração de uso de IA.
+- Parte 1: mapas do grupo em `data/mapas_grupo/`, comandos pelo terminal (`--alg`, `--armadilhas`, `--fonte-consumivel`, `--interactive` e `--out`) e página interativa em `out/parte1/labirinto_interativo.html`.
+- Site do grupo em `web/`: o mesmo conteúdo da página interativa, em várias páginas.
+- Relatório em PDF e declaração de uso de IA em `docs/`.
 
 ## Instalação
 
@@ -65,7 +65,39 @@ O comando verifica o formato e mostra as dimensões. Um mapa válido não necess
 .\.venv\Scripts\python.exe -m src.solve
 ```
 
-Gera em `out/parte1/` os arcos, as métricas, as camadas, os graus, as soluções dos algoritmos e as figuras de todos os mapas de `data/mapas/`.
+Gera em `out/parte1/` os arcos, as métricas, as camadas, os graus, as soluções dos algoritmos e as figuras de todos os mapas de `data/mapas/` e `data/mapas_grupo/`, além da página interativa e do `web/data.js`.
+
+### Rodar um algoritmo num mapa (Parte 1)
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli --mapa ./data/mapas/m03_tres_chaves.txt --alg BFS --out ./out/parte1/
+.\.venv\Scripts\python.exe -m src.cli --mapa ./data/mapas/m03_tres_chaves.txt --alg DIJKSTRA --out ./out/parte1/
+.\.venv\Scripts\python.exe -m src.cli --mapa ./data/mapas/m05_bonus.txt --alg BELLMAN_FORD --out ./out/parte1/
+.\.venv\Scripts\python.exe -m src.cli --mapa ./data/mapas/m06_fonte.txt --alg BELLMAN_FORD --fonte-consumivel --out ./out/parte1/
+.\.venv\Scripts\python.exe -m src.cli --mapa ./data/mapas/m04_esteiras.txt --armadilhas --out ./out/parte1/
+```
+
+| Opção | Significado |
+| --- | --- |
+| `--alg` | `BFS`, `DFS`, `DIJKSTRA` ou `BELLMAN_FORD`, rodado no grafo de estados do mapa |
+| `--fonte-consumivel` | A fonte (`*`) vale −2 só na primeira vez, como o bônus (correção do ciclo negativo do m06) |
+| `--armadilhas` | Lista os estados alcançáveis de onde não dá mais para chegar na saída |
+| `--out` | Pasta onde o resultado é salvo: `<mapa>_<algoritmo>.json` para o `--alg` e `armadilhas_<mapa>.csv` para o `--armadilhas` |
+
+O comando funciona com qualquer mapa válido, não só os de `data/mapas/`. Quando o Bellman-Ford encontra um ciclo negativo de onde ainda dá para chegar na saída, mostra o ciclo e o custo dele; se o ciclo fica num lugar de onde não se chega mais na saída, o custo até a saída continua sendo calculado, com um aviso.
+
+### Página interativa (Parte 1)
+
+```powershell
+.\.venv\Scripts\python.exe -m src.cli --interactive
+.\.venv\Scripts\python.exe -m src.cli --mapa ./data/mapas/m03_tres_chaves.txt --interactive --out ./out/parte1/
+```
+
+Abre `out/parte1/labirinto_interativo.html` no navegador. É o site do grupo (pasta `web/`) num arquivo só, com os dados e as figuras dentro, então funciona sem servidor. Com `--mapa`, a página é gerada de novo com esse mapa incluído (inclusive um mapa novo, fora de `data/mapas/`) e já abre nele. Com `--out`, a página é salva nessa pasta.
+
+Na página **Labirintos e saídas** dá para escolher o mapa e o algoritmo, acompanhar o percurso passo a passo (com controle de velocidade), comparar os quatro algoritmos lado a lado, alternar as camadas, realçar os estados-armadilha, explorar os arcos, graus e caminhos de cada mapa, ver o grafo de estados em camadas, a árvore da BFS e o heatmap de multiplicidade, e abrir todos os arquivos de `out/parte1/`.
+
+O site em `web/` pode ser aberto direto pelo `web/index.html`. Os dados dele ficam em `web/data.js`, gerado pelo `src.solve` (ou por `python web/build_data.py`).
 
 ### Rodar um algoritmo no dataset (Parte 2)
 
@@ -127,7 +159,7 @@ O notebook `02` gera `out/parte2/passos_volta.csv`, que o notebook `01` usa. Qua
 .\.venv\Scripts\python.exe -m pytest -q
 ```
 
-Os testes verificam a estrutura do grafo, os algoritmos, a leitura dos mapas e os comandos do terminal das duas partes. `networkx` é utilizado somente nos testes para conferir resultados; os algoritmos são implementados pelo grupo.
+Os testes verificam a estrutura do grafo, os algoritmos, a leitura dos mapas e os comandos do terminal das duas partes. `networkx` é utilizado somente nos testes para conferir resultados; os algoritmos são implementados no próprio projeto, sem bibliotecas prontas.
 
 ## Equipe e contato
 
