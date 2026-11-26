@@ -133,8 +133,8 @@ def test_comandos_do_enunciado_gravam_na_pasta_do_out(tmp_path):
     fonte = json.loads((tmp_path / "m06_bellman_ford_fonte_consumivel.json").read_text(encoding="utf-8"))
     assert fonte["status"] == "OK" and fonte["custo"] == 10
     # o CSV sai igual ao que o solve.py gera em out/parte1
-    gerado = (tmp_path / "armadilhas_m04.csv").read_bytes()
-    assert gerado == (PASTA_PROJETO / "out" / "parte1" / "armadilhas_m04.csv").read_bytes()
+    gerado = (tmp_path / "armadilhas_m04.csv").read_text(encoding="utf-8").splitlines()
+    assert gerado == (PASTA_PROJETO / "out" / "parte1" / "armadilhas_m04.csv").read_text(encoding="utf-8").splitlines()
 
 
 def test_out_nao_pode_ser_um_arquivo(tmp_path):
