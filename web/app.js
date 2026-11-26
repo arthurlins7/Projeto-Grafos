@@ -391,7 +391,7 @@ const FOTOS = [
     insight: "A diferença é especialmente clara na faixa zero. Quase metade dos usuários (46,4%) não fez nenhuma marcação, enquanto 14,4% não receberam nenhuma. No outro extremo, alguns usuários receberam 501 marcações ou mais. Nenhum usuário fez tantas marcações: o maior grau de saída foi 428." },
   { f: "parte2/avd_concentracao_negativas.png", titulo: "Concentração das marcações de inimigo", grupo: "exp", origem: "Notebook 01 · seção 5.5 · exploratória 2",
     mostra: "A porcentagem acumulada das 124.130 marcações de inimigo conforme se incluem os usuários, de quem tem mais para quem tem menos, com uma curva para as feitas (laranja) e outra para as recebidas (azul).",
-    insight: "Os 10% do topo fizeram 94,41% das negativas e receberam 77,33%. Elas se concentram mais em quem marca." },
+    insight: "Os 10% do topo fizeram 94,41% das marcações de inimigo e receberam 77,33%. Elas se concentram mais em quem marca." },
   { f: "parte2/avd_recebidas_feitas.png", titulo: "Marcações recebidas e feitas", grupo: "exp", origem: "Notebook 01 · seção 6.2 · exploratória 3",
     mostra: "A porcentagem dos 82.140 usuários em três grupos: recebeu mais do que fez (azul), recebeu e fez igual (cinza) e fez mais do que recebeu (cinza).",
     insight: "A maioria (59,2%) recebeu mais do que fez, contra 33,7% que fizeram mais e 7,1% com a mesma quantidade." },
