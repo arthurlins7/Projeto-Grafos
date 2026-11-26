@@ -22,7 +22,6 @@ PASTA_MAPAS = Path("data/mapas")
 PASTA_MAPAS_GRUPO = Path("data/mapas_grupo")
 PASTA_SAIDA = Path("out/parte1")
 PAGINA_INTERATIVA = PASTA_SAIDA / "labirinto_interativo.html"
-MODELO_PAGINA = Path(__file__).parent / "labirinto_template.html"
 
 
 def listar_mapas(pasta=None):
@@ -586,99 +585,18 @@ def chave_na_pagina(caminho, dados):
     return nome
 
 
-def dados_da_pagina(mapa_extra=None):
-    # tudo que a pagina interativa precisa, mapa por mapa.
-    # mapa_extra: um mapa a mais (ex.: um mapa novo passado no --mapa do cli)
-    # devolve (dados, nome do mapa extra na pagina)
-    caminhos = listar_mapas()
-    chave_extra = None
-    if mapa_extra is not None:
-        mapa_extra = Path(mapa_extra)
-        if not any(c.resolve() == mapa_extra.resolve() for c in caminhos):
-            caminhos.append(mapa_extra)
-
-    dados = {}
-    for caminho in caminhos:
-        nome = chave_na_pagina(caminho, dados)
-        if mapa_extra is not None and Path(caminho).resolve() == mapa_extra.resolve():
-            chave_extra = nome
-        linhas = ler_mapa(caminho)
-        g_est = construir_grafo_estados(linhas)
-
-        # camadas: casas que existem para cada conjunto de chaves
-        camadas = {}
-        for no in grafo_estados_sem_alvo(g_est).nos():
-            posicao, chaves, bonus = decompor_estado(no)
-            camadas.setdefault(chaves, set()).add(posicao)
-        camadas = {k: sorted(camadas[k]) for k in sorted(camadas, key=lambda k: (len(k.strip("-")), k))}
-
-        armadilhas = []
-        for estado in estados_armadilha(g_est):
-            posicao, chaves, bonus = decompor_estado(estado)
-            armadilhas.append([posicao[0], posicao[1], chaves])
-
-        nomes_alg = ["BFS", "DFS", "DIJKSTRA", "BELLMAN_FORD"]
-        if any("*" in linha for linha in linhas):
-            nomes_alg.append("BELLMAN_FORD_FONTE_CONSUMIVEL")
-
-        algoritmos = {}
-        for alg in nomes_alg:
-            fonte = alg == "BELLMAN_FORD_FONTE_CONSUMIVEL"
-            r = resolver_mapa(linhas, "BELLMAN_FORD" if fonte else alg, fonte)
-            grafo = construir_grafo_estados(linhas, fonte_consumivel=True) if fonte else g_est
-            percurso = []
-            if "caminho" in r:
-                percurso = percurso_com_custos(grafo, r["caminho"])
-            elif "ciclo" in r:
-                percurso = percurso_com_custos(grafo, r["ciclo"])
-            algoritmos[alg] = {
-                "status": r["status"],
-                "passos": r.get("passos"),
-                "custo": r.get("custo"),
-                "mensagem": r.get("mensagem"),
-                "custo_ciclo": r.get("custo_ciclo"),
-                "percurso": percurso,
-            }
-
-        partes = Path(caminho).stem.split("_", 1)
-        if len(partes) > 1:
-            titulo = partes[1].replace("_", " ")
-        elif Path(caminho).parent.resolve() == PASTA_MAPAS_GRUPO.resolve():
-            titulo = "mapa do grupo"
-        else:
-            titulo = "mapa novo"
-        dados[nome] = {
-            "titulo": titulo,
-            "grade": linhas,
-            "camadas": camadas,
-            "armadilhas": armadilhas,
-            "algoritmos": algoritmos,
-        }
-    return dados, chave_extra
-
-
 def gerar_pagina_interativa(destino=PAGINA_INTERATIVA, mapa=None):
-    # o modelo (src/labirinto_template.html) tem o HTML e o JavaScript;
-    # aqui so colocamos os dados dentro dele e salvamos em out/parte1/.
-    # mapa: a pagina ja abre nesse mapa (se for um mapa novo, ele entra na pagina)
-    modelo = MODELO_PAGINA.read_text(encoding="utf-8")
-    marcador = "/*DADOS*/{}"
-    marcador_inicial = '/*MAPA_INICIAL*/""'
-    if marcador not in modelo or marcador_inicial not in modelo:
-        raise ValueError(f"O modelo {MODELO_PAGINA} precisa ter as linhas: const DADOS = {marcador}; "
-                         f"e const MAPA_INICIAL = {marcador_inicial};")
-    dados, mapa_inicial = dados_da_pagina(mapa)
-    html = modelo.replace(marcador, json.dumps(dados, ensure_ascii=False))
-    html = html.replace(marcador_inicial, json.dumps(mapa_inicial or ""))
-    destino = Path(destino)
-    destino.parent.mkdir(parents=True, exist_ok=True)
-    destino.write_text(html, encoding="utf-8")
-    return destino
+    # a pagina interativa e o site do grupo (web/) num arquivo so, com os dados e as figuras dentro.
+    # mapa: a pagina ja abre nesse mapa (se for um mapa novo, ele entra no site)
+    from src.pagina_site import gerar_site_unico
+    return gerar_site_unico(destino, mapa)
 
 
 if __name__ == "__main__":
     gerar_arestas_metricas_camadas()
     gerar_resultados_algoritmos()
     gerar_figuras()
+    from src.pagina_site import gerar_data_js
+    gerar_data_js()   # web/data.js, usado pelas paginas do site em web/
     gerar_pagina_interativa()
-    print(f"Arquivos gerados em {PASTA_SAIDA}/")
+    print(f"Arquivos gerados em {PASTA_SAIDA}/ e web/data.js")

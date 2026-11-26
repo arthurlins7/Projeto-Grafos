@@ -202,3 +202,33 @@ footer a{color:var(--a)}footer .small{font-size:.78rem;margin-top:6px;opacity:.7
   .stats,.algos,.team{grid-template-columns:1fr}.nav{flex-wrap:wrap;gap:6px}.nav nav{max-width:100%}.speed{flex:1 1 100%}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+
+/* [IA] Claude – estilos novos das paginas Labirintos e Modelagem (comparar 2x2, numeros, figuras, paginacao) */
+.icon-btn.passo{background:#161a35;font-size:1.4rem;line-height:1}
+.speed b{min-width:74px;color:#fff;font:600 .8rem "JetBrains Mono",monospace}
+.comparar{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cmp{background:#080a16;border:1px solid var(--line);border-radius:14px;padding:12px;border-top:3px solid var(--c)}
+.cmp h4{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:8px;color:var(--c)}
+.cmp h4 small{color:var(--muted);font-weight:500;font-size:.78rem}
+.cmp .tela{display:flex;justify-content:center;overflow:hidden}
+.cmp p{font-size:.82rem;color:var(--muted);margin-top:8px;min-height:1.3em}
+.cmp p b{color:#fff}
+.duas-colunas{margin-top:22px}.duas-colunas .table-card{margin-top:0}
+.numeros h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:14px 0 4px}
+.numeros h4:first-child{margin-top:0}
+.numeros td,.numeros th{padding:7px 10px}
+.mono{font-family:"JetBrains Mono",monospace;font-size:.8rem;color:#bbd4f5;word-break:break-all}
+.mapas-modelagem{margin-bottom:14px}
+.ciclo-seq{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 12px}
+.ciclo-seq i{font-style:normal;font:600 .8rem "JetBrains Mono",monospace;padding:4px 9px;border-radius:8px;background:rgba(232,160,106,.15);color:var(--gold)}
+.ciclo-seq s{text-decoration:none;color:var(--muted)}
+.figuras-modelagem{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.figuras-modelagem figure{background:#fff;border-radius:12px;padding:8px;cursor:zoom-in;transition:.2s}
+.figuras-modelagem figure:hover{transform:translateY(-3px)}
+.figuras-modelagem img{width:100%;display:block}
+.figuras-modelagem figcaption{color:#111;font-size:.82rem;padding:6px 4px 0}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:28px}
+.pager a{text-decoration:none;padding:11px 18px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-weight:600;font-size:.92rem;transition:.2s}
+.pager a:hover{color:#fff;border-color:var(--a)}
+.pager a:last-child{margin-left:auto}
+@media (max-width:900px){.comparar{grid-template-columns:1fr}}

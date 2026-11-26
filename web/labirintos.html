@@ -18,6 +18,7 @@
 <header class="nav">
   <a class="brand" href="index.html"><span class="brand-dot"></span>Projeto Grafos</a>
   <nav>
+    <a href="index.html">Início</a>
     <a href="labirintos.html" class="on" aria-current="page">Labirintos</a>
     <a href="modelagem.html">Modelagem</a>
     <a href="slashdot.html">Slashdot</a>
@@ -31,12 +32,14 @@
   <!-- PARTE 1 -->
   <section class="block" id="parte1">
     <div class="head"><span class="eyebrow">Parte 1</span><h2>Labirinto interativo</h2>
-      <p>Escolha um mapa e um algoritmo e veja o percurso real calculado pelo nosso código.</p></div>
+      <p>Escolha um mapa e um algoritmo e veja o percurso real calculado pelo nosso código, passo a passo. No modo <b>Comparar os 4</b>, os quatro algoritmos andam juntos no mesmo mapa.</p></div>
 
     <div class="lab card">
       <div class="lab-controls">
         <div class="field"><label for="selMapa">Mapa</label><select id="selMapa"></select></div>
-        <div class="field grow"><label>Algoritmo</label><div class="seg" id="segAlg"></div></div>
+        <div class="field"><label>Visualização</label><div class="seg modo" id="segModo">
+          <button data-modo="um" class="on">Um algoritmo</button><button data-modo="comparar">Comparar os 4 (2×2)</button></div></div>
+        <div class="field grow" id="campoAlg"><label>Algoritmo</label><div class="seg" id="segAlg"></div></div>
       </div>
 
       <div class="lab-layers">
@@ -46,13 +49,13 @@
         </label>
       </div>
 
-      <div class="lab-main">
+      <div class="lab-main" id="vistaUm">
         <div class="canvas-wrap"><canvas id="cv" aria-label="Labirinto"></canvas>
           <div class="overlay" id="overlay" hidden></div></div>
 
         <aside class="lab-side">
           <div class="readout">
-            <div><span>Passo</span><b id="rdPasso">0</b></div>
+            <div><span id="rotPasso">Passo</span><b id="rdPasso">0</b></div>
             <div><span>Custo acumulado</span><b id="rdCusto">0</b></div>
             <div><span>Chaves</span><b id="rdChaves">—</b></div>
             <div><span>Bônus consumidos</span><b id="rdBonus">—</b></div>
@@ -63,18 +66,31 @@
         </aside>
       </div>
 
+      <div class="comparar" id="vistaComparar" hidden></div>
+
       <div class="player">
-        <button class="icon-btn" id="btnPlay" aria-label="Reproduzir">▶</button>
-        <button class="icon-btn" id="btnReset" aria-label="Reiniciar">↺</button>
+        <button class="icon-btn" id="btnPlay" aria-label="Reproduzir" title="Reproduzir / pausar">▶</button>
+        <button class="icon-btn passo" id="btnVoltar" aria-label="Passo anterior" title="Passo anterior">‹</button>
+        <button class="icon-btn passo" id="btnAvancar" aria-label="Próximo passo" title="Próximo passo">›</button>
+        <button class="icon-btn" id="btnReset" aria-label="Voltar ao início" title="Voltar ao início">↺</button>
         <input type="range" id="scrub" min="0" value="0" aria-label="Linha do tempo">
-        <label class="speed">Velocidade <input type="range" id="speed" min="1" max="10" value="5"></label>
+        <label class="speed">Velocidade <input type="range" id="speed" min="1" max="10" value="4"><b id="speedTxt"></b></label>
       </div>
     </div>
 
-    <div class="card table-card">
-      <h3>Comparativo dos algoritmos no mapa <span id="tbMapa"></span></h3>
-      <div class="table-scroll"><table id="tbl"></table></div>
+    <div class="two duas-colunas">
+      <div class="card table-card">
+        <h3>Comparativo dos algoritmos no mapa <span id="tbMapa"></span></h3>
+        <div class="table-scroll"><table id="tbl"></table></div>
+        <p class="note">★ menor custo entre BFS, DFS, Dijkstra e Bellman-Ford (a fonte consumível muda a regra, por isso fica de fora).</p>
+      </div>
+      <div class="card table-card">
+        <h3>Números do mapa <span id="numMapa"></span></h3>
+        <div id="numeros"></div>
+      </div>
     </div>
+
+    <nav class="pager"><a href="index.html">← Início</a><a href="modelagem.html">Modelagem: por que grafo de estados →</a></nav>
   </section>
 </main>
 

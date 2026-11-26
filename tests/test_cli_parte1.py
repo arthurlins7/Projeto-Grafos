@@ -149,7 +149,7 @@ def test_interactive_com_mapa_e_out_gera_a_pagina_nesse_mapa(tmp_path):
     resultado = executar_cli("--mapa", mapa("m03_tres_chaves.txt"), "--interactive", "--out", str(tmp_path) + "/")
     assert resultado.returncode == 0, resultado.stderr
     html = (tmp_path / "labirinto_interativo.html").read_text(encoding="utf-8")
-    assert 'const MAPA_INICIAL = "m03";' in html
+    assert 'window.MAPA_INICIAL = "m03";' in html
     assert '"g02"' in html
 
 
@@ -159,8 +159,8 @@ def test_interactive_com_mapa_novo_coloca_o_mapa_na_pagina(tmp_path):
     resultado = executar_cli("--mapa", str(novo), "--interactive", "--out", str(tmp_path / "pagina.html"))
     assert resultado.returncode == 0, resultado.stderr
     html = (tmp_path / "pagina.html").read_text(encoding="utf-8")
-    assert 'const MAPA_INICIAL = "teste";' in html
-    assert '"teste": {"titulo": "professora"' in html
+    assert 'window.MAPA_INICIAL = "teste";' in html
+    assert '"teste": {"id": "teste", "nome": "Professora"' in html
 
 
 def test_interactive_avisa_quando_o_navegador_nao_abre(tmp_path, monkeypatch, capsys):

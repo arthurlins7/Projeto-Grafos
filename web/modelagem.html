@@ -18,6 +18,7 @@
 <header class="nav">
   <a class="brand" href="index.html"><span class="brand-dot"></span>Projeto Grafos</a>
   <nav>
+    <a href="index.html">Início</a>
     <a href="labirintos.html">Labirintos</a>
     <a href="modelagem.html" class="on" aria-current="page">Modelagem</a>
     <a href="slashdot.html">Slashdot</a>
@@ -33,10 +34,38 @@
     <div class="head"><span class="eyebrow">Modelagem</span><h2>Por que usar grafo de estados?</h2>
       <p>Posição sozinha não basta: quem tem a chave <i>a</i> não está no mesmo estado de quem não tem. O nó guarda <code>(linha,coluna)|chaves|{bônus}</code>.</p></div>
     <div class="two">
-      <div class="card"><h3>Tamanho dos grafos por mapa</h3><div id="chartModel" class="bars"></div>
-        <p class="note">Nós de <b class="k1">G_pos</b> (só posição) contra nós de <b class="k2">G_est</b> (posição + chaves + bônus).</p></div>
-      <div class="card"><h3>O que dá errado só com posições</h3><div id="armadilhas" class="traps"></div></div>
+      <div class="card"><h3>Ordem dos grafos por mapa (número de vértices)</h3><div id="chartModel" class="bars"></div>
+        <p class="note">Vértices de <b class="k1">G_pos</b> (só posição) contra vértices de <b class="k2">G_est</b> (posição + chaves + bônus). Escala logarítmica.</p></div>
+      <div class="card"><h3>O que dá errado só com posições</h3>
+        <div class="seg layers mapas-modelagem" id="segModelagem"></div>
+        <div id="armadilhas" class="traps"></div></div>
     </div>
+
+    <div class="card table-card">
+      <h3>Estados alcançáveis × teto teórico</h3>
+      <p class="note top">Teto = casas livres × 2<sup>chaves</sup> × 2<sup>bônus</sup>. O grafo é construído por BFS a partir do início, então só entram os estados alcançáveis.</p>
+      <div class="table-scroll"><table id="tblTeto"></table></div>
+    </div>
+
+    <div class="two duas-colunas">
+      <div class="card table-card" id="cardCiclo">
+        <h3>Ciclo negativo do m06 e a correção</h3>
+        <div id="cicloM06"></div>
+      </div>
+      <div class="card table-card">
+        <h3>Gabarito dos mapas do grupo</h3>
+        <div class="table-scroll"><table id="tblGabarito"></table></div>
+        <p class="note">Estados e arcos do G_est (sem o ALVO), passos da BFS e custo do Dijkstra ou do Bellman-Ford.</p>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <h3>Figuras do grafo de estados</h3>
+      <p class="note top">Geradas pelo <code>src/solve.py</code> em <code>out/parte1/</code>. Clique para ampliar.</p>
+      <div class="figuras-modelagem" id="figurasModelagem"></div>
+    </div>
+
+    <nav class="pager"><a href="labirintos.html">← Labirintos</a><a href="slashdot.html">Parte 2: a rede Slashdot →</a></nav>
   </section>
 </main>
 
