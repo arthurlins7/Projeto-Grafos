@@ -59,10 +59,29 @@
       </div>
     </div>
 
-    <div class="card table-card">
-      <h3>Figuras do grafo de estados</h3>
-      <p class="note top">Geradas pelo <code>src/solve.py</code> em <code>out/parte1/</code>. Clique para ampliar.</p>
-      <div class="figuras-modelagem" id="figurasModelagem"></div>
+    <div class="card table-card" id="vizGrafo">
+      <h3>O grafo de estados, interativo</h3>
+      <p class="note top">Passe o mouse sobre um estado ou uma casa para ver os detalhes. Funciona para qualquer mapa, inclusive um mapa novo.</p>
+      <div class="lab-controls">
+        <div class="field"><label for="selMapaViz">Mapa</label><select id="selMapaViz"></select></div>
+        <div class="field grow"><label>Visualização</label><div class="seg layers" id="segViz">
+          <button data-viz="camadas" class="on">Grafo em camadas</button>
+          <button data-viz="arvore">Árvore da BFS</button>
+          <button data-viz="heatmap">Heatmap de multiplicidade</button></div></div>
+      </div>
+      <p class="note" id="vizTexto"></p>
+      <div class="viz-legenda" id="vizLegenda"></div>
+      <div class="viz-area" id="vizArea"></div>
+    </div>
+
+    <div class="card table-card" id="arquivosOut">
+      <h3>Arquivos de <code>out/parte1/</code></h3>
+      <p class="note top">Todos os CSV e JSON gerados pelo <code>src/solve.py</code>. Escolha um para ver o conteúdo ou baixar.</p>
+      <div class="arquivos">
+        <div class="arquivos-lista" id="listaArquivos"></div>
+        <div class="arquivos-ver"><div class="arquivos-topo"><b id="nomeArquivo"></b><button class="btn-baixar" id="btnBaixar">Baixar</button></div>
+          <div id="verArquivo"></div></div>
+      </div>
     </div>
 
     <nav class="pager"><a href="labirintos.html">← Labirintos</a><a href="slashdot.html">Parte 2: a rede Slashdot →</a></nav>

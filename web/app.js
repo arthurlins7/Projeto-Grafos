@@ -159,8 +159,9 @@ function escolherModo(modo) {
 function escolherAlg(id) {
   S.alg = id;
   [...$("#segAlg").children].forEach((b) => b.classList.toggle("on", b.dataset.id === id));
-  S.passo = 0; S.acc = 0;
+  S.passo = 0; S.acc = 0; EXP.passo = -1;
   resultado();
+  explorar();
   atualizar();
   tocar(maiorPasso() > 0);
 }
@@ -329,7 +330,7 @@ function atualizarLeitura() {
   const sc = $("#scrub"); sc.max = maiorPasso(); sc.value = S.passo;
 }
 
-function atualizar() { desenhar(); atualizarLeitura(); }
+function atualizar() { desenhar(); atualizarLeitura(); explorarPasso(); }
 
 /* ---------- reproducao ---------- */
 function tocar(sim) {
@@ -415,12 +416,6 @@ function numeros() {
 }
 
 /* ---------- modelagem ---------- */
-function abrirFigura(src, titulo) {
-  const lb = $("#lightbox"); if (!lb) return;
-  lb.querySelector("img").src = src; lb.querySelector("p").textContent = titulo; lb.hidden = false;
-  lb.onclick = () => (lb.hidden = true);
-}
-
 function modelagem() {
   const maior = Math.max(...Object.values(D.metricas).map((m) => m.G_est.ordem), 10) * 1.1;
   const L = (n) => Math.max(4, (Math.log10(n) / Math.log10(maior)) * 100);
@@ -475,16 +470,297 @@ function modelagem() {
         <td>${g.passos_bfs ?? "—"}</td><td>${g.custo ?? "—"} <span class="note">${g.algoritmo_custo === "BELLMAN_FORD" ? "Bellman-Ford" : g.algoritmo_custo === "DIJKSTRA" ? "Dijkstra" : ""}</span></td>
         <td>${g.armadilhas} (${num(g.porcentagem_armadilhas, 1)}%)</td></tr>`).join("") + "</tbody>";
   }
+}
 
-  /* figuras do grafo de estados */
-  const figs = [
-    ["parte1/arvore_bfs_m02.png", "Árvore da BFS no grafo de estados (M02)"],
-    ["parte1/camadas_m02.png", "Grafo de estados do M02 em camadas"],
-    ["parte1/heatmap_multiplicidade_m08.png", "Multiplicidade das casas (M08)"],
-  ];
-  $("#figurasModelagem").innerHTML = figs.map(([f, t]) =>
-    `<figure data-src="${IMG(f)}" data-t="${t}"><img loading="lazy" src="${IMG(f)}" alt="${t}"><figcaption>${t}</figcaption></figure>`).join("");
-  $("#figurasModelagem").onclick = (e) => { const f = e.target.closest("figure"); if (f) abrirFigura(f.dataset.src, f.dataset.t); };
+/* ---------- utilitarios das partes interativas novas ---------- */
+const rotulo = (e) => `(${e[0]},${e[1]})|${e[2] || "-"}|{${e[3].join(",")}}`;
+const esc2 = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+// cores das camadas, sempre na mesma ordem (camada 0 = sem chaves, 1 = primeira chave...)
+const COR_CAMADA = ["#4c8ddb", "#e8a06a", "#2fafa3", "#c084fc", "#facc15", "#f472b6", "#a3e635", "#94a3b8"];
+const corDaCamada = (ordem, k) => { const i = ordem.indexOf(k); return i >= 0 && i < COR_CAMADA.length ? COR_CAMADA[i] : "#64748b"; };
+const nomeCamada = (k) => (k === "" ? "sem chaves" : "chaves " + k.split("").join(", "));
+const NOME_CASA = { ".": "chão", ",": "lama", "~": "água", "+": "bônus", "*": "fonte", S: "início", G: "saída",
+  ">": "esteira", "<": "esteira", "^": "esteira", v: "esteira" };
+const nomeCasa = (ch) => NOME_CASA[ch] || (/[a-d]/.test(ch) ? "chave " + ch : /[A-D]/.test(ch) ? "porta " + ch : ch);
+
+let dica = null;
+function mostrarDica(html, ev) {
+  if (!dica) { dica = document.createElement("div"); dica.className = "dica"; document.body.appendChild(dica); }
+  dica.innerHTML = html; dica.hidden = false;
+  const x = Math.min(ev.clientX + 14, window.innerWidth - dica.offsetWidth - 10);
+  const y = Math.min(ev.clientY + 14, window.innerHeight - dica.offsetHeight - 10);
+  dica.style.left = x + "px"; dica.style.top = y + "px";
+}
+function esconderDica() { if (dica) dica.hidden = true; }
+
+// tabela com busca, ordenacao por coluna e paginas de 50 linhas
+function tabelaInterativa(el, colunas, linhas, opcoes = {}) {
+  const T = { busca: "", col: null, desc: false, pagina: 0, por: opcoes.porPagina || 50 };
+  function filtradas() {
+    let r = linhas.map((l, i) => ({ l, i }));
+    if (T.busca) { const b = T.busca.toLowerCase(); r = r.filter(({ l }) => l.some((v) => String(v).toLowerCase().includes(b))); }
+    if (T.col !== null) {
+      const c = T.col, num = colunas[c].num;
+      r.sort((a, b) => { const x = a.l[c], y = b.l[c]; const d = num ? x - y : String(x).localeCompare(String(y), "pt-BR", { numeric: true }); return T.desc ? -d : d; });
+    }
+    return r;
+  }
+  function render() {
+    const r = filtradas(), paginas = Math.max(1, Math.ceil(r.length / T.por));
+    T.pagina = Math.min(T.pagina, paginas - 1);
+    const vis = r.slice(T.pagina * T.por, (T.pagina + 1) * T.por);
+    const destaque = opcoes.destaque ? opcoes.destaque() : -1;
+    el.querySelector(".info").textContent = `${fmt(r.length)} de ${fmt(linhas.length)} linhas · página ${T.pagina + 1} de ${paginas}`;
+    el.querySelector(".ant").disabled = T.pagina === 0;
+    el.querySelector(".prox").disabled = T.pagina >= paginas - 1;
+    el.querySelector("thead").innerHTML = "<tr>" + colunas.map((c, i) =>
+      `<th data-c="${i}" class="${T.col === i ? "ord" + (T.desc ? " desc" : "") : ""}">${c.t}</th>`).join("") + "</tr>";
+    el.querySelector("tbody").innerHTML = vis.map(({ l, i }) =>
+      `<tr data-i="${i}" class="${i === destaque ? "atual" : ""} ${opcoes.aoClicar ? "clicavel" : ""}">` +
+      l.map((v, c) => {
+        // textos muito longos (o caminho inteiro no solucoes.csv) aparecem cortados; o texto todo fica no title
+        const t = String(v), curto = t.length > 70 ? t.slice(0, 67) + "…" : t;
+        return `<td class="${colunas[c].mono ? "mono" : ""}"${curto !== t ? ` title="${esc2(t)}"` : ""}>${esc2(curto)}</td>`;
+      }).join("") + "</tr>").join("");
+  }
+  el.innerHTML = `<div class="ferramentas"><input type="search" placeholder="Buscar (estado, casa, movimento...)" aria-label="Buscar na tabela">
+    <button class="ant">‹ anterior</button><button class="prox">próxima ›</button><span class="info"></span></div>
+    <div class="table-scroll"><table class="t-interativa"><thead></thead><tbody></tbody></table></div>`;
+  el.querySelector("input").oninput = (e) => { T.busca = e.target.value; T.pagina = 0; render(); };
+  el.querySelector(".ant").onclick = () => { T.pagina--; render(); };
+  el.querySelector(".prox").onclick = () => { T.pagina++; render(); };
+  el.querySelector("thead").onclick = (e) => {
+    const th = e.target.closest("th"); if (!th) return;
+    const c = +th.dataset.c; if (T.col === c) T.desc = !T.desc; else { T.col = c; T.desc = false; } render();
+  };
+  if (opcoes.aoClicar) el.querySelector("tbody").onclick = (e) => { const tr = e.target.closest("tr"); if (tr) opcoes.aoClicar(+tr.dataset.i); };
+  render();
+  return { render, irPara: (i) => { if (T.busca || T.col !== null) return render(); T.pagina = Math.floor(i / T.por); render(); } };
+}
+
+/* ---------- labirintos: explorar os dados do mapa ---------- */
+const EXP = { aba: "caminho", tabela: null, passo: -1 };
+function explorar() {
+  if (!$("#tabelaDados") || !S.mapa) return;
+  const id = S.mapa.id, g = D.grafos[id], el = $("#tabelaDados");
+  $("#expMapa").textContent = id.toUpperCase();
+  [...$("#segDados").children].forEach((b) => b.classList.toggle("on", b.dataset.aba === EXP.aba));
+  EXP.tabela = null;
+  if (EXP.aba === "caminho") {
+    const sol = solucaoDe(id, S.alg), q = quadros(sol), busca = emBusca(sol);
+    if (!q.length) { el.innerHTML = `<p class="note">${alg(S.alg).nome}: ${rotStatus[sol.status]}, não há caminho para listar.</p>`; return; }
+    const linhas = q.map((e, i) => [i, rotulo(e), S.mapa.grade[e[0]][e[1]], e[2] ? e[2].split("").join(" ") : "—",
+      e[3].length ? "{" + e[3].join(",") + "}" : "—", busca ? "—" : (i ? e[4] - q[i - 1][4] : 0), busca ? "—" : e[4]]);
+    const cols = [{ t: busca ? "Visita" : "Passo", num: true }, { t: "Estado", mono: true }, { t: "Casa" }, { t: "Chaves" }, { t: "Bônus" },
+      { t: "Custo do passo", num: true }, { t: "Custo acumulado", num: true }];
+    el.insertAdjacentHTML("afterbegin", "");
+    EXP.tabela = tabelaInterativa(el, cols, linhas, {
+      destaque: () => Math.min(S.passo, q.length - 1),
+      aoClicar: (i) => { tocar(false); S.passo = i; atualizar(); },
+    });
+    $("#tabelaDados").insertAdjacentHTML("afterbegin", `<p class="note top">${alg(S.alg).nome}${busca ? ": ordem em que a busca visitou os estados (não há caminho até a saída)." : ": clique numa linha para levar a animação até aquele passo."}</p>`);
+    return;
+  }
+  if (g.cortado) { el.innerHTML = `<p class="note">Este mapa tem estados demais para listar aqui; veja os arquivos CSV em <code>out/parte1/</code>.</p>`; return; }
+  if (EXP.aba === "arcos") {
+    const E = g.estados;
+    EXP.tabela = tabelaInterativa(el, [{ t: "Origem", mono: true }, { t: "Destino", mono: true }, { t: "Movimento" }, { t: "Casa de destino" }, { t: "Peso", num: true }],
+      g.arcos.map(([o, d, mv, casa, peso]) => [rotulo(E[o]), rotulo(E[d]), mv, casa, peso]));
+  } else if (EXP.aba === "graus") {
+    EXP.tabela = tabelaInterativa(el, [{ t: "Estado", mono: true }, { t: "Nível na BFS", num: true }, { t: "Grau de entrada", num: true }, { t: "Grau de saída", num: true }],
+      g.estados.map((e) => [rotulo(e), e[6], e[4], e[5]]));
+  } else {
+    const arm = armadilhasDa(id);
+    if (!arm.length) { el.innerHTML = `<p class="note">Este mapa não tem estados-armadilha: de todo estado alcançável ainda dá para chegar na saída.</p>`; return; }
+    const lista = g.estados.filter((e) => arm.some(([r, c, k]) => r === e[0] && c === e[1] && k === e[2]));
+    EXP.tabela = tabelaInterativa(el, [{ t: "Estado", mono: true }, { t: "Casa" }, { t: "Chaves" }, { t: "Grau de saída", num: true }],
+      lista.map((e) => [rotulo(e), S.mapa.grade[e[0]][e[1]], e[2] ? e[2].split("").join(" ") : "—", e[5]]));
+    el.insertAdjacentHTML("afterbegin", `<p class="note top">${fmt(lista.length)} estados alcançáveis de onde não dá mais para chegar na saída (busca a partir do ALVO no grafo transposto).</p>`);
+  }
+}
+function explorarPasso() {
+  // durante a animacao, a linha do passo atual acompanha
+  if (EXP.aba !== "caminho" || !EXP.tabela || EXP.passo === S.passo) return;
+  EXP.passo = S.passo; EXP.tabela.irPara(S.passo);
+}
+
+/* ---------- modelagem: o grafo de estados interativo ---------- */
+const VIZ = { mapa: null, tipo: "camadas" };
+function montarViz() {
+  if (!$("#vizArea")) return;
+  const sel = $("#selMapaViz");
+  sel.innerHTML = Object.values(D.mapas).map((m) => `<option value="${m.id}">${m.id.toUpperCase()} · ${m.nome}</option>`).join("");
+  VIZ.mapa = D.mapas[window.MAPA_INICIAL] ? window.MAPA_INICIAL : (D.mapas.m02 ? "m02" : Object.keys(D.mapas)[0]);
+  sel.value = VIZ.mapa;
+  sel.onchange = () => { VIZ.mapa = sel.value; desenharViz(); };
+  [...$("#segViz").children].forEach((b) => (b.onclick = () => {
+    VIZ.tipo = b.dataset.viz; [...$("#segViz").children].forEach((x) => x.classList.toggle("on", x === b)); desenharViz();
+  }));
+  $("#vizArea").onmouseleave = esconderDica;
+  desenharViz();
+}
+
+function desenharViz() {
+  const g = D.grafos[VIZ.mapa], area = $("#vizArea");
+  esconderDica();
+  if (g.cortado) { area.innerHTML = `<p class="note">Este mapa tem estados demais para desenhar aqui.</p>`; $("#vizLegenda").innerHTML = ""; return; }
+  if (VIZ.tipo === "camadas") vizCamadas(g, area);
+  else if (VIZ.tipo === "arvore") vizArvore(g, area);
+  else vizHeatmap(g, area);
+}
+
+function legendaCamadas(ordem, extra = "") {
+  $("#vizLegenda").innerHTML = ordem.map((k) => `<span><i style="background:${corDaCamada(ordem, k)}"></i>${nomeCamada(k)}</span>`).join("") + extra;
+}
+
+function dicaEstado(e, extra = "") {
+  return `<b>${rotulo(e)}</b><span class="mono">nível ${e[6]} na BFS · entrada ${e[4]} · saída ${e[5]}</span>${extra}`;
+}
+
+function vizCamadas(g, area) {
+  const grade = D.mapas[VIZ.mapa].grade, rows = grade.length, cols = grade[0].length;
+  const ordem = D.camadas[VIZ.mapa].ordem, E = g.estados;
+  const k = Math.max(10, Math.min(30, Math.floor(((area.clientWidth || 900) - 40) / cols)));
+  const topo = 26, banda = rows * k + topo + 10, W = cols * k + 20, H = ordem.length * banda;
+  // estados na mesma casa e camada (bonus diferentes) ficam lado a lado
+  const vizinhos = {};
+  const pos = E.map((e) => {
+    const chave = e[0] + "," + e[1] + "|" + e[2]; const n = (vizinhos[chave] = (vizinhos[chave] || 0) + 1) - 1;
+    const b = ordem.indexOf(e[2]);
+    return [10 + e[1] * k + k / 2 + (n % 3 - 1) * k * 0.22, b * banda + topo + e[0] * k + k / 2 + Math.floor(n / 3) * k * 0.22];
+  });
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Grafo de estados em camadas">`;
+  ordem.forEach((kk, b) => {
+    const y = b * banda, qtd = E.filter((e) => e[2] === kk).length;
+    s += `<rect x="2" y="${y + 2}" width="${W - 4}" height="${banda - 6}" rx="10" fill="rgba(255,255,255,.025)" stroke="rgba(255,255,255,.07)"/>`;
+    s += `<text x="12" y="${y + 18}" fill="${corDaCamada(ordem, kk)}" font-size="12" font-weight="700">${nomeCamada(kk)} · ${qtd} estados</text>`;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) if (grade[r][c] === "#")
+      s += `<rect x="${10 + c * k}" y="${y + topo + r * k}" width="${k}" height="${k}" fill="rgba(255,255,255,.035)"/>`;
+  });
+  let dentro = "", entre = "";
+  g.arcos.forEach(([o, d]) => {
+    const [x1, y1] = pos[o], [x2, y2] = pos[d];
+    if (E[o][2] === E[d][2]) dentro += `M${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}`;
+    else entre += `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)}C${(x1 + 40).toFixed(1)} ${y1.toFixed(1)} ${(x2 + 40).toFixed(1)} ${y2.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="#fb7185" stroke-width="1.6" opacity=".85"/>`;
+  });
+  s += `<path d="${dentro}" stroke="rgba(207,216,245,.28)" stroke-width="1" fill="none"/>` + entre + `<g id="vizRealce"></g>`;
+  const r = Math.max(2.5, k * 0.2);
+  E.forEach((e, i) => { const [x, y] = pos[i]; s += `<circle class="no" data-i="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${corDaCamada(ordem, e[2])}"/>`; });
+  area.innerHTML = s + "</svg>";
+  legendaCamadas(ordem, `<span><b class="linha" style="border-color:rgba(207,216,245,.5)"></b>arco dentro da camada</span><span><b class="linha" style="border-color:#fb7185"></b>arco que muda de camada (pegou uma chave)</span>`);
+  $("#vizTexto").textContent = `Cada faixa é uma camada (um conjunto de chaves) e cada ponto é um estado, desenhado na casa onde o jogador está. ${fmt(g.arcos.length)} arcos ao todo; passe o mouse num estado para ver os arcos dele.`;
+  area.onmousemove = (ev) => {
+    const no = ev.target.closest(".no"); const realce = area.querySelector("#vizRealce");
+    if (!no) { esconderDica(); realce.innerHTML = ""; return; }
+    const i = +no.dataset.i, [x0, y0] = pos[i];
+    realce.innerHTML = g.arcos.filter(([o, d]) => o === i || d === i).map(([o, d]) =>
+      `<line x1="${pos[o][0]}" y1="${pos[o][1]}" x2="${pos[d][0]}" y2="${pos[d][1]}" stroke="#fff" stroke-width="2"/>`).join("") +
+      `<circle cx="${x0}" cy="${y0}" r="${r + 3}" fill="none" stroke="#fff" stroke-width="2"/>`;
+    mostrarDica(dicaEstado(E[i], `<span>casa: ${nomeCasa(grade[E[i][0]][E[i][1]])}</span>`), ev);
+  };
+}
+
+function vizArvore(g, area) {
+  const E = g.estados, ordem = D.camadas[VIZ.mapa].ordem, grade = D.mapas[VIZ.mapa].grade;
+  const porNivel = {};
+  E.forEach((e, i) => { if (e[6] >= 0) (porNivel[e[6]] = porNivel[e[6]] || []).push(i); });
+  const niveis = Object.keys(porNivel).map(Number).sort((a, b) => a - b), maxLargura = Math.max(...niveis.map((n) => porNivel[n].length));
+  const dx = niveis.length > 120 ? 14 : 30, dy = maxLargura > 40 ? 10 : 18, mx = 40, my = 30;
+  const W = mx * 2 + niveis.length * dx, H = my * 2 + maxLargura * dy;
+  const pos = [];
+  niveis.forEach((n) => porNivel[n].forEach((i, j) => { pos[i] = [mx + n * dx, my + (j + 0.5) * dy + (maxLargura - porNivel[n].length) * dy / 2]; }));
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Árvore da BFS no grafo de estados">`;
+  const passo = niveis.length > 60 ? 10 : 5;
+  niveis.forEach((n) => { if (n % passo === 0) s += `<text x="${mx + n * dx}" y="16" text-anchor="middle" fill="#9aa0c3" font-size="11">${n}</text><line x1="${mx + n * dx}" x2="${mx + n * dx}" y1="22" y2="${H - 8}" stroke="rgba(255,255,255,.05)"/>`; });
+  let arestas = "";
+  E.forEach((e, i) => { if (e[7] >= 0 && pos[i] && pos[e[7]]) arestas += `M${pos[e[7]][0]} ${pos[e[7]][1].toFixed(1)}L${pos[i][0]} ${pos[i][1].toFixed(1)}`; });
+  s += `<path d="${arestas}" stroke="rgba(207,216,245,.3)" stroke-width="1" fill="none"/><g id="vizRealce"></g>`;
+  const r = dy > 12 ? 4.5 : 3;
+  E.forEach((e, i) => {
+    if (!pos[i]) return;
+    const saida = grade[e[0]][e[1]] === "G";
+    s += `<circle class="no" data-i="${i}" cx="${pos[i][0]}" cy="${pos[i][1].toFixed(1)}" r="${saida ? r + 1.5 : r}" fill="${corDaCamada(ordem, e[2])}" ${saida ? 'stroke="#f43f5e" stroke-width="2"' : ""}/>`;
+  });
+  area.innerHTML = s + "</svg>";
+  legendaCamadas(ordem, `<span><i style="background:transparent;border:2px solid #f43f5e"></i>estado na saída G</span>`);
+  $("#vizTexto").textContent = `Cada coluna é um nível da BFS (número de passos desde o início), de 0 a ${niveis.at(-1)}. A cor é a camada do estado. Passe o mouse num estado para ver o caminho da árvore até ele.`;
+  area.onmousemove = (ev) => {
+    const no = ev.target.closest(".no"); const realce = area.querySelector("#vizRealce");
+    if (!no) { esconderDica(); realce.innerHTML = ""; return; }
+    let i = +no.dataset.i; const pts = [];
+    while (i >= 0 && pos[i]) { pts.push(pos[i].map((v) => v.toFixed(1)).join(",")); i = E[i][7]; }
+    realce.innerHTML = `<polyline points="${pts.join(" ")}" fill="none" stroke="#fff" stroke-width="2.2"/>`;
+    mostrarDica(dicaEstado(E[+no.dataset.i], `<span>caminho da árvore: ${pts.length - 1} passos</span>`), ev);
+  };
+}
+
+function vizHeatmap(g, area) {
+  const grade = D.mapas[VIZ.mapa].grade, rows = grade.length, cols = grade[0].length, E = g.estados;
+  const porCasa = {};
+  E.forEach((e) => (porCasa[e[0] + "," + e[1]] = porCasa[e[0] + "," + e[1]] || []).push(e));
+  const max = Math.max(1, ...Object.values(porCasa).map((v) => v.length));
+  // uma cor so (azul), do escuro (poucos estados) ao claro (muitos)
+  const cor = (n) => `hsl(212 72% ${(22 + 56 * (max === 1 ? 1 : (n - 1) / (max - 1))).toFixed(0)}%)`;
+  const k = Math.max(10, Math.min(36, Math.floor(((area.clientWidth || 900) - 30) / cols)));
+  let s = `<svg width="${cols * k}" height="${rows * k}" viewBox="0 0 ${cols * k} ${rows * k}" role="img" aria-label="Heatmap de multiplicidade">`;
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const ch = grade[r][c], lista = porCasa[r + "," + c], x = c * k, y = r * k;
+    if (ch === "#") { s += `<rect x="${x}" y="${y}" width="${k}" height="${k}" fill="#1a1d3a"/>`; continue; }
+    const fill = lista ? cor(lista.length) : "#0f1226";
+    s += `<rect class="no" data-c="${r},${c}" x="${x + 1}" y="${y + 1}" width="${k - 2}" height="${k - 2}" rx="${k * 0.15}" fill="${fill}"/>`;
+    if (k >= 18 && lista) s += `<text x="${x + k / 2}" y="${y + k / 2 + 4}" text-anchor="middle" font-size="${Math.floor(k * 0.38)}" font-weight="700" fill="${lista.length > max * 0.55 ? "#0b0d1a" : "#e8eaf6"}" pointer-events="none">${lista.length}</text>`;
+    else if (k >= 18 && ch !== ".") s += `<text x="${x + k / 2}" y="${y + k / 2 + 4}" text-anchor="middle" font-size="${Math.floor(k * 0.38)}" fill="#64748b" pointer-events="none">${esc2(ch)}</text>`;
+  }
+  area.innerHTML = s + "</svg>";
+  $("#vizLegenda").innerHTML = `<span>1 estado<b class="degrade" style="background:linear-gradient(90deg,${cor(1)},${cor(max)})"></b>${max} estados por casa</span><span><i style="background:#0f1226;border-radius:3px;border:1px solid rgba(255,255,255,.2)"></i>casa livre que nunca é alcançada</span>`;
+  $("#vizTexto").textContent = `Quantos estados do G_est existem em cada casa (mesma posição com chaves ou bônus diferentes). A casa mais "multiplicada" tem ${max} estados.`;
+  area.onmousemove = (ev) => {
+    const no = ev.target.closest(".no"); if (!no) return esconderDica();
+    const [r, c] = no.dataset.c.split(",").map(Number), lista = porCasa[r + "," + c] || [];
+    mostrarDica(`<b>casa (${r},${c}) · ${nomeCasa(grade[r][c])}</b><span>${lista.length} estado${lista.length === 1 ? "" : "s"} nesta casa</span>` +
+      lista.slice(0, 8).map((e) => `<span class="mono">${rotulo(e)}</span>`).join("") + (lista.length > 8 ? `<span>… e mais ${lista.length - 8}</span>` : ""), ev);
+  };
+}
+
+/* ---------- modelagem: arquivos de out/parte1 ---------- */
+function arquivosOut() {
+  if (!$("#listaArquivos") || !D.arquivos) return;
+  if (!D.arquivos.length) { $("#arquivosOut").hidden = true; return; }
+  $("#listaArquivos").innerHTML = D.arquivos.map((a, i) => `<button data-i="${i}">${a.nome}</button>`).join("");
+  const abrir = (i) => {
+    const a = D.arquivos[i];
+    [...$("#listaArquivos").children].forEach((b) => b.classList.toggle("on", +b.dataset.i === i));
+    $("#nomeArquivo").textContent = a.nome + ` · ${fmt(Math.round(a.texto.length / 1024 * 10) / 10)} KB`;
+    $("#btnBaixar").onclick = () => {
+      const url = URL.createObjectURL(new Blob([a.texto], { type: a.tipo === "csv" ? "text/csv" : "application/json" }));
+      const link = document.createElement("a"); link.href = url; link.download = a.nome; link.click(); URL.revokeObjectURL(url);
+    };
+    const ver = $("#verArquivo");
+    if (a.tipo === "csv") {
+      const linhas = a.texto.trim().split(/\r?\n/).map(lerLinhaCsv);
+      tabelaInterativa(ver, linhas[0].map((t) => ({ t, num: linhas.slice(1, 30).every((l) => l[linhas[0].indexOf(t)] !== "" && !isNaN(l[linhas[0].indexOf(t)])), mono: /estado|origem|destino|caminho/.test(t) })),
+        linhas.slice(1).map((l) => l.map((v) => (v !== "" && !isNaN(v) ? Number(v) : v))));
+    } else {
+      let texto = a.texto; try { texto = JSON.stringify(JSON.parse(a.texto), null, 2); } catch (e) { /* mostra como esta */ }
+      ver.innerHTML = `<pre class="json-ver">${esc2(texto)}</pre>`;
+    }
+  };
+  $("#listaArquivos").onclick = (e) => { const b = e.target.closest("button"); if (b) abrir(+b.dataset.i); };
+  const inicial = D.arquivos.findIndex((a) => a.nome === "solucoes.csv");
+  abrir(inicial >= 0 ? inicial : 0);
+}
+
+// CSV simples: separa por virgula, respeitando campos entre aspas (os rotulos dos estados tem virgula)
+function lerLinhaCsv(linha) {
+  const campos = []; let atual = "", aspas = false;
+  for (let i = 0; i < linha.length; i++) {
+    const ch = linha[i];
+    if (ch === '"') { if (aspas && linha[i + 1] === '"') { atual += '"'; i++; } else aspas = !aspas; }
+    else if (ch === "," && !aspas) { campos.push(atual); atual = ""; }
+    else atual += ch;
+  }
+  campos.push(atual);
+  return campos;
 }
 
 /* ---------- parte 2 ---------- */
@@ -619,7 +895,8 @@ function efeitos() {
 }
 
 if (cv) montarMapas();
-if ($("#chartModel")) modelagem();
+if ($("#chartModel")) { modelagem(); montarViz(); arquivosOut(); }
+if ($("#segDados")) [...$("#segDados").children].forEach((b) => (b.onclick = () => { EXP.aba = b.dataset.aba; EXP.passo = -1; explorar(); }));
 if ($("#chartEscala")) parte2();
 if ($("#topicos")) graficosEmTopicos();
 efeitos();

@@ -22,6 +22,7 @@ from src.solve import (
     PASTA_MAPAS_GRUPO,
     PASTA_SAIDA,
     camadas_do_mapa,
+    chave_de_leitura,
     chave_na_pagina,
     estado_inicial,
     estados_armadilha,
@@ -44,6 +45,8 @@ PAGINAS = [  # (id da pagina no site unico, arquivo em web/, nome no menu)
     ("equipe", "equipe.html", "Equipe"),
 ]
 ALGORITMOS = ["BFS", "DFS", "DIJKSTRA", "BELLMAN_FORD"]
+LIMITE_ESTADOS = 8000    # acima disso a pagina mostra so os resumos (o grafo ficaria pesado demais no navegador)
+LIMITE_ARCOS = 20000
 
 
 def sem_traco(chaves):
@@ -136,7 +139,41 @@ def dados_de_um_mapa(caminho, nome, titulo):
         "dfs": dfs_info,
     }
     mapa = {"id": nome, "nome": titulo, "grade": linhas}
-    return mapa, solucoes, metricas_do_mapa(linhas), armadilhas, camadas, numeros
+    return mapa, solucoes, metricas_do_mapa(linhas), armadilhas, camadas, numeros, grafo_para_o_site(g_est, sem_alvo, inicio)
+
+
+def grafo_para_o_site(g_est, sem_alvo, inicio):
+    # estados e arcos do G_est (sem o ALVO) para as visualizacoes interativas:
+    # arvore da BFS, grafo em camadas, heatmap e as tabelas de arcos e graus.
+    # cada estado: [linha, coluna, chaves, bonus, grau de entrada, grau de saida, nivel na BFS, indice do pai]
+    # cada arco: [indice da origem, indice do destino, movimento, casa de destino, peso]
+    if sem_alvo.ordem() > LIMITE_ESTADOS or sem_alvo.tamanho() > LIMITE_ARCOS:
+        return {"cortado": True, "estados": [], "arcos": []}
+    dist, pai, ordem = bfs(g_est, inicio)
+    nos = [no for no in ordem if no != NO_ALVO]
+    nos += sorted((no for no in sem_alvo.nos() if no not in dist), key=chave_de_leitura)
+    indice = {no: i for i, no in enumerate(nos)}
+    estados = []
+    for no in nos:
+        posicao, chaves, bonus = decompor_estado(no)
+        estados.append([posicao[0], posicao[1], sem_traco(chaves), list(bonus),
+                        sem_alvo.grau_entrada(no), sem_alvo.grau_saida(no),
+                        dist.get(no, -1), indice.get(pai.get(no), -1)])
+    arcos = []
+    for no in nos:
+        for destino, peso, movimento, casa in sem_alvo.vizinhos(no):
+            arcos.append([indice[no], indice[destino], movimento, casa, peso])
+    return {"cortado": False, "estados": estados, "arcos": arcos}
+
+
+def arquivos_de_out(pasta=PASTA_SAIDA):
+    # todos os CSV e JSON de out/parte1, para a pagina mostrar e deixar baixar
+    arquivos = []
+    for arquivo in sorted(Path(pasta).glob("*")):
+        if arquivo.suffix in (".csv", ".json"):
+            arquivos.append({"nome": arquivo.name, "tipo": arquivo.suffix[1:],
+                             "texto": arquivo.read_text(encoding="utf-8")})
+    return arquivos
 
 
 def titulo_do_mapa(caminho):
@@ -192,18 +229,19 @@ def dados_do_site(mapa_extra=None):
         if not any(c.resolve() == mapa_extra.resolve() for c in caminhos):
             caminhos.append(mapa_extra)
 
-    dados = {"mapas": {}, "solucoes": {}, "metricas": {}, "armadilhas": {}, "camadas": {}, "numeros": {}}
+    dados = {"mapas": {}, "solucoes": {}, "metricas": {}, "armadilhas": {}, "camadas": {}, "numeros": {}, "grafos": {}}
     for caminho in caminhos:
         nome = chave_na_pagina(caminho, dados["mapas"])
         if mapa_extra is not None and Path(caminho).resolve() == mapa_extra.resolve():
             chave_extra = nome
-        mapa, solucoes, metricas, armadilhas, camadas, numeros = dados_de_um_mapa(caminho, nome, titulo_do_mapa(caminho))
+        mapa, solucoes, metricas, armadilhas, camadas, numeros, grafo = dados_de_um_mapa(caminho, nome, titulo_do_mapa(caminho))
         dados["mapas"][nome] = mapa
         dados["solucoes"][nome] = solucoes
         dados["metricas"][nome] = metricas
         dados["armadilhas"][nome] = armadilhas
         dados["camadas"][nome] = camadas
         dados["numeros"][nome] = numeros
+        dados["grafos"][nome] = grafo
 
     # resultados que o solve.py ja gravou em out/parte1
     dados["modelagem"] = []
@@ -213,6 +251,7 @@ def dados_do_site(mapa_extra=None):
     dados["ciclo_m06"] = ler_json(PASTA_SAIDA / "ciclo_negativo_m06.json")
     dados["gabarito"] = ler_json(PASTA_SAIDA / "gabarito_mapas_grupo.json")
     dados["parte2"] = ler_parte2()
+    dados["arquivos"] = arquivos_de_out()
     return dados, chave_extra
 
 

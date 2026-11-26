@@ -53,3 +53,13 @@ def test_data_js(tmp_path):
     destino = gerar_data_js(tmp_path / "data.js")
     texto = destino.read_text(encoding="utf-8")
     assert texto.startswith("// [IA]") and "window.DADOS = " in texto and '"g01"' in texto
+
+
+def test_site_tem_o_grafo_e_os_arquivos_de_out():
+    dados, _ = dados_do_site()
+    g = dados["grafos"]["m02"]
+    assert len(g["estados"]) == 39 and len(g["arcos"]) == 74      # mesmo G_est do metricas_global.json
+    assert g["estados"][0][6] == 0 and g["estados"][0][7] == -1     # o inicio e o nivel 0 da BFS, sem pai
+    nomes = [a["nome"] for a in dados["arquivos"]]
+    assert "solucoes.csv" in nomes and "arestas_m08.csv" in nomes and "ciclo_negativo_m06.json" in nomes
+    assert not any(n.endswith((".html", ".png")) for n in nomes)
